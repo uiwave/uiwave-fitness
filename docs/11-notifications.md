@@ -4,13 +4,13 @@ Notificaciones por usuario. Cada usuario ve **solo las suyas** (se filtran por `
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Body | Respuesta |
-|---|---|---|---|---|---|
-| GET | `/notifications` | cualquiera (solo propias) | `page`, `limit`, `read`, `type` | — | `{ data: Notification[], meta: { total, page, limit, unread } }` |
-| POST | `/notifications` | admin | — | `CreateNotificationDto` | `{ data: Notification }` |
-| PATCH | `/notifications/:id/read` | cualquiera (solo propias) | — | — | `{ data: Notification }` |
-| PATCH | `/notifications/read-all` | cualquiera | — | — | `{ data: { updated: n } }` |
-| DELETE | `/notifications/:id` | cualquiera (propias o admin) | — | — | `{ data: { id, deleted: true } }` |
+| Método | Ruta                      | Roles                        | Query                           | Body                    | Respuesta                                                        |
+| ------ | ------------------------- | ---------------------------- | ------------------------------- | ----------------------- | ---------------------------------------------------------------- |
+| GET    | `/notifications`          | cualquiera (solo propias)    | `page`, `limit`, `read`, `type` | —                       | `{ data: Notification[], meta: { total, page, limit, unread } }` |
+| POST   | `/notifications`          | admin                        | —                               | `CreateNotificationDto` | `{ data: Notification }`                                         |
+| PATCH  | `/notifications/:id/read` | cualquiera (solo propias)    | —                               | —                       | `{ data: Notification }`                                         |
+| PATCH  | `/notifications/read-all` | cualquiera                   | —                               | —                       | `{ data: { updated: n } }`                                       |
+| DELETE | `/notifications/:id`      | cualquiera (propias o admin) | —                               | —                       | `{ data: { id, deleted: true } }`                                |
 
 ## Fila Notification (respuesta, snake_case)
 
@@ -32,21 +32,21 @@ Notificaciones por usuario. Cada usuario ve **solo las suyas** (se filtran por `
 
 ### CreateNotificationDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `userId` | string | 1–255 chars | **requerido**; el user debe existir |
-| `title` | string | máx 200 | **requerido** |
-| `message` | string | máx 4000 | **requerido** |
-| `type` | string | `INFO` \| `WARNING` \| `SUCCESS` \| `PAYMENT` \| `MEMBERSHIP` \| `SYSTEM` | **requerido** |
+| Campo     | Tipo   | Validación                                                                | Notas                               |
+| --------- | ------ | ------------------------------------------------------------------------- | ----------------------------------- |
+| `userId`  | string | 1–255 chars                                                               | **requerido**; el user debe existir |
+| `title`   | string | máx 200                                                                   | **requerido**                       |
+| `message` | string | máx 4000                                                                  | **requerido**                       |
+| `type`    | string | `INFO` \| `WARNING` \| `SUCCESS` \| `PAYMENT` \| `MEMBERSHIP` \| `SYSTEM` | **requerido**                       |
 
 ### Query params de GET /notifications
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
-| `read` | string | `true` \| `false` (se envía como string en query) |
-| `type` | string | `INFO` \| `WARNING` \| `SUCCESS` \| `PAYMENT` \| `MEMBERSHIP` \| `SYSTEM` |
+| Param   | Tipo   | Notas                                                                     |
+| ------- | ------ | ------------------------------------------------------------------------- |
+| `page`  | number | default 1                                                                 |
+| `limit` | number | 1–100, default 20                                                         |
+| `read`  | string | `true` \| `false` (se envía como string en query)                         |
+| `type`  | string | `INFO` \| `WARNING` \| `SUCCESS` \| `PAYMENT` \| `MEMBERSHIP` \| `SYSTEM` |
 
 ## Reglas de negocio
 

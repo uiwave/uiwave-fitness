@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Eye, Pencil, Plus, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Eye, Pencil, Plus, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { del, errorMessage, get, patch, post } from '@/lib/apiClient'
+import { usePaginated } from '@/hooks/usePaginated';
+import { del, errorMessage, get, patch, post } from '@/lib/apiClient';
 import type {
   Envelope,
   Exercise,
@@ -15,13 +15,13 @@ import type {
   Routine,
   RoutineExercise,
   RoutineStatus,
-} from '@/types/api'
-import { formatDate } from '@/lib/format'
-import { useAuth } from '@/auth/AuthContext'
+} from '@/types/api';
+import { formatDate } from '@/lib/format';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -29,14 +29,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -44,7 +44,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -54,7 +54,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog';
 import {
   Form,
   FormControl,
@@ -62,12 +62,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/form';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
-const STATUSES: RoutineStatus[] = ['ACTIVE', 'INACTIVE', 'COMPLETED']
+const STATUSES: RoutineStatus[] = ['ACTIVE', 'INACTIVE', 'COMPLETED'];
 
 const routineSchema = z
   .object({
@@ -79,22 +83,29 @@ const routineSchema = z
     status: z.enum(['ACTIVE', 'INACTIVE', 'COMPLETED']),
   })
   .superRefine((values, ctx) => {
-    if (values.startDate && values.endDate && values.endDate < values.startDate) {
+    if (
+      values.startDate &&
+      values.endDate &&
+      values.endDate < values.startDate
+    ) {
       ctx.addIssue({
         code: 'custom',
         path: ['endDate'],
         message: 'endDate debe ser mayor o igual a startDate',
-      })
+      });
     }
-  })
+  });
 
-type RoutineValues = z.infer<typeof routineSchema>
+type RoutineValues = z.infer<typeof routineSchema>;
 
 const routineExerciseSchema = z.object({
   exerciseId: z.string().min(1, 'Selecciona un ejercicio'),
   sets: z
     .string()
-    .refine((v) => Number.isInteger(Number(v)) && Number(v) >= 1 && Number(v) <= 1000, 'Series inválidas'),
+    .refine(
+      (v) => Number.isInteger(Number(v)) && Number(v) >= 1 && Number(v) <= 1000,
+      'Series inválidas',
+    ),
   repetitions: z
     .string()
     .refine(
@@ -103,33 +114,41 @@ const routineExerciseSchema = z.object({
     ),
   weight: z
     .string()
-    .refine((v) => !Number.isNaN(Number(v)) && Number(v) >= 0 && Number(v) <= 99999999.99, 'Peso inválido'),
+    .refine(
+      (v) =>
+        !Number.isNaN(Number(v)) && Number(v) >= 0 && Number(v) <= 99999999.99,
+      'Peso inválido',
+    ),
   restSeconds: z
     .string()
     .refine(
-      (v) => Number.isInteger(Number(v)) && Number(v) >= 0 && Number(v) <= 86400,
+      (v) =>
+        Number.isInteger(Number(v)) && Number(v) >= 0 && Number(v) <= 86400,
       'Descanso inválido',
     ),
   notes: z.string().max(1000).optional().or(z.literal('')),
   orderIndex: z
     .string()
-    .refine((v) => Number.isInteger(Number(v)) && Number(v) >= 0, 'Orden inválido'),
-})
+    .refine(
+      (v) => Number.isInteger(Number(v)) && Number(v) >= 0,
+      'Orden inválido',
+    ),
+});
 
-type RoutineExerciseValues = z.infer<typeof routineExerciseSchema>
+type RoutineExerciseValues = z.infer<typeof routineExerciseSchema>;
 
 function RoutineForm({
   routine,
   onSuccess,
   onCancel,
 }: {
-  routine?: Routine
-  onSuccess: () => void
-  onCancel: () => void
+  routine?: Routine;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const [members, setMembers] = useState<Member[]>([])
-  const isEdit = !!routine
+  const [submitting, setSubmitting] = useState(false);
+  const [members, setMembers] = useState<Member[]>([]);
+  const isEdit = !!routine;
 
   const form = useForm<RoutineValues>({
     resolver: zodResolver(routineSchema),
@@ -150,16 +169,16 @@ function RoutineForm({
           endDate: '',
           status: 'ACTIVE',
         },
-  })
+  });
 
   useEffect(() => {
     get<Paginated<Member>>('/members', { page: 1, limit: 100 })
       .then((result) => setMembers(result.data))
-      .catch(() => setMembers([]))
-  }, [])
+      .catch(() => setMembers([]));
+  }, []);
 
   const onSubmit = async (values: RoutineValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const body: Record<string, unknown> = {
       memberId: values.memberId,
       name: values.name,
@@ -167,22 +186,22 @@ function RoutineForm({
       startDate: values.startDate || undefined,
       endDate: values.endDate || undefined,
       status: values.status,
-    }
+    };
     try {
       if (isEdit) {
-        await patch<Envelope<Routine>>(`/routines/${routine!.id}`, body)
-        toast.success('Rutina actualizada')
+        await patch<Envelope<Routine>>(`/routines/${routine!.id}`, body);
+        toast.success('Rutina actualizada');
       } else {
-        await post<Envelope<Routine>>('/routines', body)
-        toast.success('Rutina creada')
+        await post<Envelope<Routine>>('/routines', body);
+        toast.success('Rutina creada');
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -294,12 +313,16 @@ function RoutineForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear rutina'}
+            {submitting
+              ? 'Guardando...'
+              : isEdit
+                ? 'Guardar cambios'
+                : 'Crear rutina'}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 function RoutineExerciseForm({
@@ -308,14 +331,14 @@ function RoutineExerciseForm({
   onSuccess,
   onCancel,
 }: {
-  routineId: string
-  exercise?: RoutineExercise
-  onSuccess: () => void
-  onCancel: () => void
+  routineId: string;
+  exercise?: RoutineExercise;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const [exercises, setExercises] = useState<Exercise[]>([])
-  const isEdit = !!exercise
+  const [submitting, setSubmitting] = useState(false);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const isEdit = !!exercise;
 
   const form = useForm<RoutineExerciseValues>({
     resolver: zodResolver(routineExerciseSchema),
@@ -338,16 +361,16 @@ function RoutineExerciseForm({
           notes: '',
           orderIndex: '0',
         },
-  })
+  });
 
   useEffect(() => {
     get<Paginated<Exercise>>('/exercises', { page: 1, limit: 100 })
       .then((result) => setExercises(result.data))
-      .catch(() => setExercises([]))
-  }, [])
+      .catch(() => setExercises([]));
+  }, []);
 
   const onSubmit = async (values: RoutineExerciseValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const body: Record<string, unknown> = {
       exerciseId: values.exerciseId,
       sets: Number(values.sets),
@@ -356,25 +379,28 @@ function RoutineExerciseForm({
       restSeconds: Number(values.restSeconds),
       notes: values.notes || undefined,
       orderIndex: Number(values.orderIndex),
-    }
+    };
     try {
       if (isEdit) {
         await patch<Envelope<RoutineExercise>>(
           `/routines/${routineId}/exercises/${exercise!.id}`,
           body,
-        )
-        toast.success('Ejercicio de rutina actualizado')
+        );
+        toast.success('Ejercicio de rutina actualizado');
       } else {
-        await post<Envelope<RoutineExercise>>(`/routines/${routineId}/exercises`, body)
-        toast.success('Ejercicio agregado a la rutina')
+        await post<Envelope<RoutineExercise>>(
+          `/routines/${routineId}/exercises`,
+          body,
+        );
+        toast.success('Ejercicio agregado a la rutina');
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -492,12 +518,16 @@ function RoutineExerciseForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Agregar'}
+            {submitting
+              ? 'Guardando...'
+              : isEdit
+                ? 'Guardar cambios'
+                : 'Agregar'}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 function RoutineExercisesDialog({
@@ -505,43 +535,43 @@ function RoutineExercisesDialog({
   canManage,
   onClose,
 }: {
-  routine: Routine
-  canManage: boolean
-  onClose: () => void
+  routine: Routine;
+  canManage: boolean;
+  onClose: () => void;
 }) {
-  const [exercises, setExercises] = useState<RoutineExercise[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [formOpen, setFormOpen] = useState(false)
-  const [editing, setEditing] = useState<RoutineExercise | null>(null)
-  const [deleting, setDeleting] = useState<RoutineExercise | null>(null)
-  const [deletingLoading, setDeletingLoading] = useState(false)
+  const [exercises, setExercises] = useState<RoutineExercise[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState<RoutineExercise | null>(null);
+  const [deleting, setDeleting] = useState<RoutineExercise | null>(null);
+  const [deletingLoading, setDeletingLoading] = useState(false);
 
   const load = () => {
-    setLoading(true)
-    setError('')
+    setLoading(true);
+    setError('');
     get<Envelope<RoutineExercise[]>>(`/routines/${routine.id}/exercises`)
       .then((result) => setExercises(result.data))
       .catch((err) => setError(errorMessage(err)))
-      .finally(() => setLoading(false))
-  }
+      .finally(() => setLoading(false));
+  };
 
-  useEffect(load, [routine.id])
+  useEffect(load, [routine.id]);
 
   const confirmDelete = async () => {
-    if (!deleting) return
-    setDeletingLoading(true)
+    if (!deleting) return;
+    setDeletingLoading(true);
     try {
-      await del(`/routines/${routine.id}/exercises/${deleting.id}`)
-      toast.success('Ejercicio eliminado de la rutina')
-      setDeleting(null)
-      load()
+      await del(`/routines/${routine.id}/exercises/${deleting.id}`);
+      toast.success('Ejercicio eliminado de la rutina');
+      setDeleting(null);
+      load();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setDeletingLoading(false)
+      setDeletingLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
@@ -565,7 +595,9 @@ function RoutineExercisesDialog({
                 <TableHead>Series × Reps</TableHead>
                 <TableHead>Peso</TableHead>
                 <TableHead>Descanso</TableHead>
-                {canManage && <TableHead className="w-20 text-right">Acciones</TableHead>}
+                {canManage && (
+                  <TableHead className="w-20 text-right">Acciones</TableHead>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -579,7 +611,9 @@ function RoutineExercisesDialog({
               {exercises.map((exercise) => (
                 <TableRow key={exercise.id}>
                   <TableCell>{exercise.order_index}</TableCell>
-                  <TableCell className="font-medium">{exercise.exercise_name}</TableCell>
+                  <TableCell className="font-medium">
+                    {exercise.exercise_name}
+                  </TableCell>
                   <TableCell>
                     {exercise.sets} × {exercise.repetitions}
                   </TableCell>
@@ -592,8 +626,8 @@ function RoutineExercisesDialog({
                           variant="ghost"
                           size="icon-sm"
                           onClick={() => {
-                            setEditing(exercise)
-                            setFormOpen(true)
+                            setEditing(exercise);
+                            setFormOpen(true);
                           }}
                         >
                           <Pencil />
@@ -619,8 +653,8 @@ function RoutineExercisesDialog({
           <DialogFooter>
             <Button
               onClick={() => {
-                setEditing(null)
-                setFormOpen(true)
+                setEditing(null);
+                setFormOpen(true);
               }}
             >
               <Plus />
@@ -632,28 +666,39 @@ function RoutineExercisesDialog({
         <Dialog open={formOpen} onOpenChange={setFormOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{editing ? 'Editar ejercicio' : 'Agregar ejercicio'}</DialogTitle>
+              <DialogTitle>
+                {editing ? 'Editar ejercicio' : 'Agregar ejercicio'}
+              </DialogTitle>
             </DialogHeader>
             <RoutineExerciseForm
               routineId={routine.id}
               exercise={editing ?? undefined}
               onSuccess={() => {
-                setFormOpen(false)
-                load()
+                setFormOpen(false);
+                load();
               }}
               onCancel={() => setFormOpen(false)}
             />
           </DialogContent>
         </Dialog>
 
-        <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
+        <AlertDialog
+          open={!!deleting}
+          onOpenChange={(open) => !open && setDeleting(null)}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>¿Quitar este ejercicio de la rutina?</AlertDialogTitle>
-              <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+              <AlertDialogTitle>
+                ¿Quitar este ejercicio de la rutina?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta acción no se puede deshacer.
+              </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={deletingLoading}>Cancelar</AlertDialogCancel>
+              <AlertDialogCancel disabled={deletingLoading}>
+                Cancelar
+              </AlertDialogCancel>
               <AlertDialogAction
                 className="bg-destructive text-white"
                 disabled={deletingLoading}
@@ -666,53 +711,65 @@ function RoutineExercisesDialog({
         </AlertDialog>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export default function RoutinesPage() {
-  const { user } = useAuth()
-  const isAdmin = user?.role === 'admin'
-  const canManage = isAdmin || user?.role === 'trainer'
-  const { data, meta, loading, error, page, setPage, filters, setFilter, reload } =
-    usePaginated<Routine>('/routines')
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+  const canManage = isAdmin || user?.role === 'trainer';
+  const {
+    data,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    filters,
+    setFilter,
+    reload,
+  } = usePaginated<Routine>('/routines');
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Routine | null>(null)
-  const [viewing, setViewing] = useState<Routine | null>(null)
-  const [deleting, setDeleting] = useState<Routine | null>(null)
-  const [deletingLoading, setDeletingLoading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Routine | null>(null);
+  const [viewing, setViewing] = useState<Routine | null>(null);
+  const [deleting, setDeleting] = useState<Routine | null>(null);
+  const [deletingLoading, setDeletingLoading] = useState(false);
 
   const openCreate = () => {
-    setEditing(null)
-    setDialogOpen(true)
-  }
+    setEditing(null);
+    setDialogOpen(true);
+  };
   const openEdit = (routine: Routine) => {
-    setEditing(routine)
-    setDialogOpen(true)
-  }
+    setEditing(routine);
+    setDialogOpen(true);
+  };
   const onSuccess = () => {
-    setDialogOpen(false)
-    reload()
-  }
+    setDialogOpen(false);
+    reload();
+  };
 
   const confirmDelete = async () => {
-    if (!deleting) return
-    setDeletingLoading(true)
+    if (!deleting) return;
+    setDeletingLoading(true);
     try {
-      await del(`/routines/${deleting.id}`)
-      toast.success('Rutina eliminada')
-      setDeleting(null)
-      reload()
+      await del(`/routines/${deleting.id}`);
+      toast.success('Rutina eliminada');
+      setDeleting(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setDeletingLoading(false)
+      setDeletingLoading(false);
     }
-  }
+  };
 
   return (
     <div>
-      <PageHeader title="Rutinas" description="Rutinas de entrenamiento asignadas a miembros">
+      <PageHeader
+        title="Rutinas"
+        description="Rutinas de entrenamiento asignadas a miembros"
+      >
         {canManage && (
           <Button onClick={openCreate}>
             <Plus />
@@ -722,10 +779,12 @@ export default function RoutinesPage() {
       </PageHeader>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <Label className="text-sm text-muted-foreground">Estado</Label>
+        <Label className="text-muted-foreground text-sm">Estado</Label>
         <Select
           value={(filters.status as string) ?? ''}
-          onValueChange={(v) => setFilter('status', v === 'all' ? undefined : v)}
+          onValueChange={(v) =>
+            setFilter('status', v === 'all' ? undefined : v)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
@@ -777,12 +836,20 @@ export default function RoutinesPage() {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
-                    <Button variant="ghost" size="icon-sm" onClick={() => setViewing(routine)}>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => setViewing(routine)}
+                    >
                       <Eye />
                     </Button>
                     {canManage && (
                       <>
-                        <Button variant="ghost" size="icon-sm" onClick={() => openEdit(routine)}>
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          onClick={() => openEdit(routine)}
+                        >
                           <Pencil />
                         </Button>
                         {isAdmin && (
@@ -804,14 +871,23 @@ export default function RoutinesPage() {
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? 'Editar rutina' : 'Nueva rutina'}</DialogTitle>
+            <DialogTitle>
+              {editing ? 'Editar rutina' : 'Nueva rutina'}
+            </DialogTitle>
             <DialogDescription>
-              {editing ? 'Actualiza los datos de la rutina.' : 'Asigna una rutina a un miembro.'}
+              {editing
+                ? 'Actualiza los datos de la rutina.'
+                : 'Asigna una rutina a un miembro.'}
             </DialogDescription>
           </DialogHeader>
           <RoutineForm
@@ -830,14 +906,23 @@ export default function RoutinesPage() {
         />
       )}
 
-      <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
+      <AlertDialog
+        open={!!deleting}
+        onOpenChange={(open) => !open && setDeleting(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar la rutina "{deleting?.name}"?</AlertDialogTitle>
-            <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+            <AlertDialogTitle>
+              ¿Eliminar la rutina "{deleting?.name}"?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deletingLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={deletingLoading}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white"
               disabled={deletingLoading}
@@ -849,5 +934,5 @@ export default function RoutinesPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

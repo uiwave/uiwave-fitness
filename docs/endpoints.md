@@ -105,9 +105,9 @@ Obtiene un miembro por su ID (UUID).
 
 **Errores:**
 
-| Código | Cuerpo                          | Caso                    |
-| ------ | ------------------------------- | ----------------------- |
-| `400`  | `{ "message": ... }`            | `id` no es un UUID      |
+| Código | Cuerpo                                   | Caso                 |
+| ------ | ---------------------------------------- | -------------------- |
+| `400`  | `{ "message": ... }`                     | `id` no es un UUID   |
 | `404`  | `{ "message": "Miembro no encontrado" }` | No existe el miembro |
 
 ---
@@ -120,14 +120,14 @@ Crea un nuevo miembro. El `user_id` se toma del usuario autenticado (no se enví
 
 **Body (JSON):**
 
-| Campo                   | Tipo   | Validación           | Obligatorio | Descripción                 |
-| ----------------------- | ------ | -------------------- | ----------- | --------------------------- |
-| `documentNumber`        | string | longitud 8-20        | No          | Número de documento         |
-| `phone`                 | string | máx. 20 caracteres   | No          | Teléfono                    |
-| `birthDate`             | string | fecha ISO (YYYY-MM-DD) | No        | Fecha de nacimiento         |
-| `address`               | string | máx. 500 caracteres  | No          | Dirección                   |
-| `emergencyContactName`  | string | máx. 100 caracteres  | No          | Nombre de contacto de emergencia |
-| `emergencyContactPhone` | string | máx. 20 caracteres   | No          | Teléfono de contacto de emergencia |
+| Campo                   | Tipo   | Validación             | Obligatorio | Descripción                        |
+| ----------------------- | ------ | ---------------------- | ----------- | ---------------------------------- |
+| `documentNumber`        | string | longitud 8-20          | No          | Número de documento                |
+| `phone`                 | string | máx. 20 caracteres     | No          | Teléfono                           |
+| `birthDate`             | string | fecha ISO (YYYY-MM-DD) | No          | Fecha de nacimiento                |
+| `address`               | string | máx. 500 caracteres    | No          | Dirección                          |
+| `emergencyContactName`  | string | máx. 100 caracteres    | No          | Nombre de contacto de emergencia   |
+| `emergencyContactPhone` | string | máx. 20 caracteres     | No          | Teléfono de contacto de emergencia |
 
 **Ejemplo de petición:**
 
@@ -191,14 +191,14 @@ Registro con email y contraseña. Devuelve la sesión creada (cookies + token).
 
 **Body (JSON):**
 
-| Campo          | Tipo    | Obligatorio | Descripción                                  |
-| -------------- | ------- | ----------- | -------------------------------------------- |
-| `name`         | string  | Sí          | Nombre del usuario                           |
-| `email`        | string  | Sí          | Email (debe ser válido y no estar registrado)|
-| `password`     | string  | Sí          | Mín. 8, máx. 128 caracteres                  |
-| `image`        | string  | No          | URL de foto de perfil                        |
-| `callbackURL`  | string  | No          | URL para el callback de verificación de email|
-| `rememberMe`   | boolean | No          | Si `false`, la sesión no se recuerda (default `true`) |
+| Campo         | Tipo    | Obligatorio | Descripción                                           |
+| ------------- | ------- | ----------- | ----------------------------------------------------- |
+| `name`        | string  | Sí          | Nombre del usuario                                    |
+| `email`       | string  | Sí          | Email (debe ser válido y no estar registrado)         |
+| `password`    | string  | Sí          | Mín. 8, máx. 128 caracteres                           |
+| `image`       | string  | No          | URL de foto de perfil                                 |
+| `callbackURL` | string  | No          | URL para el callback de verificación de email         |
+| `rememberMe`  | boolean | No          | Si `false`, la sesión no se recuerda (default `true`) |
 
 **Ejemplo:**
 
@@ -230,10 +230,10 @@ Registro con email y contraseña. Devuelve la sesión creada (cookies + token).
 
 **Errores:**
 
-| Código | Código de error                 | Caso                              |
-| ------ | ------------------------------- | --------------------------------- |
-| `422`  | `USER_ALREADY_EXISTS`           | El email ya está registrado       |
-| `422`  | `PASSWORD_TOO_SHORT` / `PASSWORD_TOO_LONG` | Contraseña fuera de rango |
+| Código | Código de error                            | Caso                        |
+| ------ | ------------------------------------------ | --------------------------- |
+| `422`  | `USER_ALREADY_EXISTS`                      | El email ya está registrado |
+| `422`  | `PASSWORD_TOO_SHORT` / `PASSWORD_TOO_LONG` | Contraseña fuera de rango   |
 
 ### 2. `POST /api/auth/sign-in/email`
 
@@ -243,12 +243,12 @@ Inicio de sesión con email y contraseña.
 
 **Body (JSON):**
 
-| Campo         | Tipo    | Obligatorio | Descripción                                            |
-| ------------- | ------- | ----------- | ------------------------------------------------------ |
-| `email`       | string  | Sí          | Email del usuario                                      |
-| `password`    | string  | Sí          | Contraseña del usuario                                 |
-| `callbackURL` | string  | No          | URL de redirección                                     |
-| `rememberMe`  | boolean | No          | Si `false`, la sesión no se recuerda (default `true`)  |
+| Campo         | Tipo    | Obligatorio | Descripción                                           |
+| ------------- | ------- | ----------- | ----------------------------------------------------- |
+| `email`       | string  | Sí          | Email del usuario                                     |
+| `password`    | string  | Sí          | Contraseña del usuario                                |
+| `callbackURL` | string  | No          | URL de redirección                                    |
+| `rememberMe`  | boolean | No          | Si `false`, la sesión no se recuerda (default `true`) |
 
 **Ejemplo:**
 
@@ -276,9 +276,9 @@ Inicio de sesión con email y contraseña.
 
 **Errores:**
 
-| Código | Código de error        | Caso                          |
-| ------ | ---------------------- | ----------------------------- |
-| `401`  | `INVALID_EMAIL_OR_PASSWORD` | Credenciales incorrectas  |
+| Código | Código de error             | Caso                     |
+| ------ | --------------------------- | ------------------------ |
+| `401`  | `INVALID_EMAIL_OR_PASSWORD` | Credenciales incorrectas |
 
 ### 3. `POST /api/auth/sign-out`
 
@@ -332,10 +332,10 @@ Actualiza los datos del usuario autenticado (solo los campos propios permitidos,
 
 **Body (JSON):**
 
-| Campo  | Tipo   | Obligatorio | Descripción                      |
-| ------ | ------ | ----------- | -------------------------------- |
-| `name` | string | No          | Nuevo nombre                     |
-| `image`| string | No          | Nueva URL de foto de perfil      |
+| Campo   | Tipo   | Obligatorio | Descripción                 |
+| ------- | ------ | ----------- | --------------------------- |
+| `name`  | string | No          | Nuevo nombre                |
+| `image` | string | No          | Nueva URL de foto de perfil |
 
 **Respuesta (200 OK):** el usuario actualizado (`{ "user": { ... } }`)
 
@@ -347,19 +347,19 @@ Cambia la contraseña del usuario autenticado.
 
 **Body (JSON):**
 
-| Campo                | Tipo    | Obligatorio | Descripción                                        |
-| -------------------- | ------- | ----------- | -------------------------------------------------- |
-| `newPassword`        | string  | Sí          | Nueva contraseña (mín. 8, máx. 128)                |
-| `currentPassword`    | string  | Sí          | Contraseña actual (debe coincidir)                 |
-| `revokeOtherSessions`| boolean | No          | Si `true`, revoca las demás sesiones del usuario   |
+| Campo                 | Tipo    | Obligatorio | Descripción                                      |
+| --------------------- | ------- | ----------- | ------------------------------------------------ |
+| `newPassword`         | string  | Sí          | Nueva contraseña (mín. 8, máx. 128)              |
+| `currentPassword`     | string  | Sí          | Contraseña actual (debe coincidir)               |
+| `revokeOtherSessions` | boolean | No          | Si `true`, revoca las demás sesiones del usuario |
 
 **Respuesta (200 OK):** `{ "token": "nuevo-token-si-revocó-sesiones", "user": { ... } }`
 
 **Errores:**
 
-| Código | Código de error       | Caso                          |
-| ------ | --------------------- | ----------------------------- |
-| `400`  | `INVALID_PASSWORD`    | `currentPassword` incorrecta  |
+| Código | Código de error                            | Caso                            |
+| ------ | ------------------------------------------ | ------------------------------- |
+| `400`  | `INVALID_PASSWORD`                         | `currentPassword` incorrecta    |
 | `422`  | `PASSWORD_TOO_SHORT` / `PASSWORD_TOO_LONG` | Nueva contraseña fuera de rango |
 
 ### 7. `POST /api/auth/change-email`
@@ -370,10 +370,10 @@ Solicita el cambio de email del usuario autenticado.
 
 **Body (JSON):**
 
-| Campo         | Tipo   | Obligatorio | Descripción                          |
-| ------------- | ------ | ----------- | ------------------------------------ |
-| `newEmail`    | string | Sí          | Nuevo email                          |
-| `callbackURL` | string | No          | URL de callback de verificación      |
+| Campo         | Tipo   | Obligatorio | Descripción                     |
+| ------------- | ------ | ----------- | ------------------------------- |
+| `newEmail`    | string | Sí          | Nuevo email                     |
+| `callbackURL` | string | No          | URL de callback de verificación |
 
 **Respuesta (200 OK):** `{ "status": true }`
 
@@ -422,9 +422,9 @@ Revoca una sesión específica del usuario autenticado.
 
 **Body (JSON):**
 
-| Campo   | Tipo   | Obligatorio | Descripción            |
-| ------- | ------ | ----------- | ---------------------- |
-| `token` | string | Sí          | Token de la sesión     |
+| Campo   | Tipo   | Obligatorio | Descripción        |
+| ------- | ------ | ----------- | ------------------ |
+| `token` | string | Sí          | Token de la sesión |
 
 **Respuesta (200 OK):** `{ "success": true }`
 
@@ -436,8 +436,8 @@ Revoca todas las sesiones del usuario autenticado.
 
 **Body (JSON):**
 
-| Campo   | Tipo   | Obligatorio | Descripción                        |
-| ------- | ------ | ----------- | ---------------------------------- |
+| Campo   | Tipo   | Obligatorio | Descripción                          |
+| ------- | ------ | ----------- | ------------------------------------ |
 | `token` | string | No          | Token de la sesión actual (opcional) |
 
 **Respuesta (200 OK):** `{ "success": true }`
@@ -466,10 +466,10 @@ Envía el email de verificación al usuario.
 
 **Body (JSON):**
 
-| Campo         | Tipo   | Obligatorio | Descripción                            |
-| ------------- | ------ | ----------- | -------------------------------------- |
-| `email`       | string | Sí          | Email del usuario                      |
-| `callbackURL` | string | No          | URL de callback de verificación        |
+| Campo         | Tipo   | Obligatorio | Descripción                     |
+| ------------- | ------ | ----------- | ------------------------------- |
+| `email`       | string | Sí          | Email del usuario               |
+| `callbackURL` | string | No          | URL de callback de verificación |
 
 **Respuesta (200 OK):** `{ "status": true }`
 
@@ -479,10 +479,10 @@ Verifica el email con el token enviado por correo. Normalmente se accede por red
 
 **Query params:**
 
-| Parámetro     | Tipo   | Obligatorio | Descripción                    |
-| ------------- | ------ | ----------- | ------------------------------ |
-| `token`       | string | Sí          | Token de verificación          |
-| `callbackURL` | string | No          | URL de redirección             |
+| Parámetro     | Tipo   | Obligatorio | Descripción           |
+| ------------- | ------ | ----------- | --------------------- |
+| `token`       | string | Sí          | Token de verificación |
+| `callbackURL` | string | No          | URL de redirección    |
 
 **Respuesta (200 OK):** `{ "user": { ... } }`
 
@@ -494,10 +494,10 @@ Solicita el restablecimiento de contraseña. Envía un email con el enlace (requ
 
 **Body (JSON):**
 
-| Campo        | Tipo   | Obligatorio | Descripción                                    |
-| ------------ | ------ | ----------- | ---------------------------------------------- |
-| `email`      | string | Sí          | Email del usuario                              |
-| `redirectTo` | string | No          | URL donde redirigir con el token `?token=...`  |
+| Campo        | Tipo   | Obligatorio | Descripción                                   |
+| ------------ | ------ | ----------- | --------------------------------------------- |
+| `email`      | string | Sí          | Email del usuario                             |
+| `redirectTo` | string | No          | URL donde redirigir con el token `?token=...` |
 
 **Respuesta (200 OK):** `{ "status": true, "message": "If this email exists in our system, check your email for the reset link" }`
 
@@ -513,9 +513,9 @@ Establece una nueva contraseña con el token de restablecimiento.
 
 **Body (JSON):**
 
-| Campo         | Tipo   | Obligatorio | Descripción                    |
-| ------------- | ------ | ----------- | ------------------------------ |
-| `newPassword` | string | Sí          | Nueva contraseña (mín. 8)      |
+| Campo         | Tipo   | Obligatorio | Descripción                               |
+| ------------- | ------ | ----------- | ----------------------------------------- |
+| `newPassword` | string | Sí          | Nueva contraseña (mín. 8)                 |
 | `token`       | string | No          | Token (también aceptado como query param) |
 
 **Respuesta (200 OK):** `{ "status": true }`
@@ -528,9 +528,9 @@ Verifica la contraseña actual del usuario autenticado.
 
 **Body (JSON):**
 
-| Campo      | Tipo   | Obligatorio | Descripción              |
-| ---------- | ------ | ----------- | ------------------------ |
-| `password` | string | Sí          | Contraseña a verificar   |
+| Campo      | Tipo   | Obligatorio | Descripción            |
+| ---------- | ------ | ----------- | ---------------------- |
+| `password` | string | Sí          | Contraseña a verificar |
 
 **Respuesta (200 OK):** `{ "valid": true }`
 
@@ -577,11 +577,11 @@ Vincula una cuenta social al usuario autenticado (requiere proveedores sociales 
 
 **Body (JSON):**
 
-| Campo      | Tipo   | Obligatorio | Descripción                       |
-| ---------- | ------ | ----------- | --------------------------------- |
-| `provider` | string | Sí          | Proveedor social                  |
-| `token`    | string | No          | Token de sesión                   |
-| `callbackURL` | string | No       | URL de redirección                |
+| Campo         | Tipo   | Obligatorio | Descripción        |
+| ------------- | ------ | ----------- | ------------------ |
+| `provider`    | string | Sí          | Proveedor social   |
+| `token`       | string | No          | Token de sesión    |
+| `callbackURL` | string | No          | URL de redirección |
 
 ### 25. `POST /api/auth/unlink-account`
 
@@ -591,10 +591,10 @@ Desvincula una cuenta social del usuario autenticado.
 
 **Body (JSON):**
 
-| Campo      | Tipo   | Obligatorio | Descripción                       |
-| ---------- | ------ | ----------- | --------------------------------- |
-| `providerId` | string | Sí        | Proveedor a desvincular           |
-| `accountId`  | string | Sí        | ID de la cuenta a desvincular     |
+| Campo        | Tipo   | Obligatorio | Descripción                   |
+| ------------ | ------ | ----------- | ----------------------------- |
+| `providerId` | string | Sí          | Proveedor a desvincular       |
+| `accountId`  | string | Sí          | ID de la cuenta a desvincular |
 
 **Respuesta (200 OK):** `{ "success": true }`
 
@@ -612,13 +612,13 @@ Crea un usuario desde el panel de administración. Puede asignar rol y datos ext
 
 **Body (JSON):**
 
-| Campo      | Tipo             | Obligatorio | Descripción                                        |
-| ---------- | ---------------- | ----------- | -------------------------------------------------- |
-| `email`    | string           | Sí          | Email (no debe existir)                            |
-| `name`     | string           | Sí          | Nombre del usuario                                 |
-| `password` | string           | No          | Si se omite, el usuario no tendrá credenciales     |
-| `role`     | string o array   | No          | Rol(es): `admin`, `trainer`, `receptionist`, `member` (default: `member`) |
-| `data`     | objeto           | No          | Campos adicionales del usuario                     |
+| Campo      | Tipo           | Obligatorio | Descripción                                                               |
+| ---------- | -------------- | ----------- | ------------------------------------------------------------------------- |
+| `email`    | string         | Sí          | Email (no debe existir)                                                   |
+| `name`     | string         | Sí          | Nombre del usuario                                                        |
+| `password` | string         | No          | Si se omite, el usuario no tendrá credenciales                            |
+| `role`     | string o array | No          | Rol(es): `admin`, `trainer`, `receptionist`, `member` (default: `member`) |
+| `data`     | objeto         | No          | Campos adicionales del usuario                                            |
 
 **Ejemplo:**
 
@@ -641,9 +641,9 @@ Cambia el rol de un usuario.
 
 **Body (JSON):**
 
-| Campo    | Tipo           | Obligatorio | Descripción                                        |
-| -------- | -------------- | ----------- | -------------------------------------------------- |
-| `userId` | string         | Sí          | ID del usuario                                     |
+| Campo    | Tipo           | Obligatorio | Descripción                                          |
+| -------- | -------------- | ----------- | ---------------------------------------------------- |
+| `userId` | string         | Sí          | ID del usuario                                       |
 | `role`   | string o array | Sí          | Rol(es) a asignar (debe existir en la configuración) |
 
 **Ejemplo:**
@@ -665,10 +665,10 @@ Actualiza datos de un usuario (nombre, email, rol, baneo, etc.). **No permite ca
 
 **Body (JSON):**
 
-| Campo    | Tipo   | Obligatorio | Descripción                  |
-| -------- | ------ | ----------- | ---------------------------- |
-| `userId` | string | Sí          | ID del usuario               |
-| `data`   | objeto | Sí          | Datos a actualizar (no vacío)|
+| Campo    | Tipo   | Obligatorio | Descripción                   |
+| -------- | ------ | ----------- | ----------------------------- |
+| `userId` | string | Sí          | ID del usuario                |
+| `data`   | objeto | Sí          | Datos a actualizar (no vacío) |
 
 **Ejemplo:**
 
@@ -686,11 +686,11 @@ Actualiza datos de un usuario (nombre, email, rol, baneo, etc.). **No permite ca
 
 **Errores:**
 
-| Código | Código de error              | Caso                                |
-| ------ | ---------------------------- | ----------------------------------- |
+| Código | Código de error                              | Caso                        |
+| ------ | -------------------------------------------- | --------------------------- |
 | `400`  | `PASSWORD_CANNOT_BE_UPDATED_VIA_UPDATE_USER` | Intentar cambiar contraseña |
-| `400`  | `NO_DATA_TO_UPDATE`          | `data` vacío                        |
-| `404`  | `USER_NOT_FOUND`             | El usuario no existe                |
+| `400`  | `NO_DATA_TO_UPDATE`                          | `data` vacío                |
+| `404`  | `USER_NOT_FOUND`                             | El usuario no existe        |
 
 ### 29. `GET /api/auth/admin/get-user`
 
@@ -700,9 +700,9 @@ Obtiene un usuario por ID.
 
 **Query params:**
 
-| Parámetro | Tipo   | Obligatorio | Descripción   |
-| --------- | ------ | ----------- | ------------- |
-| `id`      | string | Sí          | ID del usuario|
+| Parámetro | Tipo   | Obligatorio | Descripción    |
+| --------- | ------ | ----------- | -------------- |
+| `id`      | string | Sí          | ID del usuario |
 
 **Respuesta (200 OK):** el usuario (`{ "user": { ... } }`)
 
@@ -714,18 +714,18 @@ Lista usuarios con búsqueda, filtros, paginación y ordenamiento.
 
 **Query params (todos opcionales):**
 
-| Parámetro         | Tipo                | Descripción                                   |
-| ----------------- | ------------------- | --------------------------------------------- |
-| `searchValue`     | string              | Valor a buscar                                |
-| `searchField`     | `email` o `name`    | Campo donde buscar (default: `email`)         |
-| `searchOperator`  | `contains`, `starts_with`, `ends_with` | Operador de búsqueda (default: `contains`) |
-| `limit`           | number              | Cantidad de resultados                        |
-| `offset`          | number              | Desplazamiento para paginación                |
-| `sortBy`          | string              | Campo por el que ordenar                      |
-| `sortDirection`   | `asc` o `desc`      | Dirección del orden (default: `asc`)          |
-| `filterField`     | string              | Campo a filtrar                               |
-| `filterValue`     | string o number o boolean o array | Valor del filtro                |
-| `filterOperator`  | `eq`, `ne`, `lt`, `lte`, `gt`, `gte`, `contains`, `starts_with`, `ends_with` | Operador del filtro (default: `eq`) |
+| Parámetro        | Tipo                                                                         | Descripción                                |
+| ---------------- | ---------------------------------------------------------------------------- | ------------------------------------------ |
+| `searchValue`    | string                                                                       | Valor a buscar                             |
+| `searchField`    | `email` o `name`                                                             | Campo donde buscar (default: `email`)      |
+| `searchOperator` | `contains`, `starts_with`, `ends_with`                                       | Operador de búsqueda (default: `contains`) |
+| `limit`          | number                                                                       | Cantidad de resultados                     |
+| `offset`         | number                                                                       | Desplazamiento para paginación             |
+| `sortBy`         | string                                                                       | Campo por el que ordenar                   |
+| `sortDirection`  | `asc` o `desc`                                                               | Dirección del orden (default: `asc`)       |
+| `filterField`    | string                                                                       | Campo a filtrar                            |
+| `filterValue`    | string o number o boolean o array                                            | Valor del filtro                           |
+| `filterOperator` | `eq`, `ne`, `lt`, `lte`, `gt`, `gte`, `contains`, `starts_with`, `ends_with` | Operador del filtro (default: `eq`)        |
 
 **Ejemplo:**
 
@@ -737,7 +737,14 @@ GET /api/auth/admin/list-users?searchValue=juan&searchField=name&limit=10&offset
 
 ```json
 {
-  "users": [{ "id": "uuid", "email": "juan@example.com", "name": "Juan Pérez", "role": "member" }],
+  "users": [
+    {
+      "id": "uuid",
+      "email": "juan@example.com",
+      "name": "Juan Pérez",
+      "role": "member"
+    }
+  ],
   "total": 1,
   "limit": 10,
   "offset": 0
@@ -752,9 +759,9 @@ Lista las sesiones de un usuario.
 
 **Body (JSON):**
 
-| Campo    | Tipo   | Obligatorio | Descripción      |
-| -------- | ------ | ----------- | ---------------- |
-| `userId` | string | Sí          | ID del usuario   |
+| Campo    | Tipo   | Obligatorio | Descripción    |
+| -------- | ------ | ----------- | -------------- |
+| `userId` | string | Sí          | ID del usuario |
 
 **Respuesta (200 OK):** `{ "sessions": [ ... ] }`
 
@@ -780,9 +787,9 @@ Revoca todas las sesiones de un usuario.
 
 **Body (JSON):**
 
-| Campo    | Tipo   | Obligatorio | Descripción      |
-| -------- | ------ | ----------- | ---------------- |
-| `userId` | string | Sí          | ID del usuario   |
+| Campo    | Tipo   | Obligatorio | Descripción    |
+| -------- | ------ | ----------- | -------------- |
+| `userId` | string | Sí          | ID del usuario |
 
 **Respuesta (200 OK):** `{ "success": true }`
 
@@ -794,18 +801,18 @@ Elimina un usuario y todas sus sesiones y cuentas (irreversible).
 
 **Body (JSON):**
 
-| Campo    | Tipo   | Obligatorio | Descripción              |
-| -------- | ------ | ----------- | ------------------------ |
-| `userId` | string | Sí          | ID del usuario           |
+| Campo    | Tipo   | Obligatorio | Descripción    |
+| -------- | ------ | ----------- | -------------- |
+| `userId` | string | Sí          | ID del usuario |
 
 **Respuesta (200 OK):** `{ "success": true }`
 
 **Errores:**
 
-| Código | Código de error         | Caso                          |
-| ------ | ----------------------- | ----------------------------- |
+| Código | Código de error              | Caso                           |
+| ------ | ---------------------------- | ------------------------------ |
 | `400`  | `YOU_CANNOT_REMOVE_YOURSELF` | Intentar eliminarse a sí mismo |
-| `404`  | `USER_NOT_FOUND`        | El usuario no existe          |
+| `404`  | `USER_NOT_FOUND`             | El usuario no existe           |
 
 ### 35. `POST /api/auth/admin/ban-user`
 
@@ -825,10 +832,10 @@ Banea a un usuario (revoca todas sus sesiones).
 
 **Errores:**
 
-| Código | Código de error         | Caso                       |
-| ------ | ----------------------- | -------------------------- |
+| Código | Código de error           | Caso                         |
+| ------ | ------------------------- | ---------------------------- |
 | `400`  | `YOU_CANNOT_BAN_YOURSELF` | Intentar banearse a sí mismo |
-| `404`  | `USER_NOT_FOUND`        | El usuario no existe       |
+| `404`  | `USER_NOT_FOUND`          | El usuario no existe         |
 
 ### 36. `POST /api/auth/admin/unban-user`
 
@@ -838,9 +845,9 @@ Quita el baneo de un usuario.
 
 **Body (JSON):**
 
-| Campo    | Tipo   | Obligatorio | Descripción      |
-| -------- | ------ | ----------- | ---------------- |
-| `userId` | string | Sí          | ID del usuario   |
+| Campo    | Tipo   | Obligatorio | Descripción    |
+| -------- | ------ | ----------- | -------------- |
+| `userId` | string | Sí          | ID del usuario |
 
 **Respuesta (200 OK):** `{ "user": { ... } }`
 
@@ -852,10 +859,10 @@ Establece la contraseña de un usuario (sin conocer la actual).
 
 **Body (JSON):**
 
-| Campo         | Tipo   | Obligatorio | Descripción                    |
-| ------------- | ------ | ----------- | ------------------------------ |
-| `userId`      | string | Sí          | ID del usuario                 |
-| `newPassword` | string | Sí          | Nueva contraseña (mín. 8)      |
+| Campo         | Tipo   | Obligatorio | Descripción               |
+| ------------- | ------ | ----------- | ------------------------- |
+| `userId`      | string | Sí          | ID del usuario            |
+| `newPassword` | string | Sí          | Nueva contraseña (mín. 8) |
 
 **Respuesta (200 OK):** `{ "status": true }`
 
@@ -867,9 +874,9 @@ Inicia una sesión como otro usuario (requiere configuración adicional).
 
 **Body (JSON):**
 
-| Campo    | Tipo   | Obligatorio | Descripción      |
-| -------- | ------ | ----------- | ---------------- |
-| `userId` | string | Sí          | ID del usuario   |
+| Campo    | Tipo   | Obligatorio | Descripción    |
+| -------- | ------ | ----------- | -------------- |
+| `userId` | string | Sí          | ID del usuario |
 
 **Respuesta (200 OK):** `{ "session": { ... }, "user": { ... } }`
 
@@ -889,12 +896,12 @@ Verifica si un usuario/rol tiene permisos.
 
 **Body (JSON):**
 
-| Campo         | Tipo             | Obligatorio | Descripción                              |
-| ------------- | ---------------- | ----------- | ---------------------------------------- |
-| `permission`  | objeto           | No (uno de los dos) | `{ "recurso": ["acción", ...] }`  |
-| `permissions` | objeto           | No (uno de los dos) | Igual que `permission`            |
-| `userId`      | string           | No          | ID del usuario a evaluar                  |
-| `role`        | string           | No          | Rol a evaluar                             |
+| Campo         | Tipo   | Obligatorio         | Descripción                      |
+| ------------- | ------ | ------------------- | -------------------------------- |
+| `permission`  | objeto | No (uno de los dos) | `{ "recurso": ["acción", ...] }` |
+| `permissions` | objeto | No (uno de los dos) | Igual que `permission`           |
+| `userId`      | string | No                  | ID del usuario a evaluar         |
+| `role`        | string | No                  | Rol a evaluar                    |
 
 **Ejemplo:**
 

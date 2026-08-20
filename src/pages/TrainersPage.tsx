@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { del, errorMessage, get, patch, post } from '@/lib/apiClient'
-import type { Envelope, Paginated, Trainer, User } from '@/types/api'
-import { useAuth } from '@/auth/AuthContext'
+import { usePaginated } from '@/hooks/usePaginated';
+import { del, errorMessage, get, patch, post } from '@/lib/apiClient';
+import type { Envelope, Paginated, Trainer, User } from '@/types/api';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -20,14 +20,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -35,7 +35,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,7 +45,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog';
 import {
   Form,
   FormControl,
@@ -53,20 +53,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/form';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
 const trainerSchema = z.object({
-  userId: z.string().min(1, 'Selecciona un usuario').optional().or(z.literal('')),
+  userId: z
+    .string()
+    .min(1, 'Selecciona un usuario')
+    .optional()
+    .or(z.literal('')),
   specialization: z.string().max(100).optional().or(z.literal('')),
   phone: z.string().max(20).optional().or(z.literal('')),
   bio: z.string().max(2000).optional().or(z.literal('')),
   status: z.enum(['active', 'inactive']),
-})
+});
 
-type TrainerValues = z.infer<typeof trainerSchema>
+type TrainerValues = z.infer<typeof trainerSchema>;
 
 function TrainerForm({
   trainer,
@@ -74,14 +82,14 @@ function TrainerForm({
   onSuccess,
   onCancel,
 }: {
-  trainer?: Trainer
-  isAdmin: boolean
-  onSuccess: () => void
-  onCancel: () => void
+  trainer?: Trainer;
+  isAdmin: boolean;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const [users, setUsers] = useState<User[]>([])
-  const isEdit = !!trainer
+  const [submitting, setSubmitting] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const isEdit = !!trainer;
 
   const form = useForm<TrainerValues>({
     resolver: zodResolver(trainerSchema),
@@ -93,39 +101,45 @@ function TrainerForm({
           bio: trainer.bio ?? '',
           status: trainer.status,
         }
-      : { userId: '', specialization: '', phone: '', bio: '', status: 'active' },
-  })
+      : {
+          userId: '',
+          specialization: '',
+          phone: '',
+          bio: '',
+          status: 'active',
+        },
+  });
 
   useEffect(() => {
     get<Paginated<User>>('/users', { page: 1, limit: 100, role: 'trainer' })
       .then((result) => setUsers(result.data))
-      .catch(() => setUsers([]))
-  }, [])
+      .catch(() => setUsers([]));
+  }, []);
 
   const onSubmit = async (values: TrainerValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const body: Record<string, unknown> = {
       userId: values.userId || undefined,
       specialization: values.specialization || undefined,
       phone: values.phone || undefined,
       bio: values.bio || undefined,
       status: values.status,
-    }
+    };
     try {
       if (isEdit) {
-        await patch<Envelope<Trainer>>(`/trainers/${trainer!.id}`, body)
-        toast.success('Entrenador actualizado')
+        await patch<Envelope<Trainer>>(`/trainers/${trainer!.id}`, body);
+        toast.success('Entrenador actualizado');
       } else {
-        await post<Envelope<Trainer>>('/trainers', body)
-        toast.success('Entrenador creado')
+        await post<Envelope<Trainer>>('/trainers', body);
+        toast.success('Entrenador creado');
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -225,56 +239,74 @@ function TrainerForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear entrenador'}
+            {submitting
+              ? 'Guardando...'
+              : isEdit
+                ? 'Guardar cambios'
+                : 'Crear entrenador'}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 export default function TrainersPage() {
-  const { user: me } = useAuth()
-  const isAdmin = me?.role === 'admin'
-  const { data, meta, loading, error, page, setPage, search, setSearch, filters, setFilter, reload } =
-    usePaginated<Trainer>('/trainers')
+  const { user: me } = useAuth();
+  const isAdmin = me?.role === 'admin';
+  const {
+    data,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    search,
+    setSearch,
+    filters,
+    setFilter,
+    reload,
+  } = usePaginated<Trainer>('/trainers');
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Trainer | null>(null)
-  const [deleting, setDeleting] = useState<Trainer | null>(null)
-  const [deletingLoading, setDeletingLoading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Trainer | null>(null);
+  const [deleting, setDeleting] = useState<Trainer | null>(null);
+  const [deletingLoading, setDeletingLoading] = useState(false);
 
   const openCreate = () => {
-    setEditing(null)
-    setDialogOpen(true)
-  }
+    setEditing(null);
+    setDialogOpen(true);
+  };
   const openEdit = (trainer: Trainer) => {
-    setEditing(trainer)
-    setDialogOpen(true)
-  }
+    setEditing(trainer);
+    setDialogOpen(true);
+  };
   const onSuccess = () => {
-    setDialogOpen(false)
-    reload()
-  }
+    setDialogOpen(false);
+    reload();
+  };
 
   const confirmDelete = async () => {
-    if (!deleting) return
-    setDeletingLoading(true)
+    if (!deleting) return;
+    setDeletingLoading(true);
     try {
-      await del(`/trainers/${deleting.id}`)
-      toast.success('Entrenador eliminado')
-      setDeleting(null)
-      reload()
+      await del(`/trainers/${deleting.id}`);
+      toast.success('Entrenador eliminado');
+      setDeleting(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setDeletingLoading(false)
+      setDeletingLoading(false);
     }
-  }
+  };
 
   return (
     <div>
-      <PageHeader title="Entrenadores" description="Perfiles profesionales de los entrenadores">
+      <PageHeader
+        title="Entrenadores"
+        description="Perfiles profesionales de los entrenadores"
+      >
         {isAdmin && (
           <Button onClick={openCreate}>
             <Plus />
@@ -290,10 +322,12 @@ export default function TrainersPage() {
           placeholder="Buscar por nombre o email..."
           className="max-w-xs"
         />
-        <Label className="text-sm text-muted-foreground">Estado</Label>
+        <Label className="text-muted-foreground text-sm">Estado</Label>
         <Select
           value={(filters.status as string) ?? ''}
-          onValueChange={(v) => setFilter('status', v === 'all' ? undefined : v)}
+          onValueChange={(v) =>
+            setFilter('status', v === 'all' ? undefined : v)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
@@ -330,10 +364,12 @@ export default function TrainersPage() {
               </TableRow>
             )}
             {data.map((trainer) => {
-              const canEdit = isAdmin || trainer.user_id === me?.id
+              const canEdit = isAdmin || trainer.user_id === me?.id;
               return (
                 <TableRow key={trainer.id}>
-                  <TableCell className="font-medium">{trainer.user_name}</TableCell>
+                  <TableCell className="font-medium">
+                    {trainer.user_name}
+                  </TableCell>
                   <TableCell>{trainer.user_email}</TableCell>
                   <TableCell>{trainer.specialization ?? '—'}</TableCell>
                   <TableCell>{trainer.phone ?? '—'}</TableCell>
@@ -345,7 +381,11 @@ export default function TrainersPage() {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        title={canEdit ? 'Editar' : 'Solo admin o el propio entrenador'}
+                        title={
+                          canEdit
+                            ? 'Editar'
+                            : 'Solo admin o el propio entrenador'
+                        }
                         disabled={!canEdit}
                         onClick={() => openEdit(trainer)}
                       >
@@ -364,19 +404,28 @@ export default function TrainersPage() {
                     </div>
                   </TableCell>
                 </TableRow>
-              )
+              );
             })}
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? 'Editar entrenador' : 'Nuevo entrenador'}</DialogTitle>
+            <DialogTitle>
+              {editing ? 'Editar entrenador' : 'Nuevo entrenador'}
+            </DialogTitle>
             <DialogDescription>
-              {editing ? 'Actualiza los datos del entrenador.' : 'Registra un perfil de entrenador.'}
+              {editing
+                ? 'Actualiza los datos del entrenador.'
+                : 'Registra un perfil de entrenador.'}
             </DialogDescription>
           </DialogHeader>
           <TrainerForm
@@ -388,14 +437,23 @@ export default function TrainersPage() {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
+      <AlertDialog
+        open={!!deleting}
+        onOpenChange={(open) => !open && setDeleting(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar a {deleting?.user_name}?</AlertDialogTitle>
-            <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+            <AlertDialogTitle>
+              ¿Eliminar a {deleting?.user_name}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deletingLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={deletingLoading}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white"
               disabled={deletingLoading}
@@ -407,5 +465,5 @@ export default function TrainersPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

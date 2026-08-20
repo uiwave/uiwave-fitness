@@ -6,24 +6,24 @@ Gestión de usuarios del sistema (cuentas de Better Auth). **Solo admin** para e
 
 ## Endpoints
 
-| Método | Ruta | Roles | Body | Respuesta |
-|---|---|---|---|---|
-| GET | `/users` | admin, receptionist | — | `{ data: User[], meta }` |
-| GET | `/users/:id` | admin, receptionist | — | `{ data: User }` |
-| POST | `/users` | admin | `CreateUserDto` | `{ data: User }` |
-| PATCH | `/users/:id/role` | admin | `UpdateUserRoleDto` | `{ data: { id, role } }` |
-| PATCH | `/users/:id/ban` | admin | — | `{ data: { id, banned: true } }` |
-| PATCH | `/users/:id/unban` | admin | — | `{ data: { id, banned: false } }` |
-| DELETE | `/users/:id` | admin | — | `{ data: { id, deleted: true } }` |
+| Método | Ruta               | Roles               | Body                | Respuesta                         |
+| ------ | ------------------ | ------------------- | ------------------- | --------------------------------- |
+| GET    | `/users`           | admin, receptionist | —                   | `{ data: User[], meta }`          |
+| GET    | `/users/:id`       | admin, receptionist | —                   | `{ data: User }`                  |
+| POST   | `/users`           | admin               | `CreateUserDto`     | `{ data: User }`                  |
+| PATCH  | `/users/:id/role`  | admin               | `UpdateUserRoleDto` | `{ data: { id, role } }`          |
+| PATCH  | `/users/:id/ban`   | admin               | —                   | `{ data: { id, banned: true } }`  |
+| PATCH  | `/users/:id/unban` | admin               | —                   | `{ data: { id, banned: false } }` |
+| DELETE | `/users/:id`       | admin               | —                   | `{ data: { id, deleted: true } }` |
 
 ## Query params de GET /users
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
-| `search` | string | máx 100 |
-| `role` | string | `admin` \| `trainer` \| `receptionist` \| `member` |
+| Param    | Tipo   | Notas                                              |
+| -------- | ------ | -------------------------------------------------- |
+| `page`   | number | default 1                                          |
+| `limit`  | number | 1–100, default 20                                  |
+| `search` | string | máx 100                                            |
+| `role`   | string | `admin` \| `trainer` \| `receptionist` \| `member` |
 
 ## Fila User (respuesta)
 
@@ -49,17 +49,17 @@ Gestión de usuarios del sistema (cuentas de Better Auth). **Solo admin** para e
 
 ### CreateUserDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `name` | string | 2–100 chars | **requerido** |
-| `email` | string | email válido, máx 255 | **requerido** |
-| `password` | string | 8–100 chars | **requerido** |
-| `role` | string | `admin` \| `trainer` \| `receptionist` \| `member` | opcional, default `member` |
+| Campo      | Tipo   | Validación                                         | Notas                      |
+| ---------- | ------ | -------------------------------------------------- | -------------------------- |
+| `name`     | string | 2–100 chars                                        | **requerido**              |
+| `email`    | string | email válido, máx 255                              | **requerido**              |
+| `password` | string | 8–100 chars                                        | **requerido**              |
+| `role`     | string | `admin` \| `trainer` \| `receptionist` \| `member` | opcional, default `member` |
 
 ### UpdateUserRoleDto
 
-| Campo | Tipo | Validación |
-|---|---|---|
+| Campo  | Tipo   | Validación                                                         |
+| ------ | ------ | ------------------------------------------------------------------ |
 | `role` | string | `admin` \| `trainer` \| `receptionist` \| `member` — **requerido** |
 
 ## Reglas de negocio

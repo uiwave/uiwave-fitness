@@ -1,26 +1,26 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Ban, Plus, ShieldCheck, Trash2, Unlock } from "lucide-react";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Ban, Plus, ShieldCheck, Trash2, Unlock } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from "@/hooks/usePaginated";
-import { del, errorMessage, patch, post } from "@/lib/apiClient";
+import { usePaginated } from '@/hooks/usePaginated';
+import { del, errorMessage, patch, post } from '@/lib/apiClient';
 import type {
   BanResponse,
   Envelope,
   RoleUpdateResponse,
   User,
   UserRole,
-} from "@/types/api";
-import { formatDateTime } from "@/lib/format";
-import { useAuth } from "@/auth/AuthContext";
+} from '@/types/api';
+import { formatDateTime } from '@/lib/format';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -28,14 +28,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -43,7 +43,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -53,7 +53,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 import {
   Form,
   FormControl,
@@ -61,22 +61,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   ErrorAlert,
   LoadingRows,
   EmptyState,
-} from "@/components/shared/DataState";
-import { PageHeader, PaginationBar } from "@/components/shared/PageParts";
-import { StatusBadge } from "@/components/shared/StatusBadge";
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
-const ROLES: UserRole[] = ["admin", "trainer", "receptionist", "member"];
+const ROLES: UserRole[] = ['admin', 'trainer', 'receptionist', 'member'];
 
 const createUserSchema = z.object({
-  name: z.string().min(2, "Mínimo 2 caracteres").max(100),
-  email: z.string().email("Email inválido"),
-  password: z.string().min(8, "Mínimo 8 caracteres").max(100),
-  role: z.enum(["admin", "trainer", "receptionist", "member"]),
+  name: z.string().min(2, 'Mínimo 2 caracteres').max(100),
+  email: z.string().email('Email inválido'),
+  password: z.string().min(8, 'Mínimo 8 caracteres').max(100),
+  role: z.enum(['admin', 'trainer', 'receptionist', 'member']),
 });
 
 type CreateUserValues = z.infer<typeof createUserSchema>;
@@ -85,14 +85,14 @@ function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
   const [submitting, setSubmitting] = useState(false);
   const form = useForm<CreateUserValues>({
     resolver: zodResolver(createUserSchema),
-    defaultValues: { name: "", email: "", password: "", role: "member" },
+    defaultValues: { name: '', email: '', password: '', role: 'member' },
   });
 
   const onSubmit = async (values: CreateUserValues) => {
     setSubmitting(true);
     try {
-      await post<Envelope<User>>("/users", values);
-      toast.success("Usuario creado");
+      await post<Envelope<User>>('/users', values);
+      toast.success('Usuario creado');
       onSuccess();
     } catch (err) {
       toast.error(errorMessage(err));
@@ -173,7 +173,7 @@ function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
         />
         <DialogFooter>
           <Button type="submit" disabled={submitting}>
-            {submitting ? "Creando..." : "Crear usuario"}
+            {submitting ? 'Creando...' : 'Crear usuario'}
           </Button>
         </DialogFooter>
       </form>
@@ -183,7 +183,7 @@ function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
 
 export default function UsersPage() {
   const { user: me } = useAuth();
-  const isAdmin = me?.role === "admin";
+  const isAdmin = me?.role === 'admin';
   const {
     data,
     meta,
@@ -196,11 +196,11 @@ export default function UsersPage() {
     filters,
     setFilter,
     reload,
-  } = usePaginated<User>("/users");
+  } = usePaginated<User>('/users');
 
   const [createOpen, setCreateOpen] = useState(false);
   const [roleUser, setRoleUser] = useState<User | null>(null);
-  const [roleValue, setRoleValue] = useState<UserRole>("member");
+  const [roleValue, setRoleValue] = useState<UserRole>('member');
   const [banUser, setBanUser] = useState<User | null>(null);
   const [deleteUser, setDeleteUser] = useState<User | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
@@ -212,7 +212,7 @@ export default function UsersPage() {
       await patch<Envelope<RoleUpdateResponse>>(`/users/${roleUser.id}/role`, {
         role: roleValue,
       });
-      toast.success("Rol actualizado");
+      toast.success('Rol actualizado');
       setRoleUser(null);
       reload();
     } catch (err) {
@@ -227,10 +227,10 @@ export default function UsersPage() {
     try {
       if (user.banned) {
         await patch<Envelope<BanResponse>>(`/users/${user.id}/unban`);
-        toast.success("Usuario desbaneado");
+        toast.success('Usuario desbaneado');
       } else {
         await patch<Envelope<BanResponse>>(`/users/${user.id}/ban`);
-        toast.success("Usuario baneado");
+        toast.success('Usuario baneado');
       }
       setBanUser(null);
       reload();
@@ -246,7 +246,7 @@ export default function UsersPage() {
     setActionLoading(true);
     try {
       await del(`/users/${deleteUser.id}`);
-      toast.success("Usuario eliminado");
+      toast.success('Usuario eliminado');
       setDeleteUser(null);
       reload();
     } catch (err) {
@@ -277,10 +277,10 @@ export default function UsersPage() {
           placeholder="Buscar por nombre o email..."
           className="max-w-xs"
         />
-        <Label className="text-sm text-muted-foreground">Rol</Label>
+        <Label className="text-muted-foreground text-sm">Rol</Label>
         <Select
-          value={(filters.role as string) ?? ""}
-          onValueChange={(v) => setFilter("role", v === "all" ? undefined : v)}
+          value={(filters.role as string) ?? ''}
+          onValueChange={(v) => setFilter('role', v === 'all' ? undefined : v)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
@@ -370,7 +370,7 @@ export default function UsersPage() {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        title={user.banned ? "Desbanear" : "Banear"}
+                        title={user.banned ? 'Desbanear' : 'Banear'}
                         onClick={() => setBanUser(user)}
                       >
                         {user.banned ? <Unlock /> : <Ban />}
@@ -445,7 +445,7 @@ export default function UsersPage() {
                 Cancelar
               </Button>
               <Button onClick={changeRole} disabled={actionLoading}>
-                {actionLoading ? "Guardando..." : "Guardar"}
+                {actionLoading ? 'Guardando...' : 'Guardar'}
               </Button>
             </DialogFooter>
           </div>
@@ -465,8 +465,8 @@ export default function UsersPage() {
             </AlertDialogTitle>
             <AlertDialogDescription>
               {banUser?.banned
-                ? "El usuario podrá volver a iniciar sesión."
-                : "El usuario no podrá iniciar sesión hasta que sea desbaneado."}
+                ? 'El usuario podrá volver a iniciar sesión.'
+                : 'El usuario no podrá iniciar sesión hasta que sea desbaneado.'}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -478,7 +478,7 @@ export default function UsersPage() {
               disabled={actionLoading}
               onClick={() => banUser && toggleBan(banUser)}
             >
-              {actionLoading ? "Procesando..." : "Confirmar"}
+              {actionLoading ? 'Procesando...' : 'Confirmar'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -505,7 +505,7 @@ export default function UsersPage() {
               disabled={actionLoading}
               onClick={confirmDelete}
             >
-              {actionLoading ? "Eliminando..." : "Eliminar"}
+              {actionLoading ? 'Eliminando...' : 'Eliminar'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

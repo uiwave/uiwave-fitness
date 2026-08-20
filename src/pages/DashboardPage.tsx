@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   CalendarCheck2,
   CircleDollarSign,
@@ -9,9 +9,9 @@ import {
   TrendingUp,
   Users,
   Wallet,
-} from 'lucide-react'
+} from 'lucide-react';
 
-import { get, errorMessage } from '@/lib/apiClient'
+import { get, errorMessage } from '@/lib/apiClient';
 import type {
   Attendance,
   AttendanceReport,
@@ -25,12 +25,17 @@ import type {
   Payment,
   RevenueReport,
   Routine,
-} from '@/types/api'
-import { formatDate, formatDateTime, formatDuration, formatMoney } from '@/lib/format'
-import { useAuth } from '@/auth/AuthContext'
+} from '@/types/api';
+import {
+  formatDate,
+  formatDateTime,
+  formatDuration,
+  formatMoney,
+} from '@/lib/format';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -38,47 +43,55 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 import {
   AttendanceAreaChart,
   ChartCard,
   MembersLineChart,
   RevenueBarChart,
   StatusPieChart,
-} from '@/components/reports/ReportCharts'
+} from '@/components/reports/ReportCharts';
 
 interface StatCardProps {
-  title: string
-  value: string | number
-  icon?: React.ReactNode
+  title: string;
+  value: string | number;
+  icon?: React.ReactNode;
 }
 
 function StatCard({ title, value, icon }: StatCardProps) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+        <CardTitle className="text-muted-foreground text-sm font-medium">
+          {title}
+        </CardTitle>
         {icon && <span className="text-muted-foreground">{icon}</span>}
       </CardHeader>
       <CardContent>
         <p className="text-2xl font-semibold">{value}</p>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function StaffDashboard() {
-  const [dashboard, setDashboard] = useState<DashboardReport | null>(null)
-  const [revenue, setRevenue] = useState<RevenueReport | null>(null)
-  const [attendance, setAttendance] = useState<AttendanceReport | null>(null)
-  const [members, setMembers] = useState<MembersReport | null>(null)
-  const [memberships, setMemberships] = useState<MembershipsReport | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [dashboard, setDashboard] = useState<DashboardReport | null>(null);
+  const [revenue, setRevenue] = useState<RevenueReport | null>(null);
+  const [attendance, setAttendance] = useState<AttendanceReport | null>(null);
+  const [members, setMembers] = useState<MembersReport | null>(null);
+  const [memberships, setMemberships] = useState<MembershipsReport | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     Promise.all([
@@ -88,25 +101,41 @@ function StaffDashboard() {
       get<Envelope<MembersReport>>('/reports/members'),
       get<Envelope<MembershipsReport>>('/reports/memberships'),
     ])
-      .then(([dashboardResult, revenueResult, attendanceResult, membersResult, membershipsResult]) => {
-        setDashboard(dashboardResult.data)
-        setRevenue(revenueResult.data)
-        setAttendance(attendanceResult.data)
-        setMembers(membersResult.data)
-        setMemberships(membershipsResult.data)
-      })
+      .then(
+        ([
+          dashboardResult,
+          revenueResult,
+          attendanceResult,
+          membersResult,
+          membershipsResult,
+        ]) => {
+          setDashboard(dashboardResult.data);
+          setRevenue(revenueResult.data);
+          setAttendance(attendanceResult.data);
+          setMembers(membersResult.data);
+          setMemberships(membershipsResult.data);
+        },
+      )
       .catch((err) => setError(errorMessage(err)))
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
-  if (loading) return <LoadingRows rows={8} />
-  if (error) return <ErrorAlert message={error} />
+  if (loading) return <LoadingRows rows={8} />;
+  if (error) return <ErrorAlert message={error} />;
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Miembros totales" value={dashboard!.totalMembers} icon={<Users />} />
-        <StatCard title="Miembros activos" value={dashboard!.activeMembers} icon={<Users />} />
+        <StatCard
+          title="Miembros totales"
+          value={dashboard!.totalMembers}
+          icon={<Users />}
+        />
+        <StatCard
+          title="Miembros activos"
+          value={dashboard!.activeMembers}
+          icon={<Users />}
+        />
         <StatCard
           title="Membresías activas"
           value={dashboard!.activeMemberships}
@@ -157,7 +186,9 @@ function StaffDashboard() {
       {memberships!.expiringSoonList.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Membresías por vencer</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Membresías por vencer
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
@@ -180,32 +211,38 @@ function StaffDashboard() {
         </Card>
       )}
     </div>
-  )
+  );
 }
 
 function TrainerDashboard() {
-  const [routines, setRoutines] = useState<Routine[]>([])
-  const [routinesTotal, setRoutinesTotal] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [routines, setRoutines] = useState<Routine[]>([]);
+  const [routinesTotal, setRoutinesTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     get<Paginated<Routine>>('/routines', { page: 1, limit: 5 })
       .then((result) => {
-        setRoutines(result.data)
-        setRoutinesTotal(result.meta.total)
+        setRoutines(result.data);
+        setRoutinesTotal(result.meta.total);
       })
       .catch((err) => setError(errorMessage(err)))
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2">
-        <StatCard title="Rutinas registradas" value={routinesTotal} icon={<Dumbbell />} />
+        <StatCard
+          title="Rutinas registradas"
+          value={routinesTotal}
+          icon={<Dumbbell />}
+        />
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">Acciones</CardTitle>
+            <CardTitle className="text-muted-foreground text-sm font-medium">
+              Acciones
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline">
@@ -220,7 +257,9 @@ function TrainerDashboard() {
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Rutinas recientes</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Rutinas recientes
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
@@ -242,7 +281,9 @@ function TrainerDashboard() {
                 )}
                 {routines.map((routine) => (
                   <TableRow key={routine.id}>
-                    <TableCell className="font-medium">{routine.name}</TableCell>
+                    <TableCell className="font-medium">
+                      {routine.name}
+                    </TableCell>
                     <TableCell>{routine.member_name}</TableCell>
                     <TableCell>{formatDate(routine.start_date)}</TableCell>
                     <TableCell>
@@ -256,73 +297,90 @@ function TrainerDashboard() {
         </Card>
       )}
     </div>
-  )
+  );
 }
 
 function MemberDashboard() {
-  const { user } = useAuth()
-  const [member, setMember] = useState<Member | null>(null)
-  const [memberships, setMemberships] = useState<Membership[]>([])
-  const [payments, setPayments] = useState<Payment[]>([])
-  const [attendance, setAttendance] = useState<Attendance[]>([])
-  const [routines, setRoutines] = useState<Routine[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const { user } = useAuth();
+  const [member, setMember] = useState<Member | null>(null);
+  const [memberships, setMemberships] = useState<Membership[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [attendance, setAttendance] = useState<Attendance[]>([]);
+  const [routines, setRoutines] = useState<Routine[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    ;(async () => {
-      if (!user) return
+    (async () => {
+      if (!user) return;
       try {
         const membersResult = await get<Paginated<Member>>('/members', {
           page: 1,
           limit: 100,
           search: user.email,
-        })
-        const myMember = membersResult.data.find((m) => m.user_email === user.email) ?? null
-        setMember(myMember)
-        if (!myMember) return
+        });
+        const myMember =
+          membersResult.data.find((m) => m.user_email === user.email) ?? null;
+        setMember(myMember);
+        if (!myMember) return;
 
-        const [membershipsResult, paymentsResult, attendanceResult, routinesResult] =
-          await Promise.all([
-            get<Envelope<Membership[]>>(`/members/${myMember.id}/memberships`),
-            get<Envelope<Payment[]>>(`/members/${myMember.id}/payments`),
-            get<Envelope<Attendance[]>>(`/members/${myMember.id}/attendance`),
-            get<Envelope<Routine[]>>(`/members/${myMember.id}/routines`),
-          ])
-        setMemberships(membershipsResult.data)
-        setPayments(paymentsResult.data)
-        setAttendance(attendanceResult.data)
-        setRoutines(routinesResult.data)
+        const [
+          membershipsResult,
+          paymentsResult,
+          attendanceResult,
+          routinesResult,
+        ] = await Promise.all([
+          get<Envelope<Membership[]>>(`/members/${myMember.id}/memberships`),
+          get<Envelope<Payment[]>>(`/members/${myMember.id}/payments`),
+          get<Envelope<Attendance[]>>(`/members/${myMember.id}/attendance`),
+          get<Envelope<Routine[]>>(`/members/${myMember.id}/routines`),
+        ]);
+        setMemberships(membershipsResult.data);
+        setPayments(paymentsResult.data);
+        setAttendance(attendanceResult.data);
+        setRoutines(routinesResult.data);
       } catch (err) {
-        setError(errorMessage(err))
+        setError(errorMessage(err));
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    })()
-  }, [user])
+    })();
+  }, [user]);
 
-  if (loading) return <LoadingRows rows={8} />
-  if (error) return <ErrorAlert message={error} />
+  if (loading) return <LoadingRows rows={8} />;
+  if (error) return <ErrorAlert message={error} />;
   if (!member) {
     return (
       <div>
         <PageHeader title="Mi cuenta" />
         <Card>
-          <CardContent className="py-8 text-center text-muted-foreground">
-            No tienes un perfil de miembro registrado. Contacta al personal del gimnasio.
+          <CardContent className="text-muted-foreground py-8 text-center">
+            No tienes un perfil de miembro registrado. Contacta al personal del
+            gimnasio.
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
-      <PageHeader title={`Hola, ${user?.name}`} description="Tu actividad en el gimnasio" />
+      <PageHeader
+        title={`Hola, ${user?.name}`}
+        description="Tu actividad en el gimnasio"
+      />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Membresías" value={memberships.length} icon={<CreditCard />} />
+        <StatCard
+          title="Membresías"
+          value={memberships.length}
+          icon={<CreditCard />}
+        />
         <StatCard title="Pagos" value={payments.length} icon={<Wallet />} />
-        <StatCard title="Asistencias" value={attendance.length} icon={<CalendarCheck2 />} />
+        <StatCard
+          title="Asistencias"
+          value={attendance.length}
+          icon={<CalendarCheck2 />}
+        />
         <StatCard title="Rutinas" value={routines.length} icon={<Dumbbell />} />
       </div>
 
@@ -357,7 +415,9 @@ function MemberDashboard() {
                   )}
                   {memberships.map((membership) => (
                     <TableRow key={membership.id}>
-                      <TableCell className="font-medium">{membership.plan_name}</TableCell>
+                      <TableCell className="font-medium">
+                        {membership.plan_name}
+                      </TableCell>
                       <TableCell>{formatDate(membership.start_date)}</TableCell>
                       <TableCell>{formatDate(membership.end_date)}</TableCell>
                       <TableCell>{formatMoney(membership.price)}</TableCell>
@@ -394,9 +454,13 @@ function MemberDashboard() {
                   )}
                   {payments.map((payment) => (
                     <TableRow key={payment.id}>
-                      <TableCell className="font-medium">{formatMoney(payment.amount)}</TableCell>
+                      <TableCell className="font-medium">
+                        {formatMoney(payment.amount)}
+                      </TableCell>
                       <TableCell>{payment.payment_method}</TableCell>
-                      <TableCell>{formatDateTime(payment.payment_date)}</TableCell>
+                      <TableCell>
+                        {formatDateTime(payment.payment_date)}
+                      </TableCell>
                       <TableCell>
                         <StatusBadge status={payment.status} />
                       </TableCell>
@@ -430,8 +494,12 @@ function MemberDashboard() {
                   {attendance.map((entry) => (
                     <TableRow key={entry.id}>
                       <TableCell>{formatDateTime(entry.check_in_at)}</TableCell>
-                      <TableCell>{formatDateTime(entry.check_out_at)}</TableCell>
-                      <TableCell>{formatDuration(entry.duration_minutes)}</TableCell>
+                      <TableCell>
+                        {formatDateTime(entry.check_out_at)}
+                      </TableCell>
+                      <TableCell>
+                        {formatDuration(entry.duration_minutes)}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -463,7 +531,9 @@ function MemberDashboard() {
                   )}
                   {routines.map((routine) => (
                     <TableRow key={routine.id}>
-                      <TableCell className="font-medium">{routine.name}</TableCell>
+                      <TableCell className="font-medium">
+                        {routine.name}
+                      </TableCell>
                       <TableCell>{routine.trainer_name}</TableCell>
                       <TableCell>{formatDate(routine.start_date)}</TableCell>
                       <TableCell>{formatDate(routine.end_date)}</TableCell>
@@ -479,12 +549,13 @@ function MemberDashboard() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
 
 export default function DashboardPage() {
-  const { user } = useAuth()
-  if (user?.role === 'admin' || user?.role === 'receptionist') return <StaffDashboard />
-  if (user?.role === 'trainer') return <TrainerDashboard />
-  return <MemberDashboard />
+  const { user } = useAuth();
+  if (user?.role === 'admin' || user?.role === 'receptionist')
+    return <StaffDashboard />;
+  if (user?.role === 'trainer') return <TrainerDashboard />;
+  return <MemberDashboard />;
 }

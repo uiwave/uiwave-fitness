@@ -24,10 +24,22 @@ Content-Type: application/json
 ```
 
 Respuesta:
+
 ```json
 {
-  "user": { "id": "32charshex...", "name": "...", "email": "...", "role": "admin", "banned": false },
-  "session": { "id": "...", "token": "TOKEN_RAW_32CHARS", "userId": "...", "expiresAt": "..." }
+  "user": {
+    "id": "32charshex...",
+    "name": "...",
+    "email": "...",
+    "role": "admin",
+    "banned": false
+  },
+  "session": {
+    "id": "...",
+    "token": "TOKEN_RAW_32CHARS",
+    "userId": "...",
+    "expiresAt": "..."
+  }
 }
 ```
 
@@ -52,41 +64,41 @@ Content-Type: application/json
 
 ## Dos modos de autenticación
 
-| Modo | Cómo | Uso recomendado |
-|---|---|---|
-| **Bearer** | Header `Authorization: Bearer <session.token>` | SPA con `localStorage` |
+| Modo       | Cómo                                                          | Uso recomendado            |
+| ---------- | ------------------------------------------------------------- | -------------------------- |
+| **Bearer** | Header `Authorization: Bearer <session.token>`                | SPA con `localStorage`     |
 | **Cookie** | Cookie `better-auth.session_token` + `credentials: 'include'` | Apps que prefieren cookies |
 
 Ambos funcionan en todos los endpoints de dominio. El guard normaliza el header (tolera `Bearer Bearer <t>`), así que siempre envía un solo `Bearer `.
 
 ## Endpoints de auth (todos bajo `/api/auth`, públicos)
 
-| Método | Ruta | Body | Uso |
-|---|---|---|---|
-| POST | `/api/auth/sign-up/email` | `{ name, email, password }` | Registro |
-| POST | `/api/auth/sign-in/email` | `{ email, password }` | Login → `{ user, session }` |
-| POST | `/api/auth/sign-out` | — | Logout (requiere sesión) |
-| GET | `/api/auth/get-session` | — | Sesión actual (solo cookie) |
-| POST | `/api/auth/update-user` | `{ name?, image? }` | Actualizar perfil propio |
-| POST | `/api/auth/change-password` | `{ currentPassword, newPassword }` | Cambiar contraseña |
-| POST | `/api/auth/change-email` | `{ newEmail }` | Cambiar email |
-| POST | `/api/auth/request-password-reset` | `{ email }` | Solicitar reset |
-| POST | `/api/auth/reset-password` | `{ newPassword, token }` | Reset con token |
+| Método | Ruta                               | Body                               | Uso                         |
+| ------ | ---------------------------------- | ---------------------------------- | --------------------------- |
+| POST   | `/api/auth/sign-up/email`          | `{ name, email, password }`        | Registro                    |
+| POST   | `/api/auth/sign-in/email`          | `{ email, password }`              | Login → `{ user, session }` |
+| POST   | `/api/auth/sign-out`               | —                                  | Logout (requiere sesión)    |
+| GET    | `/api/auth/get-session`            | —                                  | Sesión actual (solo cookie) |
+| POST   | `/api/auth/update-user`            | `{ name?, image? }`                | Actualizar perfil propio    |
+| POST   | `/api/auth/change-password`        | `{ currentPassword, newPassword }` | Cambiar contraseña          |
+| POST   | `/api/auth/change-email`           | `{ newEmail }`                     | Cambiar email               |
+| POST   | `/api/auth/request-password-reset` | `{ email }`                        | Solicitar reset             |
+| POST   | `/api/auth/reset-password`         | `{ newPassword, token }`           | Reset con token             |
 
 **Endpoints del plugin admin** (requieren rol `admin` en la sesión; la API Nest los usa internamente):
 
-| Método | Ruta |
-|---|---|
-| POST | `/api/auth/admin/create-user` |
-| POST | `/api/auth/admin/list-users` |
-| POST | `/api/auth/admin/get-user` |
-| POST | `/api/auth/admin/update-user` |
-| POST | `/api/auth/admin/set-role` |
-| POST | `/api/auth/admin/ban-user` / `unban-user` |
-| POST | `/api/auth/admin/remove-user` |
-| POST | `/api/auth/admin/list-user-sessions` / `revoke-user-session` / `revoke-user-sessions` |
-| POST | `/api/auth/admin/set-user-password` |
-| POST | `/api/auth/admin/impersonate-user` / `stop-impersonating` |
+| Método | Ruta                                                                                  |
+| ------ | ------------------------------------------------------------------------------------- |
+| POST   | `/api/auth/admin/create-user`                                                         |
+| POST   | `/api/auth/admin/list-users`                                                          |
+| POST   | `/api/auth/admin/get-user`                                                            |
+| POST   | `/api/auth/admin/update-user`                                                         |
+| POST   | `/api/auth/admin/set-role`                                                            |
+| POST   | `/api/auth/admin/ban-user` / `unban-user`                                             |
+| POST   | `/api/auth/admin/remove-user`                                                         |
+| POST   | `/api/auth/admin/list-user-sessions` / `revoke-user-session` / `revoke-user-sessions` |
+| POST   | `/api/auth/admin/set-user-password`                                                   |
+| POST   | `/api/auth/admin/impersonate-user` / `stop-impersonating`                             |
 
 > Para el frontend es más simple usar los endpoints Nest del módulo Users (`/users/*`) que encapsulan al plugin admin.
 
@@ -98,6 +110,7 @@ Authorization: Bearer <token>
 ```
 
 Respuesta:
+
 ```json
 {
   "data": {
@@ -120,12 +133,12 @@ Respuesta:
 
 Roles (campo `user.role`, lowercase): `admin`, `trainer`, `receptionist`, `member`.
 
-| Rol | Capacidades generales |
-|---|---|
-| **admin** | Todo: CRUD completo, usuarios, reportes |
-| **trainer** | Lee members/memberships/attendance/trainers; CRUD de exercises y routines (solo las suyas); **sin** payments ni reports |
+| Rol              | Capacidades generales                                                                                                                                      |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **admin**        | Todo: CRUD completo, usuarios, reportes                                                                                                                    |
+| **trainer**      | Lee members/memberships/attendance/trainers; CRUD de exercises y routines (solo las suyas); **sin** payments ni reports                                    |
 | **receptionist** | CRUD members/memberships; crear/leer payments; check-in/out + leer attendance; **sin** routines (403) ni reports... ver `12-reports.md` (sí tiene reports) |
-| **member** | Solo lectura de sus propios datos (members, memberships, payments, attendance, routines) + check-in/out propio + notificaciones |
+| **member**       | Solo lectura de sus propios datos (members, memberships, payments, attendance, routines) + check-in/out propio + notificaciones                            |
 
 > Detalle por endpoint en cada documento de módulo (columna **Roles**).
 
@@ -139,7 +152,9 @@ El plugin admin de Better Auth verifica permisos sobre el recurso **`user` (en s
 
 ```ts
 // node_modules/better-auth/dist/plugins/admin/routes.mjs
-permissions: { user: ["create"] }   // ← recurso "user", acción "create"
+permissions: {
+  user: ['create'];
+} // ← recurso "user", acción "create"
 ```
 
 Y luego `hasPermission` hace `roles[rol].authorize({ user: ["create"] })`. Si el rol no declara el recurso `user`, la autorización **falla y devuelve 403** aunque el rol sea `admin` y aunque el statement declare un recurso `users` (plural).
@@ -154,26 +169,26 @@ porque el plugin admin pedía `user: ["create"]` y el rol `admin` no tenía nada
 
 **La corrección** fue agregar el recurso `user` (singular) al statement y a los roles. Acciones disponibles del plugin admin y qué endpoint las exige:
 
-| Acción | Endpoint admin que la exige |
-|---|---|
-| `create` | `POST /api/auth/admin/create-user` |
-| `get` | `get-user` |
-| `list` | `list-users` |
-| `update` | `update-user` |
-| `delete` | `remove-user` |
-| `ban` | `ban-user` / `unban-user` |
-| `set-role` | `set-role` (y `create-user` si se envía `role` en el body) |
-| `set-email` | `update-user` (al cambiar email) |
-| `set-password` | `set-user-password` |
+| Acción         | Endpoint admin que la exige                                |
+| -------------- | ---------------------------------------------------------- |
+| `create`       | `POST /api/auth/admin/create-user`                         |
+| `get`          | `get-user`                                                 |
+| `list`         | `list-users`                                               |
+| `update`       | `update-user`                                              |
+| `delete`       | `remove-user`                                              |
+| `ban`          | `ban-user` / `unban-user`                                  |
+| `set-role`     | `set-role` (y `create-user` si se envía `role` en el body) |
+| `set-email`    | `update-user` (al cambiar email)                           |
+| `set-password` | `set-user-password`                                        |
 
 Permisos actuales por rol (declarados en `permissions.ts`):
 
-| Rol | `user` (admin plugin) | Otros recursos |
-|---|---|---|
-| **admin** | `create, get, list, update, delete, ban, set-role, set-email, set-password` | CRUD completo del resto |
-| **receptionist** | `get, list` | CRUD members/memberships, payments, attendance |
-| **trainer** | — | read de members/memberships/attendance/trainers; CRUD exercises/routines |
-| **member** | — | solo lectura de lo propio |
+| Rol              | `user` (admin plugin)                                                       | Otros recursos                                                           |
+| ---------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **admin**        | `create, get, list, update, delete, ban, set-role, set-email, set-password` | CRUD completo del resto                                                  |
+| **receptionist** | `get, list`                                                                 | CRUD members/memberships, payments, attendance                           |
+| **trainer**      | —                                                                           | read de members/memberships/attendance/trainers; CRUD exercises/routines |
+| **member**       | —                                                                           | solo lectura de lo propio                                                |
 
 #### ¿El recurso `users` (plural) sirve para algo?
 
@@ -193,11 +208,11 @@ Permisos actuales por rol (declarados en `permissions.ts`):
 
 ## Errores típicos
 
-| Situación | Respuesta |
-|---|---|
-| Credenciales incorrectas | 401 |
-| Password < 8 chars | 400 (validación) |
-| Token expirado/inválido | 401 `No autenticado` |
-| Sin token en endpoint protegido | 401 `No autenticado` |
-| Rol sin permiso | 403 `No tienes permisos para acceder a este recurso` |
+| Situación                                                    | Respuesta                                                                                                   |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Credenciales incorrectas                                     | 401                                                                                                         |
+| Password < 8 chars                                           | 400 (validación)                                                                                            |
+| Token expirado/inválido                                      | 401 `No autenticado`                                                                                        |
+| Sin token en endpoint protegido                              | 401 `No autenticado`                                                                                        |
+| Rol sin permiso                                              | 403 `No tienes permisos para acceder a este recurso`                                                        |
 | `403 You are not allowed to create users` (con cuenta admin) | El rol no tiene `user: ['create']` en `permissions.ts` (recurso singular). Ver sección "Acceso controlado". |

@@ -4,13 +4,13 @@ Reportes agregados para el dashboard. **Solo admin y receptionist** (clase con `
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Respuesta (`data`) |
-|---|---|---|---|---|
-| GET | `/reports/dashboard` | admin, receptionist | — | Resumen general |
-| GET | `/reports/members` | admin, receptionist | `from`, `to` | Miembros por estado y nuevos por mes |
-| GET | `/reports/revenue` | admin, receptionist | `from`, `to` | Ingresos totales, por mes y por método |
-| GET | `/reports/attendance` | admin, receptionist | `from`, `to` | Asistencia diaria (últimos 30 días) y promedio |
-| GET | `/reports/memberships` | admin, receptionist | — | Membresías por estado y próximas a vencer |
+| Método | Ruta                   | Roles               | Query        | Respuesta (`data`)                             |
+| ------ | ---------------------- | ------------------- | ------------ | ---------------------------------------------- |
+| GET    | `/reports/dashboard`   | admin, receptionist | —            | Resumen general                                |
+| GET    | `/reports/members`     | admin, receptionist | `from`, `to` | Miembros por estado y nuevos por mes           |
+| GET    | `/reports/revenue`     | admin, receptionist | `from`, `to` | Ingresos totales, por mes y por método         |
+| GET    | `/reports/attendance`  | admin, receptionist | `from`, `to` | Asistencia diaria (últimos 30 días) y promedio |
+| GET    | `/reports/memberships` | admin, receptionist | —            | Membresías por estado y próximas a vencer      |
 
 ## Shapes de respuesta
 
@@ -23,7 +23,7 @@ Reportes agregados para el dashboard. **Solo admin y receptionist** (clase con `
     "activeMembers": 95,
     "activeMemberships": 90,
     "expiredMemberships": 5,
-    "monthlyRevenue": 8560.50,
+    "monthlyRevenue": 8560.5,
     "todayAttendance": 34,
     "pendingPayments": 7
   }
@@ -35,8 +35,8 @@ Reportes agregados para el dashboard. **Solo admin y receptionist** (clase con `
 ```json
 {
   "data": {
-    "byStatus": [ { "status": "active", "total": 95 } ],
-    "newPerMonth": [ { "month": "2026-01", "total": 12 } ]
+    "byStatus": [{ "status": "active", "total": 95 }],
+    "newPerMonth": [{ "month": "2026-01", "total": 12 }]
   }
 }
 ```
@@ -48,9 +48,9 @@ Reportes agregados para el dashboard. **Solo admin y receptionist** (clase con `
 ```json
 {
   "data": {
-    "totalRevenue": 12345.00,
-    "byMonth": [ { "month": "2026-08", "payments": 30, "total": 2670.00 } ],
-    "byMethod": [ { "payment_method": "YAPE", "payments": 20, "total": 1780.00 } ]
+    "totalRevenue": 12345.0,
+    "byMonth": [{ "month": "2026-08", "payments": 30, "total": 2670.0 }],
+    "byMethod": [{ "payment_method": "YAPE", "payments": 20, "total": 1780.0 }]
   }
 }
 ```
@@ -60,7 +60,7 @@ Reportes agregados para el dashboard. **Solo admin y receptionist** (clase con `
 ```json
 {
   "data": {
-    "daily": [ { "day": "2026-08-19", "check_ins": 34, "check_outs": 30 } ],
+    "daily": [{ "day": "2026-08-19", "check_ins": 34, "check_outs": 30 }],
     "averagePerDay": 28.5
   }
 }
@@ -73,19 +73,21 @@ Reportes agregados para el dashboard. **Solo admin y receptionist** (clase con `
 ```json
 {
   "data": {
-    "byStatus": [ { "status": "ACTIVE", "total": 90 } ],
+    "byStatus": [{ "status": "ACTIVE", "total": 90 }],
     "expiringSoon": 4,
-    "expiringSoonList": [ { "id": "uuid", "member_name": "Juan Pérez", "end_date": "2026-08-25" } ]
+    "expiringSoonList": [
+      { "id": "uuid", "member_name": "Juan Pérez", "end_date": "2026-08-25" }
+    ]
   }
 }
 ```
 
 ## Query params (todos opcionales)
 
-| Param | Tipo | Notas |
-|---|---|---|
+| Param  | Tipo   | Notas    |
+| ------ | ------ | -------- |
 | `from` | string | ISO date |
-| `to` | string | ISO date |
+| `to`   | string | ISO date |
 
 ## Reglas de negocio
 

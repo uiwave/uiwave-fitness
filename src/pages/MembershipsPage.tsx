@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { del, errorMessage, get, patch, post } from '@/lib/apiClient'
+import { usePaginated } from '@/hooks/usePaginated';
+import { del, errorMessage, get, patch, post } from '@/lib/apiClient';
 import type {
   Envelope,
   Membership,
@@ -14,13 +14,13 @@ import type {
   Member,
   Paginated,
   Plan,
-} from '@/types/api'
-import { formatDate, formatMoney } from '@/lib/format'
-import { useAuth } from '@/auth/AuthContext'
+} from '@/types/api';
+import { formatDate, formatMoney } from '@/lib/format';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -28,14 +28,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -43,7 +43,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -53,7 +53,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog';
 import {
   Form,
   FormControl,
@@ -61,12 +61,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/form';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
-const STATUSES: MembershipStatus[] = ['ACTIVE', 'EXPIRED', 'CANCELLED', 'PENDING']
+const STATUSES: MembershipStatus[] = [
+  'ACTIVE',
+  'EXPIRED',
+  'CANCELLED',
+  'PENDING',
+];
 
 const membershipSchema = z
   .object({
@@ -77,7 +86,10 @@ const membershipSchema = z
     status: z.enum(['ACTIVE', 'EXPIRED', 'CANCELLED', 'PENDING']),
     price: z
       .string()
-      .refine((v) => v === '' || (!Number.isNaN(Number(v)) && Number(v) >= 0), 'Precio inválido'),
+      .refine(
+        (v) => v === '' || (!Number.isNaN(Number(v)) && Number(v) >= 0),
+        'Precio inválido',
+      ),
   })
   .superRefine((values, ctx) => {
     if (values.endDate < values.startDate) {
@@ -85,25 +97,25 @@ const membershipSchema = z
         code: 'custom',
         path: ['endDate'],
         message: 'endDate debe ser mayor o igual a startDate',
-      })
+      });
     }
-  })
+  });
 
-type MembershipValues = z.infer<typeof membershipSchema>
+type MembershipValues = z.infer<typeof membershipSchema>;
 
 function MembershipForm({
   membership,
   onSuccess,
   onCancel,
 }: {
-  membership?: Membership
-  onSuccess: () => void
-  onCancel: () => void
+  membership?: Membership;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const [members, setMembers] = useState<Member[]>([])
-  const [plans, setPlans] = useState<Plan[]>([])
-  const isEdit = !!membership
+  const [submitting, setSubmitting] = useState(false);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const isEdit = !!membership;
 
   const form = useForm<MembershipValues>({
     resolver: zodResolver(membershipSchema),
@@ -124,7 +136,7 @@ function MembershipForm({
           status: 'PENDING',
           price: '',
         },
-  })
+  });
 
   useEffect(() => {
     Promise.all([
@@ -132,17 +144,17 @@ function MembershipForm({
       get<Paginated<Plan>>('/plans', { page: 1, limit: 100 }),
     ])
       .then(([membersResult, plansResult]) => {
-        setMembers(membersResult.data)
-        setPlans(plansResult.data)
+        setMembers(membersResult.data);
+        setPlans(plansResult.data);
       })
       .catch(() => {
-        setMembers([])
-        setPlans([])
-      })
-  }, [])
+        setMembers([]);
+        setPlans([]);
+      });
+  }, []);
 
   const onSubmit = async (values: MembershipValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const body: Record<string, unknown> = {
       memberId: values.memberId,
       planId: values.planId,
@@ -150,22 +162,25 @@ function MembershipForm({
       endDate: values.endDate,
       status: values.status,
       price: values.price === '' ? undefined : Number(values.price),
-    }
+    };
     try {
       if (isEdit) {
-        await patch<Envelope<Membership>>(`/memberships/${membership!.id}`, body)
-        toast.success('Membresía actualizada')
+        await patch<Envelope<Membership>>(
+          `/memberships/${membership!.id}`,
+          body,
+        );
+        toast.success('Membresía actualizada');
       } else {
-        await post<Envelope<Membership>>('/memberships', body)
-        toast.success('Membresía creada')
+        await post<Envelope<Membership>>('/memberships', body);
+        toast.success('Membresía creada');
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -296,18 +311,22 @@ function MembershipForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear membresía'}
+            {submitting
+              ? 'Guardando...'
+              : isEdit
+                ? 'Guardar cambios'
+                : 'Crear membresía'}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 export default function MembershipsPage() {
-  const { user } = useAuth()
-  const isAdmin = user?.role === 'admin'
-  const canManage = isAdmin || user?.role === 'receptionist'
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+  const canManage = isAdmin || user?.role === 'receptionist';
   const {
     data,
     meta,
@@ -318,44 +337,47 @@ export default function MembershipsPage() {
     filters,
     setFilter,
     reload,
-  } = usePaginated<Membership>('/memberships')
+  } = usePaginated<Membership>('/memberships');
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Membership | null>(null)
-  const [deleting, setDeleting] = useState<Membership | null>(null)
-  const [deletingLoading, setDeletingLoading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Membership | null>(null);
+  const [deleting, setDeleting] = useState<Membership | null>(null);
+  const [deletingLoading, setDeletingLoading] = useState(false);
 
   const openCreate = () => {
-    setEditing(null)
-    setDialogOpen(true)
-  }
+    setEditing(null);
+    setDialogOpen(true);
+  };
   const openEdit = (membership: Membership) => {
-    setEditing(membership)
-    setDialogOpen(true)
-  }
+    setEditing(membership);
+    setDialogOpen(true);
+  };
   const onSuccess = () => {
-    setDialogOpen(false)
-    reload()
-  }
+    setDialogOpen(false);
+    reload();
+  };
 
   const confirmDelete = async () => {
-    if (!deleting) return
-    setDeletingLoading(true)
+    if (!deleting) return;
+    setDeletingLoading(true);
     try {
-      await del(`/memberships/${deleting.id}`)
-      toast.success('Membresía eliminada')
-      setDeleting(null)
-      reload()
+      await del(`/memberships/${deleting.id}`);
+      toast.success('Membresía eliminada');
+      setDeleting(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setDeletingLoading(false)
+      setDeletingLoading(false);
     }
-  }
+  };
 
   return (
     <div>
-      <PageHeader title="Membresías" description="Membresías activas de cada miembro">
+      <PageHeader
+        title="Membresías"
+        description="Membresías activas de cada miembro"
+      >
         {canManage && (
           <Button onClick={openCreate}>
             <Plus />
@@ -365,10 +387,12 @@ export default function MembershipsPage() {
       </PageHeader>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <Label className="text-sm text-muted-foreground">Estado</Label>
+        <Label className="text-muted-foreground text-sm">Estado</Label>
         <Select
           value={(filters.status as string) ?? ''}
-          onValueChange={(v) => setFilter('status', v === 'all' ? undefined : v)}
+          onValueChange={(v) =>
+            setFilter('status', v === 'all' ? undefined : v)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
@@ -397,7 +421,9 @@ export default function MembershipsPage() {
               <TableHead>Fin</TableHead>
               <TableHead>Precio</TableHead>
               <TableHead>Estado</TableHead>
-              {canManage && <TableHead className="w-24 text-right">Acciones</TableHead>}
+              {canManage && (
+                <TableHead className="w-24 text-right">Acciones</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -410,7 +436,9 @@ export default function MembershipsPage() {
             )}
             {data.map((membership) => (
               <TableRow key={membership.id}>
-                <TableCell className="font-medium">{membership.member_name}</TableCell>
+                <TableCell className="font-medium">
+                  {membership.member_name}
+                </TableCell>
                 <TableCell>{membership.plan_name}</TableCell>
                 <TableCell>{formatDate(membership.start_date)}</TableCell>
                 <TableCell>{formatDate(membership.end_date)}</TableCell>
@@ -421,7 +449,11 @@ export default function MembershipsPage() {
                 {canManage && (
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon-sm" onClick={() => openEdit(membership)}>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => openEdit(membership)}
+                      >
                         <Pencil />
                       </Button>
                       {isAdmin && (
@@ -442,12 +474,19 @@ export default function MembershipsPage() {
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? 'Editar membresía' : 'Nueva membresía'}</DialogTitle>
+            <DialogTitle>
+              {editing ? 'Editar membresía' : 'Nueva membresía'}
+            </DialogTitle>
             <DialogDescription>
               {editing
                 ? 'Actualiza los datos de la membresía.'
@@ -462,14 +501,23 @@ export default function MembershipsPage() {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
+      <AlertDialog
+        open={!!deleting}
+        onOpenChange={(open) => !open && setDeleting(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar la membresía de {deleting?.member_name}?</AlertDialogTitle>
-            <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+            <AlertDialogTitle>
+              ¿Eliminar la membresía de {deleting?.member_name}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deletingLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={deletingLoading}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white"
               disabled={deletingLoading}
@@ -481,5 +529,5 @@ export default function MembershipsPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

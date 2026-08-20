@@ -1,11 +1,11 @@
-import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 const LOWER_OK: Record<string, string> = {
   active: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
   inactive: 'bg-muted text-muted-foreground',
   suspended: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-}
+};
 
 const UPPER_OK: Record<string, string> = {
   ACTIVE: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
@@ -24,13 +24,13 @@ const UPPER_OK: Record<string, string> = {
   BEGINNER: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
   INTERMEDIATE: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
   ADVANCED: 'bg-red-500/10 text-red-600 dark:text-red-400',
-}
+};
 
 export function StatusBadge({ status }: { status: string }) {
-  const className = UPPER_OK[status] ?? LOWER_OK[status]
+  const className = UPPER_OK[status] ?? LOWER_OK[status];
   return (
     <Badge variant="outline" className={cn('font-normal', className)}>
       {status}
     </Badge>
-  )
+  );
 }

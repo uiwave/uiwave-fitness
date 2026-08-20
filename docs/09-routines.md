@@ -6,18 +6,18 @@ Rutinas de entrenamiento (asignadas a un member, creadas por un trainer). Incluy
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Body | Respuesta |
-|---|---|---|---|---|---|
-| GET | `/routines` | cualquiera **excepto receptionist** (403); members ven solo las suyas | `page`, `limit`, `status`, `memberId` | — | `{ data: Routine[], meta }` |
-| GET | `/routines/:id` | cualquiera (receptionist 403; member solo la suya → 404) | — | — | `{ data: Routine }` |
-| POST | `/routines` | admin, trainer | — | `CreateRoutineDto` | `{ data: Routine }` |
-| PATCH | `/routines/:id` | admin, trainer (trainer solo las suyas) | — | `UpdateRoutineDto` | `{ data: Routine }` |
-| DELETE | `/routines/:id` | admin | — | — | `{ data: { id, deleted: true } }` |
-| GET | `/routines/:routineId/exercises` | cualquiera (mismo acceso que la rutina) | — | — | `{ data: RoutineExercise[] }` |
-| POST | `/routines/:routineId/exercises` | admin, trainer | — | `CreateRoutineExerciseDto` | `{ data: RoutineExercise }` |
-| PATCH | `/routines/:routineId/exercises/:exerciseId` | admin, trainer | — | `UpdateRoutineExerciseDto` | `{ data: RoutineExercise }` |
-| DELETE | `/routines/:routineId/exercises/:exerciseId` | admin, trainer | — | — | `{ data: { id, deleted: true } }` |
-| GET | `/members/:memberId/routines` | cualquiera (member solo las suyas → 404; receptionist 403) | — | — | `{ data: Routine[] }` |
+| Método | Ruta                                         | Roles                                                                 | Query                                 | Body                       | Respuesta                         |
+| ------ | -------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------- | -------------------------- | --------------------------------- |
+| GET    | `/routines`                                  | cualquiera **excepto receptionist** (403); members ven solo las suyas | `page`, `limit`, `status`, `memberId` | —                          | `{ data: Routine[], meta }`       |
+| GET    | `/routines/:id`                              | cualquiera (receptionist 403; member solo la suya → 404)              | —                                     | —                          | `{ data: Routine }`               |
+| POST   | `/routines`                                  | admin, trainer                                                        | —                                     | `CreateRoutineDto`         | `{ data: Routine }`               |
+| PATCH  | `/routines/:id`                              | admin, trainer (trainer solo las suyas)                               | —                                     | `UpdateRoutineDto`         | `{ data: Routine }`               |
+| DELETE | `/routines/:id`                              | admin                                                                 | —                                     | —                          | `{ data: { id, deleted: true } }` |
+| GET    | `/routines/:routineId/exercises`             | cualquiera (mismo acceso que la rutina)                               | —                                     | —                          | `{ data: RoutineExercise[] }`     |
+| POST   | `/routines/:routineId/exercises`             | admin, trainer                                                        | —                                     | `CreateRoutineExerciseDto` | `{ data: RoutineExercise }`       |
+| PATCH  | `/routines/:routineId/exercises/:exerciseId` | admin, trainer                                                        | —                                     | `UpdateRoutineExerciseDto` | `{ data: RoutineExercise }`       |
+| DELETE | `/routines/:routineId/exercises/:exerciseId` | admin, trainer                                                        | —                                     | —                          | `{ data: { id, deleted: true } }` |
+| GET    | `/members/:memberId/routines`                | cualquiera (member solo las suyas → 404; receptionist 403)            | —                                     | —                          | `{ data: Routine[] }`             |
 
 ## Fila Routine (respuesta, snake_case)
 
@@ -55,7 +55,7 @@ Rutinas de entrenamiento (asignadas a un member, creadas por un trainer). Incluy
     "exercise_difficulty": "INTERMEDIATE",
     "sets": 4,
     "repetitions": 10,
-    "weight": 60.00,
+    "weight": 60.0,
     "rest_seconds": 90,
     "notes": "Subir peso progresivo",
     "order_index": 1
@@ -67,42 +67,44 @@ Rutinas de entrenamiento (asignadas a un member, creadas por un trainer). Incluy
 
 ### CreateRoutineDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `memberId` | string | UUID | **requerido** |
-| `trainerId` | string | UUID | opcional; si el usuario es trainer y no se envía → su propio perfil |
-| `name` | string | máx 150 | **requerido** |
-| `description` | string | máx 2000 | opcional |
-| `startDate` | string | ISO date | opcional |
-| `endDate` | string | ISO date | opcional, debe ser ≥ startDate (400) |
-| `status` | string | `ACTIVE` \| `INACTIVE` \| `COMPLETED` | opcional, default `ACTIVE` |
+| Campo         | Tipo   | Validación                            | Notas                                                               |
+| ------------- | ------ | ------------------------------------- | ------------------------------------------------------------------- |
+| `memberId`    | string | UUID                                  | **requerido**                                                       |
+| `trainerId`   | string | UUID                                  | opcional; si el usuario es trainer y no se envía → su propio perfil |
+| `name`        | string | máx 150                               | **requerido**                                                       |
+| `description` | string | máx 2000                              | opcional                                                            |
+| `startDate`   | string | ISO date                              | opcional                                                            |
+| `endDate`     | string | ISO date                              | opcional, debe ser ≥ startDate (400)                                |
+| `status`      | string | `ACTIVE` \| `INACTIVE` \| `COMPLETED` | opcional, default `ACTIVE`                                          |
 
 ### UpdateRoutineDto
+
 Todos los campos opcionales.
 
 ### CreateRoutineExerciseDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `exerciseId` | string | UUID | **requerido** |
-| `sets` | number | entero 1–1000 | **requerido** |
-| `repetitions` | number | entero 1–1000 | **requerido** |
-| `weight` | number | ≥ 0, 2 decimales máx | opcional, default `0` |
-| `restSeconds` | number | entero 0–86400 | opcional, default `60` |
-| `notes` | string | máx 1000 | opcional |
-| `orderIndex` | number | entero ≥ 0 | opcional, default = max+1 |
+| Campo         | Tipo   | Validación           | Notas                     |
+| ------------- | ------ | -------------------- | ------------------------- |
+| `exerciseId`  | string | UUID                 | **requerido**             |
+| `sets`        | number | entero 1–1000        | **requerido**             |
+| `repetitions` | number | entero 1–1000        | **requerido**             |
+| `weight`      | number | ≥ 0, 2 decimales máx | opcional, default `0`     |
+| `restSeconds` | number | entero 0–86400       | opcional, default `60`    |
+| `notes`       | string | máx 1000             | opcional                  |
+| `orderIndex`  | number | entero ≥ 0           | opcional, default = max+1 |
 
 ### UpdateRoutineExerciseDto
+
 Todos los campos opcionales.
 
 ### Query params de GET /routines
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
-| `status` | string | `ACTIVE` \| `INACTIVE` \| `COMPLETED` |
-| `memberId` | string | UUID |
+| Param      | Tipo   | Notas                                 |
+| ---------- | ------ | ------------------------------------- |
+| `page`     | number | default 1                             |
+| `limit`    | number | 1–100, default 20                     |
+| `status`   | string | `ACTIVE` \| `INACTIVE` \| `COMPLETED` |
+| `memberId` | string | UUID                                  |
 
 ## Reglas de negocio
 

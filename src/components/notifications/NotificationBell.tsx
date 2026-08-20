@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Bell, CheckCheck } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react';
+import { Bell, CheckCheck } from 'lucide-react';
 
-import { get, patch, errorMessage } from '@/lib/apiClient'
-import type { PaginatedNotifications } from '@/types/api'
-import { toast } from 'sonner'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { get, patch, errorMessage } from '@/lib/apiClient';
+import type { PaginatedNotifications } from '@/types/api';
+import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,59 +13,66 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { StatusBadge } from '@/components/shared/StatusBadge'
-import { Separator } from '@/components/ui/separator'
+} from '@/components/ui/dropdown-menu';
+import { StatusBadge } from '@/components/shared/StatusBadge';
+import { Separator } from '@/components/ui/separator';
 
 export function NotificationBell() {
-  const [unread, setUnread] = useState(0)
-  const [notifications, setNotifications] = useState<PaginatedNotifications['data']>([])
-  const [open, setOpen] = useState(false)
+  const [unread, setUnread] = useState(0);
+  const [notifications, setNotifications] = useState<
+    PaginatedNotifications['data']
+  >([]);
+  const [open, setOpen] = useState(false);
 
   const load = useCallback(async () => {
     try {
       const result = await get<PaginatedNotifications>('/notifications', {
         read: 'false',
         limit: 5,
-      })
-      setNotifications(result.data)
-      setUnread(result.meta.unread)
+      });
+      setNotifications(result.data);
+      setUnread(result.meta.unread);
     } catch {
       // silencioso: el badge no debe romper la navegación
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    load()
-    const timer = setInterval(load, 60000)
-    return () => clearInterval(timer)
-  }, [load])
+    load();
+    const timer = setInterval(load, 60000);
+    return () => clearInterval(timer);
+  }, [load]);
 
   const markRead = async (id: string) => {
     try {
-      await patch(`/notifications/${id}/read`)
+      await patch(`/notifications/${id}/read`);
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      load()
+      load();
     }
-  }
+  };
 
   const markAllRead = async () => {
     try {
-      await patch('/notifications/read-all')
-      toast.success('Todas las notificaciones marcadas como leídas')
+      await patch('/notifications/read-all');
+      toast.success('Todas las notificaciones marcadas como leídas');
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      load()
+      load();
     }
-  }
+  };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Notificaciones" className="relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Notificaciones"
+          className="relative"
+        >
           <Bell />
           {unread > 0 && (
             <Badge className="absolute -top-1 -right-1 size-5 min-w-5 justify-center rounded-full p-0 text-[10px]">
@@ -77,12 +84,14 @@ export function NotificationBell() {
       <DropdownMenuContent align="end" className="w-80">
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>Notificaciones</span>
-          <span className="text-xs text-muted-foreground">{unread} sin leer</span>
+          <span className="text-muted-foreground text-xs">
+            {unread} sin leer
+          </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <div className="max-h-80 overflow-y-auto">
           {notifications.length === 0 && (
-            <p className="px-2 py-4 text-center text-sm text-muted-foreground">
+            <p className="text-muted-foreground px-2 py-4 text-center text-sm">
               No hay notificaciones
             </p>
           )}
@@ -96,8 +105,8 @@ export function NotificationBell() {
                 <span className="text-sm font-medium">{n.title}</span>
                 <StatusBadge status={n.type} />
               </span>
-              <span className="text-xs text-muted-foreground">{n.message}</span>
-              <span className="text-xs text-muted-foreground/70">
+              <span className="text-muted-foreground text-xs">{n.message}</span>
+              <span className="text-muted-foreground/70 text-xs">
                 {new Date(n.created_at).toLocaleString()}
               </span>
             </DropdownMenuItem>
@@ -121,6 +130,5 @@ export function NotificationBell() {
         )}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
-
