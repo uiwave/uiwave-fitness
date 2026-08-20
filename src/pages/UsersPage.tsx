@@ -1,20 +1,26 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Ban, Plus, ShieldCheck, Trash2, Unlock } from 'lucide-react'
-import { toast } from 'sonner'
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Ban, Plus, ShieldCheck, Trash2, Unlock } from "lucide-react";
+import { toast } from "sonner";
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { del, errorMessage, patch, post } from '@/lib/apiClient'
-import type { BanResponse, Envelope, RoleUpdateResponse, User, UserRole } from '@/types/api'
-import { formatDateTime } from '@/lib/format'
-import { useAuth } from '@/auth/AuthContext'
+import { usePaginated } from "@/hooks/usePaginated";
+import { del, errorMessage, patch, post } from "@/lib/apiClient";
+import type {
+  BanResponse,
+  Envelope,
+  RoleUpdateResponse,
+  User,
+  UserRole,
+} from "@/types/api";
+import { formatDateTime } from "@/lib/format";
+import { useAuth } from "@/auth/AuthContext";
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -22,14 +28,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from "@/components/ui/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -37,7 +43,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,7 +53,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from "@/components/ui/alert-dialog";
 import {
   Form,
   FormControl,
@@ -55,41 +61,45 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from "@/components/ui/form";
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from "@/components/shared/DataState";
+import { PageHeader, PaginationBar } from "@/components/shared/PageParts";
+import { StatusBadge } from "@/components/shared/StatusBadge";
 
-const ROLES: UserRole[] = ['admin', 'trainer', 'receptionist', 'member']
+const ROLES: UserRole[] = ["admin", "trainer", "receptionist", "member"];
 
 const createUserSchema = z.object({
-  name: z.string().min(2, 'Mínimo 2 caracteres').max(100),
-  email: z.string().email('Email inválido'),
-  password: z.string().min(8, 'Mínimo 8 caracteres').max(100),
-  role: z.enum(['admin', 'trainer', 'receptionist', 'member']),
-})
+  name: z.string().min(2, "Mínimo 2 caracteres").max(100),
+  email: z.string().email("Email inválido"),
+  password: z.string().min(8, "Mínimo 8 caracteres").max(100),
+  role: z.enum(["admin", "trainer", "receptionist", "member"]),
+});
 
-type CreateUserValues = z.infer<typeof createUserSchema>
+type CreateUserValues = z.infer<typeof createUserSchema>;
 
 function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
-  const [submitting, setSubmitting] = useState(false)
+  const [submitting, setSubmitting] = useState(false);
   const form = useForm<CreateUserValues>({
     resolver: zodResolver(createUserSchema),
-    defaultValues: { name: '', email: '', password: '', role: 'member' },
-  })
+    defaultValues: { name: "", email: "", password: "", role: "member" },
+  });
 
   const onSubmit = async (values: CreateUserValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     try {
-      await post<Envelope<User>>('/users', values)
-      toast.success('Usuario creado')
-      onSuccess()
+      await post<Envelope<User>>("/users", values);
+      toast.success("Usuario creado");
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -127,7 +137,11 @@ function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
             <FormItem>
               <FormLabel>Contraseña</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Mínimo 8 caracteres" {...field} />
+                <Input
+                  type="password"
+                  placeholder="Mínimo 8 caracteres"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -159,79 +173,95 @@ function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
         />
         <DialogFooter>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Creando...' : 'Crear usuario'}
+            {submitting ? "Creando..." : "Crear usuario"}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 export default function UsersPage() {
-  const { user: me } = useAuth()
-  const isAdmin = me?.role === 'admin'
-  const { data, meta, loading, error, page, setPage, search, setSearch, filters, setFilter, reload } =
-    usePaginated<User>('/users')
+  const { user: me } = useAuth();
+  const isAdmin = me?.role === "admin";
+  const {
+    data,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    search,
+    setSearch,
+    filters,
+    setFilter,
+    reload,
+  } = usePaginated<User>("/users");
 
-  const [createOpen, setCreateOpen] = useState(false)
-  const [roleUser, setRoleUser] = useState<User | null>(null)
-  const [roleValue, setRoleValue] = useState<UserRole>('member')
-  const [banUser, setBanUser] = useState<User | null>(null)
-  const [deleteUser, setDeleteUser] = useState<User | null>(null)
-  const [actionLoading, setActionLoading] = useState(false)
+  const [createOpen, setCreateOpen] = useState(false);
+  const [roleUser, setRoleUser] = useState<User | null>(null);
+  const [roleValue, setRoleValue] = useState<UserRole>("member");
+  const [banUser, setBanUser] = useState<User | null>(null);
+  const [deleteUser, setDeleteUser] = useState<User | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
 
   const changeRole = async () => {
-    if (!roleUser) return
-    setActionLoading(true)
+    if (!roleUser) return;
+    setActionLoading(true);
     try {
-      await patch<Envelope<RoleUpdateResponse>>(`/users/${roleUser.id}/role`, { role: roleValue })
-      toast.success('Rol actualizado')
-      setRoleUser(null)
-      reload()
+      await patch<Envelope<RoleUpdateResponse>>(`/users/${roleUser.id}/role`, {
+        role: roleValue,
+      });
+      toast.success("Rol actualizado");
+      setRoleUser(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setActionLoading(false)
+      setActionLoading(false);
     }
-  }
+  };
 
   const toggleBan = async (user: User) => {
-    setActionLoading(true)
+    setActionLoading(true);
     try {
       if (user.banned) {
-        await patch<Envelope<BanResponse>>(`/users/${user.id}/unban`)
-        toast.success('Usuario desbaneado')
+        await patch<Envelope<BanResponse>>(`/users/${user.id}/unban`);
+        toast.success("Usuario desbaneado");
       } else {
-        await patch<Envelope<BanResponse>>(`/users/${user.id}/ban`)
-        toast.success('Usuario baneado')
+        await patch<Envelope<BanResponse>>(`/users/${user.id}/ban`);
+        toast.success("Usuario baneado");
       }
-      setBanUser(null)
-      reload()
+      setBanUser(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setActionLoading(false)
+      setActionLoading(false);
     }
-  }
+  };
 
   const confirmDelete = async () => {
-    if (!deleteUser) return
-    setActionLoading(true)
+    if (!deleteUser) return;
+    setActionLoading(true);
     try {
-      await del(`/users/${deleteUser.id}`)
-      toast.success('Usuario eliminado')
-      setDeleteUser(null)
-      reload()
+      await del(`/users/${deleteUser.id}`);
+      toast.success("Usuario eliminado");
+      setDeleteUser(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setActionLoading(false)
+      setActionLoading(false);
     }
-  }
+  };
 
   return (
     <div>
-      <PageHeader title="Usuarios" description="Cuentas del sistema (Better Auth)">
+      <PageHeader
+        title="Usuarios"
+        description="Cuentas del sistema (Better Auth)"
+      >
         {isAdmin && (
           <Button onClick={() => setCreateOpen(true)}>
             <Plus />
@@ -249,8 +279,8 @@ export default function UsersPage() {
         />
         <Label className="text-sm text-muted-foreground">Rol</Label>
         <Select
-          value={(filters.role as string) ?? ''}
-          onValueChange={(v) => setFilter('role', v === 'all' ? undefined : v)}
+          value={(filters.role as string) ?? ""}
+          onValueChange={(v) => setFilter("role", v === "all" ? undefined : v)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
@@ -278,7 +308,9 @@ export default function UsersPage() {
               <TableHead>Rol</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead>Creado</TableHead>
-              {isAdmin && <TableHead className="w-28 text-right">Acciones</TableHead>}
+              {isAdmin && (
+                <TableHead className="w-28 text-right">Acciones</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -305,11 +337,17 @@ export default function UsersPage() {
                 </TableCell>
                 <TableCell>
                   {user.banned ? (
-                    <Badge variant="outline" className="bg-red-500/10 text-red-600 dark:text-red-400">
+                    <Badge
+                      variant="outline"
+                      className="bg-red-500/10 text-red-600 dark:text-red-400"
+                    >
                       baneado
                     </Badge>
                   ) : (
-                    <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                    >
                       activo
                     </Badge>
                   )}
@@ -323,8 +361,8 @@ export default function UsersPage() {
                         size="icon-sm"
                         title="Cambiar rol"
                         onClick={() => {
-                          setRoleUser(user)
-                          setRoleValue(user.role)
+                          setRoleUser(user);
+                          setRoleValue(user.role);
                         }}
                       >
                         <ShieldCheck />
@@ -332,7 +370,7 @@ export default function UsersPage() {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        title={user.banned ? 'Desbanear' : 'Banear'}
+                        title={user.banned ? "Desbanear" : "Banear"}
                         onClick={() => setBanUser(user)}
                       >
                         {user.banned ? <Unlock /> : <Ban />}
@@ -355,27 +393,42 @@ export default function UsersPage() {
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Nuevo usuario</DialogTitle>
-            <DialogDescription>Crea una cuenta para un miembro del staff.</DialogDescription>
+            <DialogDescription>
+              Crea una cuenta para un miembro del staff.
+            </DialogDescription>
           </DialogHeader>
           <CreateUserForm onSuccess={() => setCreateOpen(false)} />
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!roleUser} onOpenChange={(open) => !open && setRoleUser(null)}>
+      <Dialog
+        open={!!roleUser}
+        onOpenChange={(open) => !open && setRoleUser(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Cambiar rol de {roleUser?.name}</DialogTitle>
-            <DialogDescription>El rol determina los permisos del usuario.</DialogDescription>
+            <DialogDescription>
+              El rol determina los permisos del usuario.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <Label>Rol</Label>
-            <Select value={roleValue} onValueChange={(v) => setRoleValue(v as UserRole)}>
+            <Select
+              value={roleValue}
+              onValueChange={(v) => setRoleValue(v as UserRole)}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
@@ -392,58 +445,71 @@ export default function UsersPage() {
                 Cancelar
               </Button>
               <Button onClick={changeRole} disabled={actionLoading}>
-                {actionLoading ? 'Guardando...' : 'Guardar'}
+                {actionLoading ? "Guardando..." : "Guardar"}
               </Button>
             </DialogFooter>
           </div>
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={!!banUser} onOpenChange={(open) => !open && setBanUser(null)}>
+      <AlertDialog
+        open={!!banUser}
+        onOpenChange={(open) => !open && setBanUser(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {banUser?.banned ? `¿Desbanear a ${banUser?.name}?` : `¿Banear a ${banUser?.name}?`}
+              {banUser?.banned
+                ? `¿Desbanear a ${banUser?.name}?`
+                : `¿Banear a ${banUser?.name}?`}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {banUser?.banned
-                ? 'El usuario podrá volver a iniciar sesión.'
-                : 'El usuario no podrá iniciar sesión hasta que sea desbaneado.'}
+                ? "El usuario podrá volver a iniciar sesión."
+                : "El usuario no podrá iniciar sesión hasta que sea desbaneado."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={actionLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={actionLoading}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white"
               disabled={actionLoading}
               onClick={() => banUser && toggleBan(banUser)}
             >
-              {actionLoading ? 'Procesando...' : 'Confirmar'}
+              {actionLoading ? "Procesando..." : "Confirmar"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog open={!!deleteUser} onOpenChange={(open) => !open && setDeleteUser(null)}>
+      <AlertDialog
+        open={!!deleteUser}
+        onOpenChange={(open) => !open && setDeleteUser(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar a {deleteUser?.name}?</AlertDialogTitle>
             <AlertDialogDescription>
-              Se eliminará la cuenta y sus sesiones. Esta acción no se puede deshacer.
+              Se eliminará la cuenta y sus sesiones. Esta acción no se puede
+              deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={actionLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={actionLoading}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white"
               disabled={actionLoading}
               onClick={confirmDelete}
             >
-              {actionLoading ? 'Eliminando...' : 'Eliminar'}
+              {actionLoading ? "Eliminando..." : "Eliminar"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

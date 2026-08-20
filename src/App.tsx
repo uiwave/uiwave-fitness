@@ -1,25 +1,25 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import { AuthProvider } from './auth/AuthContext'
-import { RequireAuth, RequireRole } from './auth/RequireRole'
-import AppLayout from './components/layout/AppLayout'
-import { TooltipProvider } from './components/ui/tooltip'
-import { Toaster } from './components/ui/sonner'
+import { AuthProvider } from "./auth/AuthContext";
+import { RequireAuth, RequireRole } from "./auth/RequireRole";
+import AppLayout from "./components/layout/AppLayout";
+import { TooltipProvider } from "./components/ui/tooltip";
+import { Toaster } from "./components/ui/sonner";
 
-import LoginPage from './pages/LoginPage'
-import NotFoundPage from './pages/NotFoundPage'
-import DashboardPage from './pages/DashboardPage'
-import MembersPage from './pages/MembersPage'
-import UsersPage from './pages/UsersPage'
-import PlansPage from './pages/PlansPage'
-import MembershipsPage from './pages/MembershipsPage'
-import PaymentsPage from './pages/PaymentsPage'
-import TrainersPage from './pages/TrainersPage'
-import ExercisesPage from './pages/ExercisesPage'
-import RoutinesPage from './pages/RoutinesPage'
-import AttendancePage from './pages/AttendancePage'
-import NotificationsPage from './pages/NotificationsPage'
-import ReportsPage from './pages/ReportsPage'
+import LoginPage from "./pages/LoginPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import DashboardPage from "./pages/DashboardPage";
+import MembersPage from "./pages/MembersPage";
+import UsersPage from "./pages/UsersPage";
+import PlansPage from "./pages/PlansPage";
+import MembershipsPage from "./pages/MembershipsPage";
+import PaymentsPage from "./pages/PaymentsPage";
+import TrainersPage from "./pages/TrainersPage";
+import ExercisesPage from "./pages/ExercisesPage";
+import RoutinesPage from "./pages/RoutinesPage";
+import AttendancePage from "./pages/AttendancePage";
+import NotificationsPage from "./pages/NotificationsPage";
+import ReportsPage from "./pages/ReportsPage";
 
 function App() {
   return (
@@ -40,7 +40,7 @@ function App() {
               <Route
                 path="members"
                 element={
-                  <RequireRole roles={['admin', 'trainer', 'receptionist']}>
+                  <RequireRole roles={["admin", "trainer", "receptionist"]}>
                     <MembersPage />
                   </RequireRole>
                 }
@@ -49,7 +49,7 @@ function App() {
               <Route
                 path="memberships"
                 element={
-                  <RequireRole roles={['admin', 'trainer', 'receptionist']}>
+                  <RequireRole roles={["admin", "trainer", "receptionist"]}>
                     <MembershipsPage />
                   </RequireRole>
                 }
@@ -57,7 +57,7 @@ function App() {
               <Route
                 path="payments"
                 element={
-                  <RequireRole roles={['admin', 'receptionist']}>
+                  <RequireRole roles={["admin", "receptionist"]}>
                     <PaymentsPage />
                   </RequireRole>
                 }
@@ -65,7 +65,7 @@ function App() {
               <Route
                 path="trainers"
                 element={
-                  <RequireRole roles={['admin', 'trainer', 'receptionist']}>
+                  <RequireRole roles={["admin", "trainer", "receptionist"]}>
                     <TrainersPage />
                   </RequireRole>
                 }
@@ -74,7 +74,7 @@ function App() {
               <Route
                 path="routines"
                 element={
-                  <RequireRole roles={['admin', 'trainer', 'member']}>
+                  <RequireRole roles={["admin", "trainer", "member"]}>
                     <RoutinesPage />
                   </RequireRole>
                 }
@@ -83,7 +83,7 @@ function App() {
               <Route
                 path="users"
                 element={
-                  <RequireRole roles={['admin', 'receptionist']}>
+                  <RequireRole roles={["admin", "receptionist"]}>
                     <UsersPage />
                   </RequireRole>
                 }
@@ -91,7 +91,7 @@ function App() {
               <Route
                 path="reports"
                 element={
-                  <RequireRole roles={['admin', 'receptionist']}>
+                  <RequireRole roles={["admin", "receptionist"]}>
                     <ReportsPage />
                   </RequireRole>
                 }
@@ -105,7 +105,7 @@ function App() {
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
-  )
+  );
 }
 
-export default App
+export default App;
