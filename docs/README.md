@@ -4,21 +4,21 @@ Esta carpeta contiene la documentación completa de la **GYM API** para implemen
 
 ## Índice
 
-| Archivo | Contenido |
-|---|---|
-| [00-overview.md](00-overview.md) | Stack, base URL, convenciones de API (envelope, errores, paginación, enums, IDs) |
-| [01-authentication.md](01-authentication.md) | Autenticación completa: sign-in, sign-up, token Bearer vs cookie, roles, permisos |
-| [02-members.md](02-members.md) | Módulo Members (miembros) |
-| [03-users.md](03-users.md) | Módulo Users (usuarios del sistema, admin) |
-| [04-plans.md](04-plans.md) | Módulo Plans (planes/membresías de negocio) |
-| [05-memberships.md](05-memberships.md) | Módulo Memberships (membresías de los miembros) |
-| [06-payments.md](06-payments.md) | Módulo Payments (pagos) |
-| [07-trainers.md](07-trainers.md) | Módulo Trainers (entrenadores) |
-| [08-exercises.md](08-exercises.md) | Módulo Exercises (ejercicios) |
-| [09-routines.md](09-routines.md) | Módulo Routines (rutinas + ejercicios de rutina) |
-| [10-attendance.md](10-attendance.md) | Módulo Attendance (asistencia/check-in/check-out) |
-| [11-notifications.md](11-notifications.md) | Módulo Notifications (notificaciones) |
-| [12-reports.md](12-reports.md) | Módulo Reports (reportes y dashboard) |
+| Archivo                                                | Contenido                                                                                |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| [00-overview.md](00-overview.md)                       | Stack, base URL, convenciones de API (envelope, errores, paginación, enums, IDs)         |
+| [01-authentication.md](01-authentication.md)           | Autenticación completa: sign-in, sign-up, token Bearer vs cookie, roles, permisos        |
+| [02-members.md](02-members.md)                         | Módulo Members (miembros)                                                                |
+| [03-users.md](03-users.md)                             | Módulo Users (usuarios del sistema, admin)                                               |
+| [04-plans.md](04-plans.md)                             | Módulo Plans (planes/membresías de negocio)                                              |
+| [05-memberships.md](05-memberships.md)                 | Módulo Memberships (membresías de los miembros)                                          |
+| [06-payments.md](06-payments.md)                       | Módulo Payments (pagos)                                                                  |
+| [07-trainers.md](07-trainers.md)                       | Módulo Trainers (entrenadores)                                                           |
+| [08-exercises.md](08-exercises.md)                     | Módulo Exercises (ejercicios)                                                            |
+| [09-routines.md](09-routines.md)                       | Módulo Routines (rutinas + ejercicios de rutina)                                         |
+| [10-attendance.md](10-attendance.md)                   | Módulo Attendance (asistencia/check-in/check-out)                                        |
+| [11-notifications.md](11-notifications.md)             | Módulo Notifications (notificaciones)                                                    |
+| [12-reports.md](12-reports.md)                         | Módulo Reports (reportes y dashboard)                                                    |
 | [13-frontend-react-vite.md](13-frontend-react-vite.md) | Guía de implementación React + Vite: apiClient, AuthProvider, rutas protegidas, ejemplos |
 
 ## Quickstart

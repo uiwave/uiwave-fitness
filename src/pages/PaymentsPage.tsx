@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Plus, Pencil } from 'lucide-react'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Plus, Pencil } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { errorMessage, get, patch, post } from '@/lib/apiClient'
+import { usePaginated } from '@/hooks/usePaginated';
+import { errorMessage, get, patch, post } from '@/lib/apiClient';
 import type {
   Envelope,
   Membership,
@@ -15,12 +15,12 @@ import type {
   Payment,
   PaymentMethod,
   PaymentStatus,
-} from '@/types/api'
-import { formatDateTime, formatMoney } from '@/lib/format'
+} from '@/types/api';
+import { formatDateTime, formatMoney } from '@/lib/format';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -28,14 +28,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -43,7 +43,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -51,42 +51,61 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/form';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
-const STATUSES: PaymentStatus[] = ['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED']
-const METHODS: PaymentMethod[] = ['CASH', 'CARD', 'TRANSFER', 'YAPE', 'PLIN', 'OTHER']
+const STATUSES: PaymentStatus[] = [
+  'PENDING',
+  'COMPLETED',
+  'FAILED',
+  'REFUNDED',
+];
+const METHODS: PaymentMethod[] = [
+  'CASH',
+  'CARD',
+  'TRANSFER',
+  'YAPE',
+  'PLIN',
+  'OTHER',
+];
 
 const paymentSchema = z.object({
   memberId: z.string().min(1, 'Selecciona un miembro'),
   membershipId: z.string().optional().or(z.literal('')),
   amount: z
     .string()
-    .refine((v) => !Number.isNaN(Number(v)) && Number(v) >= 0.01, 'Monto inválido (mínimo 0.01)'),
+    .refine(
+      (v) => !Number.isNaN(Number(v)) && Number(v) >= 0.01,
+      'Monto inválido (mínimo 0.01)',
+    ),
   paymentMethod: z.enum(['CASH', 'CARD', 'TRANSFER', 'YAPE', 'PLIN', 'OTHER']),
   paymentDate: z.string().optional().or(z.literal('')),
   status: z.enum(['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED']),
   reference: z.string().max(100).optional().or(z.literal('')),
   notes: z.string().max(2000).optional().or(z.literal('')),
-})
+});
 
-type PaymentValues = z.infer<typeof paymentSchema>
+type PaymentValues = z.infer<typeof paymentSchema>;
 
 function PaymentForm({
   payment,
   onSuccess,
   onCancel,
 }: {
-  payment?: Payment
-  onSuccess: () => void
-  onCancel: () => void
+  payment?: Payment;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const [members, setMembers] = useState<Member[]>([])
-  const [memberships, setMemberships] = useState<Membership[]>([])
-  const isEdit = !!payment
+  const [submitting, setSubmitting] = useState(false);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [memberships, setMemberships] = useState<Membership[]>([]);
+  const isEdit = !!payment;
 
   const form = useForm<PaymentValues>({
     resolver: zodResolver(paymentSchema),
@@ -111,28 +130,28 @@ function PaymentForm({
           reference: '',
           notes: '',
         },
-  })
+  });
 
-  const selectedMemberId = form.watch('memberId')
+  const selectedMemberId = form.watch('memberId');
 
   useEffect(() => {
     get<Paginated<Member>>('/members', { page: 1, limit: 100 })
       .then((result) => setMembers(result.data))
-      .catch(() => setMembers([]))
-  }, [])
+      .catch(() => setMembers([]));
+  }, []);
 
   useEffect(() => {
     if (!selectedMemberId) {
-      setMemberships([])
-      return
+      setMemberships([]);
+      return;
     }
     get<Envelope<Membership[]>>(`/members/${selectedMemberId}/memberships`)
       .then((result) => setMemberships(result.data))
-      .catch(() => setMemberships([]))
-  }, [selectedMemberId])
+      .catch(() => setMemberships([]));
+  }, [selectedMemberId]);
 
   const onSubmit = async (values: PaymentValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const body: Record<string, unknown> = {
       memberId: values.memberId,
       membershipId: values.membershipId || undefined,
@@ -142,22 +161,22 @@ function PaymentForm({
       status: values.status,
       reference: values.reference || undefined,
       notes: values.notes || undefined,
-    }
+    };
     try {
       if (isEdit) {
-        await patch<Envelope<Payment>>(`/payments/${payment!.id}`, body)
-        toast.success('Pago actualizado')
+        await patch<Envelope<Payment>>(`/payments/${payment!.id}`, body);
+        toast.success('Pago actualizado');
       } else {
-        await post<Envelope<Payment>>('/payments', body)
-        toast.success('Pago registrado')
+        await post<Envelope<Payment>>('/payments', body);
+        toast.success('Pago registrado');
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -195,7 +214,13 @@ function PaymentForm({
               <Select value={field.value} onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={selectedMemberId ? 'Selecciona una membresía' : 'Primero elige un miembro'} />
+                    <SelectValue
+                      placeholder={
+                        selectedMemberId
+                          ? 'Selecciona una membresía'
+                          : 'Primero elige un miembro'
+                      }
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -219,7 +244,13 @@ function PaymentForm({
               <FormItem>
                 <FormLabel>Monto (S/)</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.01" min="0.01" placeholder="89.90" {...field} />
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    placeholder="89.90"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -320,33 +351,46 @@ function PaymentForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Registrar pago'}
+            {submitting
+              ? 'Guardando...'
+              : isEdit
+                ? 'Guardar cambios'
+                : 'Registrar pago'}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 export default function PaymentsPage() {
-  const { data, meta, loading, error, page, setPage, filters, setFilter, reload } =
-    usePaginated<Payment>('/payments')
+  const {
+    data,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    filters,
+    setFilter,
+    reload,
+  } = usePaginated<Payment>('/payments');
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Payment | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Payment | null>(null);
 
   const openCreate = () => {
-    setEditing(null)
-    setDialogOpen(true)
-  }
+    setEditing(null);
+    setDialogOpen(true);
+  };
   const openEdit = (payment: Payment) => {
-    setEditing(payment)
-    setDialogOpen(true)
-  }
+    setEditing(payment);
+    setDialogOpen(true);
+  };
   const onSuccess = () => {
-    setDialogOpen(false)
-    reload()
-  }
+    setDialogOpen(false);
+    reload();
+  };
 
   return (
     <div>
@@ -358,10 +402,12 @@ export default function PaymentsPage() {
       </PageHeader>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <Label className="text-sm text-muted-foreground">Estado</Label>
+        <Label className="text-muted-foreground text-sm">Estado</Label>
         <Select
           value={(filters.status as string) ?? ''}
-          onValueChange={(v) => setFilter('status', v === 'all' ? undefined : v)}
+          onValueChange={(v) =>
+            setFilter('status', v === 'all' ? undefined : v)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
@@ -417,7 +463,9 @@ export default function PaymentsPage() {
             )}
             {data.map((payment) => (
               <TableRow key={payment.id}>
-                <TableCell className="font-medium">{payment.member_name}</TableCell>
+                <TableCell className="font-medium">
+                  {payment.member_name}
+                </TableCell>
                 <TableCell>{formatMoney(payment.amount)}</TableCell>
                 <TableCell>{payment.payment_method}</TableCell>
                 <TableCell>{formatDateTime(payment.payment_date)}</TableCell>
@@ -426,7 +474,11 @@ export default function PaymentsPage() {
                   <StatusBadge status={payment.status} />
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="icon-sm" onClick={() => openEdit(payment)}>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => openEdit(payment)}
+                  >
                     <Pencil />
                   </Button>
                 </TableCell>
@@ -435,14 +487,22 @@ export default function PaymentsPage() {
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? 'Editar pago' : 'Registrar pago'}</DialogTitle>
+            <DialogTitle>
+              {editing ? 'Editar pago' : 'Registrar pago'}
+            </DialogTitle>
             <DialogDescription>
-              Un pago con estado COMPLETED activa la membresía asociada automáticamente.
+              Un pago con estado COMPLETED activa la membresía asociada
+              automáticamente.
             </DialogDescription>
           </DialogHeader>
           <PaymentForm
@@ -453,5 +513,5 @@ export default function PaymentsPage() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

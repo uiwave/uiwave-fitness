@@ -1,6 +1,6 @@
-import { AlertCircle, Inbox } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Skeleton } from '@/components/ui/skeleton'
+import { AlertCircle, Inbox } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function LoadingRows({ rows = 5 }: { rows?: number }) {
   return (
@@ -9,7 +9,7 @@ export function LoadingRows({ rows = 5 }: { rows?: number }) {
         <Skeleton key={i} className="h-9 w-full" />
       ))}
     </div>
-  )
+  );
 }
 
 export function ErrorAlert({ message }: { message: string }) {
@@ -19,14 +19,18 @@ export function ErrorAlert({ message }: { message: string }) {
       <AlertTitle>Error</AlertTitle>
       <AlertDescription>{message}</AlertDescription>
     </Alert>
-  )
+  );
 }
 
-export function EmptyState({ message = 'No hay resultados' }: { message?: string }) {
+export function EmptyState({
+  message = 'No hay resultados',
+}: {
+  message?: string;
+}) {
   return (
-    <div className="flex flex-col items-center justify-center gap-2 py-10 text-muted-foreground">
+    <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 py-10">
       <Inbox className="h-8 w-8" />
       <p className="text-sm">{message}</p>
     </div>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Check, CheckCheck, Plus, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Check, CheckCheck, Plus, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { del, errorMessage, get, patch, post } from '@/lib/apiClient'
+import { usePaginated } from '@/hooks/usePaginated';
+import { del, errorMessage, get, patch, post } from '@/lib/apiClient';
 import type {
   Envelope,
   Notification,
@@ -15,13 +15,13 @@ import type {
   Paginated,
   UpdatedCountResponse,
   User,
-} from '@/types/api'
-import { formatDateTime } from '@/lib/format'
-import { useAuth } from '@/auth/AuthContext'
+} from '@/types/api';
+import { formatDateTime } from '@/lib/format';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -29,14 +29,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -44,7 +44,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -52,54 +52,72 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/form';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
-const TYPES: NotificationType[] = ['INFO', 'WARNING', 'SUCCESS', 'PAYMENT', 'MEMBERSHIP', 'SYSTEM']
+const TYPES: NotificationType[] = [
+  'INFO',
+  'WARNING',
+  'SUCCESS',
+  'PAYMENT',
+  'MEMBERSHIP',
+  'SYSTEM',
+];
 
 const notificationSchema = z.object({
   userId: z.string().min(1, 'Selecciona un usuario'),
   title: z.string().min(1, 'El título es obligatorio').max(200),
   message: z.string().min(1, 'El mensaje es obligatorio').max(4000),
-  type: z.enum(['INFO', 'WARNING', 'SUCCESS', 'PAYMENT', 'MEMBERSHIP', 'SYSTEM']),
-})
+  type: z.enum([
+    'INFO',
+    'WARNING',
+    'SUCCESS',
+    'PAYMENT',
+    'MEMBERSHIP',
+    'SYSTEM',
+  ]),
+});
 
-type NotificationValues = z.infer<typeof notificationSchema>
+type NotificationValues = z.infer<typeof notificationSchema>;
 
 function CreateNotificationForm({
   onSuccess,
   onCancel,
 }: {
-  onSuccess: () => void
-  onCancel: () => void
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const [users, setUsers] = useState<User[]>([])
+  const [submitting, setSubmitting] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
   const form = useForm<NotificationValues>({
     resolver: zodResolver(notificationSchema),
     defaultValues: { userId: '', title: '', message: '', type: 'INFO' },
-  })
+  });
 
   useEffect(() => {
     get<Paginated<User>>('/users', { page: 1, limit: 100 })
       .then((result) => setUsers(result.data))
-      .catch(() => setUsers([]))
-  }, [])
+      .catch(() => setUsers([]));
+  }, []);
 
   const onSubmit = async (values: NotificationValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     try {
-      await post<Envelope<Notification>>('/notifications', values)
-      toast.success('Notificación creada')
-      onSuccess()
+      await post<Envelope<Notification>>('/notifications', values);
+      toast.success('Notificación creada');
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -188,12 +206,12 @@ function CreateNotificationForm({
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 export default function NotificationsPage() {
-  const { user } = useAuth()
-  const isAdmin = user?.role === 'admin'
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
   const {
     data,
     meta,
@@ -204,52 +222,57 @@ export default function NotificationsPage() {
     filters,
     setFilter,
     reload,
-  } = usePaginated<Notification, NotificationMeta>('/notifications')
+  } = usePaginated<Notification, NotificationMeta>('/notifications');
 
-  const [createOpen, setCreateOpen] = useState(false)
-  const [acting, setActing] = useState(false)
+  const [createOpen, setCreateOpen] = useState(false);
+  const [acting, setActing] = useState(false);
 
   const markRead = async (id: string) => {
-    setActing(true)
+    setActing(true);
     try {
-      await patch<Envelope<Notification>>(`/notifications/${id}/read`)
-      reload()
+      await patch<Envelope<Notification>>(`/notifications/${id}/read`);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setActing(false)
+      setActing(false);
     }
-  }
+  };
 
   const markAllRead = async () => {
-    setActing(true)
+    setActing(true);
     try {
-      const { data: result } = await patch<Envelope<UpdatedCountResponse>>('/notifications/read-all')
-      toast.success(`${result.updated} notificaciones marcadas como leídas`)
-      reload()
+      const { data: result } = await patch<Envelope<UpdatedCountResponse>>(
+        '/notifications/read-all',
+      );
+      toast.success(`${result.updated} notificaciones marcadas como leídas`);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setActing(false)
+      setActing(false);
     }
-  }
+  };
 
   const remove = async (id: string) => {
-    setActing(true)
+    setActing(true);
     try {
-      await del(`/notifications/${id}`)
-      toast.success('Notificación eliminada')
-      reload()
+      await del(`/notifications/${id}`);
+      toast.success('Notificación eliminada');
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setActing(false)
+      setActing(false);
     }
-  }
+  };
 
   return (
     <div>
-      <PageHeader title="Notificaciones" description="Solo puedes ver tus propias notificaciones">
+      <PageHeader
+        title="Notificaciones"
+        description="Solo puedes ver tus propias notificaciones"
+      >
         {isAdmin && (
           <Button onClick={() => setCreateOpen(true)}>
             <Plus />
@@ -263,7 +286,7 @@ export default function NotificationsPage() {
       </PageHeader>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <Label className="text-sm text-muted-foreground">Leídas</Label>
+        <Label className="text-muted-foreground text-sm">Leídas</Label>
         <Select
           value={(filters.read as string) ?? ''}
           onValueChange={(v) => setFilter('read', v === 'all' ? undefined : v)}
@@ -277,7 +300,7 @@ export default function NotificationsPage() {
             <SelectItem value="false">No leídas</SelectItem>
           </SelectContent>
         </Select>
-        <Label className="text-sm text-muted-foreground">Tipo</Label>
+        <Label className="text-muted-foreground text-sm">Tipo</Label>
         <Select
           value={(filters.type as string) ?? ''}
           onValueChange={(v) => setFilter('type', v === 'all' ? undefined : v)}
@@ -294,7 +317,7 @@ export default function NotificationsPage() {
             ))}
           </SelectContent>
         </Select>
-        <Label className="text-sm text-muted-foreground">
+        <Label className="text-muted-foreground text-sm">
           {meta.unread} sin leer
         </Label>
       </div>
@@ -323,13 +346,20 @@ export default function NotificationsPage() {
               </TableRow>
             )}
             {data.map((notification) => (
-              <TableRow key={notification.id} className={notification.read ? '' : 'bg-muted/40'}>
-                <TableCell className="font-medium">{notification.title}</TableCell>
+              <TableRow
+                key={notification.id}
+                className={notification.read ? '' : 'bg-muted/40'}
+              >
+                <TableCell className="font-medium">
+                  {notification.title}
+                </TableCell>
                 <TableCell>{notification.message}</TableCell>
                 <TableCell>
                   <StatusBadge status={notification.type} />
                 </TableCell>
-                <TableCell>{notification.read ? 'leída' : 'no leída'}</TableCell>
+                <TableCell>
+                  {notification.read ? 'leída' : 'no leída'}
+                </TableCell>
                 <TableCell>{formatDateTime(notification.created_at)}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
@@ -361,13 +391,20 @@ export default function NotificationsPage() {
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Nueva notificación</DialogTitle>
-            <DialogDescription>Envía una notificación manual a un usuario.</DialogDescription>
+            <DialogDescription>
+              Envía una notificación manual a un usuario.
+            </DialogDescription>
           </DialogHeader>
           <CreateNotificationForm
             onSuccess={() => setCreateOpen(false)}
@@ -376,5 +413,5 @@ export default function NotificationsPage() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

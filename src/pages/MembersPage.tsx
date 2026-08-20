@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { del, errorMessage, get, patch, post } from '@/lib/apiClient'
-import type { Envelope, Member, Paginated, User } from '@/types/api'
-import { useAuth } from '@/auth/AuthContext'
+import { usePaginated } from '@/hooks/usePaginated';
+import { del, errorMessage, get, patch, post } from '@/lib/apiClient';
+import type { Envelope, Member, Paginated, User } from '@/types/api';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -20,14 +20,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -35,7 +35,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,7 +45,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog';
 import {
   Form,
   FormControl,
@@ -53,10 +53,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/form';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
 const memberSchema = z.object({
   userId: z.string().optional().or(z.literal('')),
@@ -72,9 +76,9 @@ const memberSchema = z.object({
   emergencyContactName: z.string().max(100).optional().or(z.literal('')),
   emergencyContactPhone: z.string().max(20).optional().or(z.literal('')),
   status: z.enum(['active', 'inactive', 'suspended']),
-})
+});
 
-type MemberValues = z.infer<typeof memberSchema>
+type MemberValues = z.infer<typeof memberSchema>;
 
 function emptyValues(): MemberValues {
   return {
@@ -86,7 +90,7 @@ function emptyValues(): MemberValues {
     emergencyContactName: '',
     emergencyContactPhone: '',
     status: 'active',
-  }
+  };
 }
 
 function MemberForm({
@@ -94,13 +98,13 @@ function MemberForm({
   onSuccess,
   onCancel,
 }: {
-  member?: Member
-  onSuccess: () => void
-  onCancel: () => void
+  member?: Member;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const [users, setUsers] = useState<User[]>([])
-  const isEdit = !!member
+  const [submitting, setSubmitting] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const isEdit = !!member;
 
   const form = useForm<MemberValues>({
     resolver: zodResolver(memberSchema),
@@ -116,16 +120,16 @@ function MemberForm({
           status: member.status,
         }
       : emptyValues(),
-  })
+  });
 
   useEffect(() => {
     get<Paginated<User>>('/users', { page: 1, limit: 100 })
       .then((result) => setUsers(result.data))
-      .catch(() => setUsers([]))
-  }, [])
+      .catch(() => setUsers([]));
+  }, []);
 
   const onSubmit = async (values: MemberValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const body: Record<string, unknown> = {
       userId: values.userId || undefined,
       documentNumber: values.documentNumber || undefined,
@@ -135,22 +139,22 @@ function MemberForm({
       emergencyContactName: values.emergencyContactName || undefined,
       emergencyContactPhone: values.emergencyContactPhone || undefined,
       status: values.status,
-    }
+    };
     try {
       if (isEdit) {
-        await patch<Envelope<Member>>(`/members/${member!.id}`, body)
-        toast.success('Miembro actualizado')
+        await patch<Envelope<Member>>(`/members/${member!.id}`, body);
+        toast.success('Miembro actualizado');
       } else {
-        await post<Envelope<Member>>('/members', body)
-        toast.success('Miembro creado')
+        await post<Envelope<Member>>('/members', body);
+        toast.success('Miembro creado');
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -289,56 +293,74 @@ function MemberForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear miembro'}
+            {submitting
+              ? 'Guardando...'
+              : isEdit
+                ? 'Guardar cambios'
+                : 'Crear miembro'}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 export default function MembersPage() {
-  const { user } = useAuth()
-  const canManage = user?.role === 'admin' || user?.role === 'receptionist'
-  const { data, meta, loading, error, page, setPage, search, setSearch, filters, setFilter, reload } =
-    usePaginated<Member>('/members')
+  const { user } = useAuth();
+  const canManage = user?.role === 'admin' || user?.role === 'receptionist';
+  const {
+    data,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    search,
+    setSearch,
+    filters,
+    setFilter,
+    reload,
+  } = usePaginated<Member>('/members');
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Member | null>(null)
-  const [deleting, setDeleting] = useState<Member | null>(null)
-  const [deletingLoading, setDeletingLoading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Member | null>(null);
+  const [deleting, setDeleting] = useState<Member | null>(null);
+  const [deletingLoading, setDeletingLoading] = useState(false);
 
   const openCreate = () => {
-    setEditing(null)
-    setDialogOpen(true)
-  }
+    setEditing(null);
+    setDialogOpen(true);
+  };
   const openEdit = (member: Member) => {
-    setEditing(member)
-    setDialogOpen(true)
-  }
+    setEditing(member);
+    setDialogOpen(true);
+  };
   const onSuccess = () => {
-    setDialogOpen(false)
-    reload()
-  }
+    setDialogOpen(false);
+    reload();
+  };
 
   const confirmDelete = async () => {
-    if (!deleting) return
-    setDeletingLoading(true)
+    if (!deleting) return;
+    setDeletingLoading(true);
     try {
-      await del(`/members/${deleting.id}`)
-      toast.success('Miembro eliminado')
-      setDeleting(null)
-      reload()
+      await del(`/members/${deleting.id}`);
+      toast.success('Miembro eliminado');
+      setDeleting(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setDeletingLoading(false)
+      setDeletingLoading(false);
     }
-  }
+  };
 
   return (
     <div>
-      <PageHeader title="Miembros" description="Gestiona los miembros del gimnasio">
+      <PageHeader
+        title="Miembros"
+        description="Gestiona los miembros del gimnasio"
+      >
         {canManage && (
           <Button onClick={openCreate}>
             <Plus />
@@ -354,10 +376,12 @@ export default function MembersPage() {
           placeholder="Buscar por nombre, email, documento, teléfono..."
           className="max-w-xs"
         />
-        <Label className="text-sm text-muted-foreground">Estado</Label>
+        <Label className="text-muted-foreground text-sm">Estado</Label>
         <Select
           value={(filters.status as string) ?? ''}
-          onValueChange={(v) => setFilter('status', v === 'all' ? undefined : v)}
+          onValueChange={(v) =>
+            setFilter('status', v === 'all' ? undefined : v)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
@@ -383,7 +407,9 @@ export default function MembersPage() {
               <TableHead>Documento</TableHead>
               <TableHead>Teléfono</TableHead>
               <TableHead>Estado</TableHead>
-              {canManage && <TableHead className="w-24 text-right">Acciones</TableHead>}
+              {canManage && (
+                <TableHead className="w-24 text-right">Acciones</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -396,7 +422,9 @@ export default function MembersPage() {
             )}
             {data.map((member) => (
               <TableRow key={member.id}>
-                <TableCell className="font-medium">{member.user_name ?? 'Sin usuario'}</TableCell>
+                <TableCell className="font-medium">
+                  {member.user_name ?? 'Sin usuario'}
+                </TableCell>
                 <TableCell>{member.user_email ?? '—'}</TableCell>
                 <TableCell>{member.document_number ?? '—'}</TableCell>
                 <TableCell>{member.phone ?? '—'}</TableCell>
@@ -406,7 +434,11 @@ export default function MembersPage() {
                 {canManage && (
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon-sm" onClick={() => openEdit(member)}>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => openEdit(member)}
+                      >
                         <Pencil />
                       </Button>
                       <Button
@@ -425,12 +457,19 @@ export default function MembersPage() {
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? 'Editar miembro' : 'Nuevo miembro'}</DialogTitle>
+            <DialogTitle>
+              {editing ? 'Editar miembro' : 'Nuevo miembro'}
+            </DialogTitle>
             <DialogDescription>
               {editing
                 ? 'Actualiza los datos del miembro.'
@@ -445,16 +484,23 @@ export default function MembersPage() {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
+      <AlertDialog
+        open={!!deleting}
+        onOpenChange={(open) => !open && setDeleting(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
               ¿Eliminar a {deleting?.user_name ?? 'este miembro'}?
             </AlertDialogTitle>
-            <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deletingLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={deletingLoading}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white"
               disabled={deletingLoading}
@@ -466,5 +512,5 @@ export default function MembersPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import { Button } from '@/components/ui/button'
+import type { ReactNode } from 'react';
+import { Button } from '@/components/ui/button';
 
 export function PaginationBar({
   page,
@@ -7,15 +7,15 @@ export function PaginationBar({
   total,
   onPageChange,
 }: {
-  page: number
-  limit: number
-  total: number
-  onPageChange: (page: number) => void
+  page: number;
+  limit: number;
+  total: number;
+  onPageChange: (page: number) => void;
 }) {
-  const totalPages = Math.max(1, Math.ceil(total / limit))
+  const totalPages = Math.max(1, Math.ceil(total / limit));
   return (
     <div className="flex items-center justify-between gap-2 pt-2">
-      <p className="text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         Página {page} de {totalPages} ({total} resultados)
       </p>
       <div className="flex gap-2">
@@ -37,7 +37,7 @@ export function PaginationBar({
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 export function PageHeader({
@@ -45,17 +45,21 @@ export function PageHeader({
   description,
   children,
 }: {
-  title: string
-  description?: string
-  children?: ReactNode
+  title: string;
+  description?: string;
+  children?: ReactNode;
 }) {
   return (
     <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
       <div>
         <h1 className="text-xl font-semibold">{title}</h1>
-        {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        {description && (
+          <p className="text-muted-foreground text-sm">{description}</p>
+        )}
       </div>
-      {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}
+      {children && (
+        <div className="flex flex-wrap items-center gap-2">{children}</div>
+      )}
     </div>
-  )
+  );
 }

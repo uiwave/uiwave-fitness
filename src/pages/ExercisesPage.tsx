@@ -1,18 +1,18 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { del, errorMessage, patch, post } from '@/lib/apiClient'
-import type { Difficulty, Envelope, Exercise } from '@/types/api'
-import { useAuth } from '@/auth/AuthContext'
+import { usePaginated } from '@/hooks/usePaginated';
+import { del, errorMessage, patch, post } from '@/lib/apiClient';
+import type { Difficulty, Envelope, Exercise } from '@/types/api';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -20,14 +20,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -35,7 +35,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,7 +45,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog';
 import {
   Form,
   FormControl,
@@ -53,12 +53,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/form';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
-const DIFFICULTIES: Difficulty[] = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED']
+const DIFFICULTIES: Difficulty[] = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
 
 const exerciseSchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio').max(150),
@@ -68,21 +72,21 @@ const exerciseSchema = z.object({
   difficulty: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED']),
   instructions: z.string().max(4000).optional().or(z.literal('')),
   imageUrl: z.string().max(500).optional().or(z.literal('')),
-})
+});
 
-type ExerciseValues = z.infer<typeof exerciseSchema>
+type ExerciseValues = z.infer<typeof exerciseSchema>;
 
 function ExerciseForm({
   exercise,
   onSuccess,
   onCancel,
 }: {
-  exercise?: Exercise
-  onSuccess: () => void
-  onCancel: () => void
+  exercise?: Exercise;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const isEdit = !!exercise
+  const [submitting, setSubmitting] = useState(false);
+  const isEdit = !!exercise;
 
   const form = useForm<ExerciseValues>({
     resolver: zodResolver(exerciseSchema),
@@ -105,10 +109,10 @@ function ExerciseForm({
           instructions: '',
           imageUrl: '',
         },
-  })
+  });
 
   const onSubmit = async (values: ExerciseValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const body: Record<string, unknown> = {
       name: values.name,
       description: values.description || undefined,
@@ -117,22 +121,22 @@ function ExerciseForm({
       difficulty: values.difficulty,
       instructions: values.instructions || undefined,
       imageUrl: values.imageUrl || undefined,
-    }
+    };
     try {
       if (isEdit) {
-        await patch<Envelope<Exercise>>(`/exercises/${exercise!.id}`, body)
-        toast.success('Ejercicio actualizado')
+        await patch<Envelope<Exercise>>(`/exercises/${exercise!.id}`, body);
+        toast.success('Ejercicio actualizado');
       } else {
-        await post<Envelope<Exercise>>('/exercises', body)
-        toast.success('Ejercicio creado')
+        await post<Envelope<Exercise>>('/exercises', body);
+        toast.success('Ejercicio creado');
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -248,57 +252,73 @@ function ExerciseForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear ejercicio'}
+            {submitting
+              ? 'Guardando...'
+              : isEdit
+                ? 'Guardar cambios'
+                : 'Crear ejercicio'}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 export default function ExercisesPage() {
-  const { user } = useAuth()
-  const isAdmin = user?.role === 'admin'
-  const canManage = isAdmin || user?.role === 'trainer'
-  const { data, meta, loading, error, page, setPage, filters, setFilter, reload } =
-    usePaginated<Exercise>('/exercises')
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+  const canManage = isAdmin || user?.role === 'trainer';
+  const {
+    data,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    filters,
+    setFilter,
+    reload,
+  } = usePaginated<Exercise>('/exercises');
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Exercise | null>(null)
-  const [deleting, setDeleting] = useState<Exercise | null>(null)
-  const [deletingLoading, setDeletingLoading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Exercise | null>(null);
+  const [deleting, setDeleting] = useState<Exercise | null>(null);
+  const [deletingLoading, setDeletingLoading] = useState(false);
 
   const openCreate = () => {
-    setEditing(null)
-    setDialogOpen(true)
-  }
+    setEditing(null);
+    setDialogOpen(true);
+  };
   const openEdit = (exercise: Exercise) => {
-    setEditing(exercise)
-    setDialogOpen(true)
-  }
+    setEditing(exercise);
+    setDialogOpen(true);
+  };
   const onSuccess = () => {
-    setDialogOpen(false)
-    reload()
-  }
+    setDialogOpen(false);
+    reload();
+  };
 
   const confirmDelete = async () => {
-    if (!deleting) return
-    setDeletingLoading(true)
+    if (!deleting) return;
+    setDeletingLoading(true);
     try {
-      await del(`/exercises/${deleting.id}`)
-      toast.success('Ejercicio eliminado')
-      setDeleting(null)
-      reload()
+      await del(`/exercises/${deleting.id}`);
+      toast.success('Ejercicio eliminado');
+      setDeleting(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setDeletingLoading(false)
+      setDeletingLoading(false);
     }
-  }
+  };
 
   return (
     <div>
-      <PageHeader title="Ejercicios" description="Catálogo de ejercicios del gimnasio">
+      <PageHeader
+        title="Ejercicios"
+        description="Catálogo de ejercicios del gimnasio"
+      >
         {canManage && (
           <Button onClick={openCreate}>
             <Plus />
@@ -314,10 +334,12 @@ export default function ExercisesPage() {
           placeholder="Filtrar por grupo muscular..."
           className="max-w-xs"
         />
-        <Label className="text-sm text-muted-foreground">Dificultad</Label>
+        <Label className="text-muted-foreground text-sm">Dificultad</Label>
         <Select
           value={(filters.difficulty as string) ?? ''}
-          onValueChange={(v) => setFilter('difficulty', v === 'all' ? undefined : v)}
+          onValueChange={(v) =>
+            setFilter('difficulty', v === 'all' ? undefined : v)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Todas" />
@@ -344,7 +366,9 @@ export default function ExercisesPage() {
               <TableHead>Grupo muscular</TableHead>
               <TableHead>Equipo</TableHead>
               <TableHead>Dificultad</TableHead>
-              {canManage && <TableHead className="w-24 text-right">Acciones</TableHead>}
+              {canManage && (
+                <TableHead className="w-24 text-right">Acciones</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -366,7 +390,11 @@ export default function ExercisesPage() {
                 {canManage && (
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon-sm" onClick={() => openEdit(exercise)}>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => openEdit(exercise)}
+                      >
                         <Pencil />
                       </Button>
                       {isAdmin && (
@@ -387,14 +415,23 @@ export default function ExercisesPage() {
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editing ? 'Editar ejercicio' : 'Nuevo ejercicio'}</DialogTitle>
+            <DialogTitle>
+              {editing ? 'Editar ejercicio' : 'Nuevo ejercicio'}
+            </DialogTitle>
             <DialogDescription>
-              {editing ? 'Actualiza los datos del ejercicio.' : 'Agrega un ejercicio al catálogo.'}
+              {editing
+                ? 'Actualiza los datos del ejercicio.'
+                : 'Agrega un ejercicio al catálogo.'}
             </DialogDescription>
           </DialogHeader>
           <ExerciseForm
@@ -405,14 +442,23 @@ export default function ExercisesPage() {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
+      <AlertDialog
+        open={!!deleting}
+        onOpenChange={(open) => !open && setDeleting(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar el ejercicio "{deleting?.name}"?</AlertDialogTitle>
-            <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+            <AlertDialogTitle>
+              ¿Eliminar el ejercicio "{deleting?.name}"?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deletingLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={deletingLoading}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white"
               disabled={deletingLoading}
@@ -424,5 +470,5 @@ export default function ExercisesPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

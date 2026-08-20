@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react'
-import { LogIn, LogOut } from 'lucide-react'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react';
+import { LogIn, LogOut } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { errorMessage, get, post } from '@/lib/apiClient'
-import type { Attendance, Envelope, Member, Paginated } from '@/types/api'
-import { formatDateTime, formatDuration } from '@/lib/format'
-import { useAuth } from '@/auth/AuthContext'
+import { usePaginated } from '@/hooks/usePaginated';
+import { errorMessage, get, post } from '@/lib/apiClient';
+import type { Attendance, Envelope, Member, Paginated } from '@/types/api';
+import { formatDateTime, formatDuration } from '@/lib/format';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -18,75 +18,91 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
+} from '@/components/ui/select';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
 
 export default function AttendancePage() {
-  const { user } = useAuth()
-  const isStaff = user?.role === 'admin' || user?.role === 'receptionist' || user?.role === 'trainer'
-  const { data, meta, loading, error, page, setPage, filters, setFilter, reload } =
-    usePaginated<Attendance>('/attendance')
+  const { user } = useAuth();
+  const isStaff =
+    user?.role === 'admin' ||
+    user?.role === 'receptionist' ||
+    user?.role === 'trainer';
+  const {
+    data,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    filters,
+    setFilter,
+    reload,
+  } = usePaginated<Attendance>('/attendance');
 
-  const [members, setMembers] = useState<Member[]>([])
-  const [selectedMember, setSelectedMember] = useState('')
-  const [checking, setChecking] = useState(false)
+  const [members, setMembers] = useState<Member[]>([]);
+  const [selectedMember, setSelectedMember] = useState('');
+  const [checking, setChecking] = useState(false);
 
   useEffect(() => {
-    if (!isStaff) return
+    if (!isStaff) return;
     get<Paginated<Member>>('/members', { page: 1, limit: 100 })
       .then((result) => setMembers(result.data))
-      .catch(() => setMembers([]))
-  }, [isStaff])
+      .catch(() => setMembers([]));
+  }, [isStaff]);
 
   // refresco periódico (check-out de otros dispositivos)
   useEffect(() => {
-    const timer = setInterval(reload, 30000)
-    return () => clearInterval(timer)
-  }, [reload])
+    const timer = setInterval(reload, 30000);
+    return () => clearInterval(timer);
+  }, [reload]);
 
   const doCheckIn = async () => {
     if (isStaff && !selectedMember) {
-      toast.error('Selecciona un miembro')
-      return
+      toast.error('Selecciona un miembro');
+      return;
     }
-    setChecking(true)
+    setChecking(true);
     try {
-      const body = isStaff ? { memberId: selectedMember } : {}
-      await post<Envelope<Attendance>>('/attendance/check-in', body)
-      toast.success('Check-in registrado')
-      reload()
+      const body = isStaff ? { memberId: selectedMember } : {};
+      await post<Envelope<Attendance>>('/attendance/check-in', body);
+      toast.success('Check-in registrado');
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setChecking(false)
+      setChecking(false);
     }
-  }
+  };
 
   const doCheckOut = async () => {
     if (isStaff && !selectedMember) {
-      toast.error('Selecciona un miembro')
-      return
+      toast.error('Selecciona un miembro');
+      return;
     }
-    setChecking(true)
+    setChecking(true);
     try {
-      const body = isStaff ? { memberId: selectedMember } : {}
-      await post<Envelope<Attendance>>('/attendance/check-out', body)
-      toast.success('Check-out registrado')
-      reload()
+      const body = isStaff ? { memberId: selectedMember } : {};
+      await post<Envelope<Attendance>>('/attendance/check-out', body);
+      toast.success('Check-out registrado');
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setChecking(false)
+      setChecking(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -112,11 +128,19 @@ export default function AttendancePage() {
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="outline" onClick={doCheckIn} disabled={checking || !selectedMember}>
+            <Button
+              variant="outline"
+              onClick={doCheckIn}
+              disabled={checking || !selectedMember}
+            >
               <LogIn />
               Check-in
             </Button>
-            <Button variant="outline" onClick={doCheckOut} disabled={checking || !selectedMember}>
+            <Button
+              variant="outline"
+              onClick={doCheckOut}
+              disabled={checking || !selectedMember}
+            >
               <LogOut />
               Check-out
             </Button>
@@ -151,7 +175,7 @@ export default function AttendancePage() {
           className="w-40"
           aria-label="Hasta"
         />
-        <Label className="text-sm text-muted-foreground">
+        <Label className="text-muted-foreground text-sm">
           {data.filter((a) => !a.check_out_at).length} check-ins abiertos
         </Label>
       </div>
@@ -179,16 +203,25 @@ export default function AttendancePage() {
             )}
             {data.map((attendance) => (
               <TableRow key={attendance.id}>
-                <TableCell className="font-medium">{attendance.member_name}</TableCell>
+                <TableCell className="font-medium">
+                  {attendance.member_name}
+                </TableCell>
                 <TableCell>{formatDateTime(attendance.check_in_at)}</TableCell>
                 <TableCell>{formatDateTime(attendance.check_out_at)}</TableCell>
-                <TableCell>{formatDuration(attendance.duration_minutes)}</TableCell>
+                <TableCell>
+                  {formatDuration(attendance.duration_minutes)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
     </div>
-  )
+  );
 }

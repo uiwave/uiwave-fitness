@@ -4,13 +4,13 @@ CRUD de miembros del gimnasio. Cada member está vinculado a un `user` de Better
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Body | Respuesta |
-|---|---|---|---|---|---|
-| GET | `/members` | admin, receptionist, trainer | `page`, `limit`, `search`, `status` | — | `{ data: Member[], meta }` |
-| GET | `/members/:id` | cualquiera (staff o propio, si no → 404) | — | — | `{ data: Member }` |
-| POST | `/members` | cualquiera (staff para crear de otro user) | — | `CreateMemberDto` | `{ data: Member }` |
-| PATCH | `/members/:id` | cualquiera (staff o propio) | — | `UpdateMemberDto` | `{ data: Member }` |
-| DELETE | `/members/:id` | admin, receptionist | — | — | `{ data: { id, deleted: true } }` |
+| Método | Ruta           | Roles                                      | Query                               | Body              | Respuesta                         |
+| ------ | -------------- | ------------------------------------------ | ----------------------------------- | ----------------- | --------------------------------- |
+| GET    | `/members`     | admin, receptionist, trainer               | `page`, `limit`, `search`, `status` | —                 | `{ data: Member[], meta }`        |
+| GET    | `/members/:id` | cualquiera (staff o propio, si no → 404)   | —                                   | —                 | `{ data: Member }`                |
+| POST   | `/members`     | cualquiera (staff para crear de otro user) | —                                   | `CreateMemberDto` | `{ data: Member }`                |
+| PATCH  | `/members/:id` | cualquiera (staff o propio)                | —                                   | `UpdateMemberDto` | `{ data: Member }`                |
+| DELETE | `/members/:id` | admin, receptionist                        | —                                   | —                 | `{ data: { id, deleted: true } }` |
 
 ## Fila Member (respuesta, snake_case)
 
@@ -39,28 +39,29 @@ CRUD de miembros del gimnasio. Cada member está vinculado a un `user` de Better
 
 ### CreateMemberDto (todos opcionales)
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `userId` | string | 1–255 chars | ID de user Better Auth (staff-only para vincular a otro) |
-| `documentNumber` | string | 8–20 chars | Único en BD (409 si se repite) |
-| `phone` | string | máx 20 | |
-| `birthDate` | string | ISO date | |
-| `address` | string | máx 500 | |
-| `emergencyContactName` | string | máx 100 | |
-| `emergencyContactPhone` | string | máx 20 | |
-| `status` | string | `active` \| `inactive` \| `suspended` | default `active` |
+| Campo                   | Tipo   | Validación                            | Notas                                                    |
+| ----------------------- | ------ | ------------------------------------- | -------------------------------------------------------- |
+| `userId`                | string | 1–255 chars                           | ID de user Better Auth (staff-only para vincular a otro) |
+| `documentNumber`        | string | 8–20 chars                            | Único en BD (409 si se repite)                           |
+| `phone`                 | string | máx 20                                |                                                          |
+| `birthDate`             | string | ISO date                              |                                                          |
+| `address`               | string | máx 500                               |                                                          |
+| `emergencyContactName`  | string | máx 100                               |                                                          |
+| `emergencyContactPhone` | string | máx 20                                |                                                          |
+| `status`                | string | `active` \| `inactive` \| `suspended` | default `active`                                         |
 
 ### UpdateMemberDto
+
 Todos los campos del CreateMemberDto, todos opcionales.
 
 ### Query params de GET /members
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
+| Param    | Tipo   | Notas                                           |
+| -------- | ------ | ----------------------------------------------- |
+| `page`   | number | default 1                                       |
+| `limit`  | number | 1–100, default 20                               |
 | `search` | string | ILIKE sobre name, email, document_number, phone |
-| `status` | string | `active` \| `inactive` \| `suspended` |
+| `status` | string | `active` \| `inactive` \| `suspended`           |
 
 ## Reglas de negocio
 

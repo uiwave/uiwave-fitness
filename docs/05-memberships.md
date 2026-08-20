@@ -4,14 +4,14 @@ Membresías activas de cada miembro (vinculan member + plan con fechas y precio)
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Body | Respuesta |
-|---|---|---|---|---|---|
-| GET | `/memberships` | admin, receptionist, trainer | `page`, `limit`, `status`, `memberId` | — | `{ data: Membership[], meta }` |
-| GET | `/memberships/:id` | cualquiera (staff o propio, si no → 404) | — | — | `{ data: Membership }` |
-| POST | `/memberships` | admin, receptionist | — | `CreateMembershipDto` | `{ data: Membership }` |
-| PATCH | `/memberships/:id` | admin, receptionist | — | `UpdateMembershipDto` | `{ data: Membership }` |
-| DELETE | `/memberships/:id` | admin | — | — | `{ data: { id, deleted: true } }` |
-| GET | `/members/:memberId/memberships` | cualquiera (staff o propio, si no → 404) | — | — | `{ data: Membership[] }` |
+| Método | Ruta                             | Roles                                    | Query                                 | Body                  | Respuesta                         |
+| ------ | -------------------------------- | ---------------------------------------- | ------------------------------------- | --------------------- | --------------------------------- |
+| GET    | `/memberships`                   | admin, receptionist, trainer             | `page`, `limit`, `status`, `memberId` | —                     | `{ data: Membership[], meta }`    |
+| GET    | `/memberships/:id`               | cualquiera (staff o propio, si no → 404) | —                                     | —                     | `{ data: Membership }`            |
+| POST   | `/memberships`                   | admin, receptionist                      | —                                     | `CreateMembershipDto` | `{ data: Membership }`            |
+| PATCH  | `/memberships/:id`               | admin, receptionist                      | —                                     | `UpdateMembershipDto` | `{ data: Membership }`            |
+| DELETE | `/memberships/:id`               | admin                                    | —                                     | —                     | `{ data: { id, deleted: true } }` |
+| GET    | `/members/:memberId/memberships` | cualquiera (staff o propio, si no → 404) | —                                     | —                     | `{ data: Membership[] }`          |
 
 ## Fila Membership (respuesta, snake_case)
 
@@ -28,7 +28,7 @@ Membresías activas de cada miembro (vinculan member + plan con fechas y precio)
     "plan_duration_days": 30,
     "start_date": "2026-01-01",
     "end_date": "2026-01-31",
-    "price": 89.90,
+    "price": 89.9,
     "status": "ACTIVE",
     "created_at": "2026-01-01T00:00:00.000Z",
     "updated_at": "2026-01-01T00:00:00.000Z"
@@ -40,26 +40,27 @@ Membresías activas de cada miembro (vinculan member + plan con fechas y precio)
 
 ### CreateMembershipDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `memberId` | string | UUID | **requerido** |
-| `planId` | string | UUID | **requerido** |
-| `startDate` | string | ISO date | **requerido** |
-| `endDate` | string | ISO date | **requerido**, debe ser ≥ startDate |
-| `status` | string | `ACTIVE` \| `EXPIRED` \| `CANCELLED` \| `PENDING` | opcional, default `PENDING` |
-| `price` | number | ≥ 0, 2 decimales máx | opcional, **default = precio del plan** |
+| Campo       | Tipo   | Validación                                        | Notas                                   |
+| ----------- | ------ | ------------------------------------------------- | --------------------------------------- |
+| `memberId`  | string | UUID                                              | **requerido**                           |
+| `planId`    | string | UUID                                              | **requerido**                           |
+| `startDate` | string | ISO date                                          | **requerido**                           |
+| `endDate`   | string | ISO date                                          | **requerido**, debe ser ≥ startDate     |
+| `status`    | string | `ACTIVE` \| `EXPIRED` \| `CANCELLED` \| `PENDING` | opcional, default `PENDING`             |
+| `price`     | number | ≥ 0, 2 decimales máx                              | opcional, **default = precio del plan** |
 
 ### UpdateMembershipDto
+
 Todos los campos opcionales.
 
 ### Query params de GET /memberships
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
-| `status` | string | `ACTIVE` \| `EXPIRED` \| `CANCELLED` \| `PENDING` |
-| `memberId` | string | UUID, filtra por miembro |
+| Param      | Tipo   | Notas                                             |
+| ---------- | ------ | ------------------------------------------------- |
+| `page`     | number | default 1                                         |
+| `limit`    | number | 1–100, default 20                                 |
+| `status`   | string | `ACTIVE` \| `EXPIRED` \| `CANCELLED` \| `PENDING` |
+| `memberId` | string | UUID, filtra por miembro                          |
 
 ## Reglas de negocio
 

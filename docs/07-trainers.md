@@ -4,13 +4,13 @@ Entrenadores del gimnasio (perfil profesional vinculado a un `user` de Better Au
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Body | Respuesta |
-|---|---|---|---|---|---|
-| GET | `/trainers` | admin, receptionist, trainer | `page`, `limit`, `search`, `status` | — | `{ data: Trainer[], meta }` |
-| GET | `/trainers/:id` | admin, receptionist, trainer | — | — | `{ data: Trainer }` |
-| POST | `/trainers` | admin | — | `CreateTrainerDto` | `{ data: Trainer }` |
-| PATCH | `/trainers/:id` | admin, trainer (admin o **el propio trainer**) | — | `UpdateTrainerDto` | `{ data: Trainer }` |
-| DELETE | `/trainers/:id` | admin | — | — | `{ data: { id, deleted: true } }` |
+| Método | Ruta            | Roles                                          | Query                               | Body               | Respuesta                         |
+| ------ | --------------- | ---------------------------------------------- | ----------------------------------- | ------------------ | --------------------------------- |
+| GET    | `/trainers`     | admin, receptionist, trainer                   | `page`, `limit`, `search`, `status` | —                  | `{ data: Trainer[], meta }`       |
+| GET    | `/trainers/:id` | admin, receptionist, trainer                   | —                                   | —                  | `{ data: Trainer }`               |
+| POST   | `/trainers`     | admin                                          | —                                   | `CreateTrainerDto` | `{ data: Trainer }`               |
+| PATCH  | `/trainers/:id` | admin, trainer (admin o **el propio trainer**) | —                                   | `UpdateTrainerDto` | `{ data: Trainer }`               |
+| DELETE | `/trainers/:id` | admin                                          | —                                   | —                  | `{ data: { id, deleted: true } }` |
 
 ## Fila Trainer (respuesta, snake_case)
 
@@ -35,24 +35,25 @@ Entrenadores del gimnasio (perfil profesional vinculado a un `user` de Better Au
 
 ### CreateTrainerDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `userId` | string | 1–255 chars | **requerido**; el user debe existir |
-| `specialization` | string | máx 100 | opcional |
-| `phone` | string | máx 20 | opcional |
-| `bio` | string | máx 2000 | opcional |
-| `status` | string | `active` \| `inactive` | opcional, default `active` |
+| Campo            | Tipo   | Validación             | Notas                               |
+| ---------------- | ------ | ---------------------- | ----------------------------------- |
+| `userId`         | string | 1–255 chars            | **requerido**; el user debe existir |
+| `specialization` | string | máx 100                | opcional                            |
+| `phone`          | string | máx 20                 | opcional                            |
+| `bio`            | string | máx 2000               | opcional                            |
+| `status`         | string | `active` \| `inactive` | opcional, default `active`          |
 
 ### UpdateTrainerDto
+
 Todos los campos opcionales.
 
 ### Query params de GET /trainers
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
-| `search` | string | máx 100 |
+| Param    | Tipo   | Notas                  |
+| -------- | ------ | ---------------------- |
+| `page`   | number | default 1              |
+| `limit`  | number | 1–100, default 20      |
+| `search` | string | máx 100                |
 | `status` | string | `active` \| `inactive` |
 
 ## Reglas de negocio

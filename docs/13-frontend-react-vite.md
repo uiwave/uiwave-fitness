@@ -7,11 +7,13 @@ Guía completa para consumir la GYM API desde un frontend **React + TypeScript +
 ### 1.1 Variables de entorno
 
 `.env` (frontend):
+
 ```env
 VITE_API_URL=http://localhost:3000
 ```
 
 `vite.config.ts` (proxy opcional — evita CORS en desarrollo):
+
 ```ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -35,9 +37,18 @@ export default defineConfig({
 
 ```ts
 // Envelope de respuestas
-export interface Meta { total: number; page: number; limit: number }
-export interface Envelope<T> { data: T }
-export interface Paginated<T> { data: T[]; meta: Meta }
+export interface Meta {
+  total: number;
+  page: number;
+  limit: number;
+}
+export interface Envelope<T> {
+  data: T;
+}
+export interface Paginated<T> {
+  data: T[];
+  meta: Meta;
+}
 
 // Usuario (Better Auth, id = texto 32 chars)
 export interface User {
@@ -121,7 +132,11 @@ export class ApiError extends Error {
 
 export async function api<T>(
   path: string,
-  options: { method?: string; body?: unknown; query?: Record<string, unknown> } = {},
+  options: {
+    method?: string;
+    body?: unknown;
+    query?: Record<string, unknown>;
+  } = {},
 ): Promise<T> {
   const { method = 'GET', body, query } = options;
 
@@ -160,7 +175,9 @@ export async function api<T>(
         ? errorBody.message.join(', ')
         : (errorBody.message ?? message);
       details = errorBody;
-    } catch { /* sin body JSON */ }
+    } catch {
+      /* sin body JSON */
+    }
     throw new ApiError(response.status, message, details);
   }
 
@@ -178,24 +195,41 @@ export const del = <T>(path: string) => api<T>(path, { method: 'DELETE' });
 ```
 
 **Uso:**
+
 ```ts
 import { get, post } from '../lib/apiClient';
 import type { Paginated, Member, Envelope } from '../types/api';
 
 const { data, meta } = await get<Paginated<Member>>('/members', {
-  page: 1, limit: 20, search: 'juan', status: 'active',
+  page: 1,
+  limit: 20,
+  search: 'juan',
+  status: 'active',
 });
 
 const { data: member } = await post<Envelope<Member>>('/members', {
-  documentNumber: '12345678', phone: '999888777',
+  documentNumber: '12345678',
+  phone: '999888777',
 });
 ```
 
 ## 3. Autenticación (`src/auth/AuthContext.tsx`)
 
 ```tsx
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { get, post, setOnUnauthorized, setToken, getToken } from '../lib/apiClient';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
+import {
+  get,
+  post,
+  setOnUnauthorized,
+  setToken,
+  getToken,
+} from '../lib/apiClient';
 import type { Envelope, User } from '../types/api';
 
 interface AuthContextValue {
@@ -218,7 +252,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Restaurar sesión al cargar: si hay token, validar con /auth/me
   useEffect(() => {
     (async () => {
-      if (!getToken()) { setLoading(false); return; }
+      if (!getToken()) {
+        setLoading(false);
+        return;
+      }
       try {
         const { data } = await get<Envelope<User>>('/auth/me');
         setUser(data);
@@ -241,7 +278,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    try { await post('/api/auth/sign-out'); } catch { /* ignora */ }
+    try {
+      await post('/api/auth/sign-out');
+    } catch {
+      /* ignora */
+    }
     setToken(null);
     setUser(null);
   };
@@ -276,7 +317,13 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-export function RequireRole({ roles, children }: { roles: UserRole[]; children: React.ReactNode }) {
+export function RequireRole({
+  roles,
+  children,
+}: {
+  roles: UserRole[];
+  children: React.ReactNode;
+}) {
   const { user } = useAuth();
   if (!user || !roles.includes(user.role)) return <Navigate to="/" replace />;
   return <>{children}</>;
@@ -284,24 +331,47 @@ export function RequireRole({ roles, children }: { roles: UserRole[]; children: 
 ```
 
 **Router:**
+
 ```tsx
 <Routes>
   <Route path="/login" element={<LoginPage />} />
-  <Route path="/" element={<RequireAuth><Layout /></RequireAuth>}>
+  <Route
+    path="/"
+    element={
+      <RequireAuth>
+        <Layout />
+      </RequireAuth>
+    }
+  >
     <Route index element={<Dashboard />} />
     <Route path="members" element={<MembersPage />} />
     {/* Solo admin y receptionist */}
-    <Route path="reports" element={
-      <RequireRole roles={['admin', 'receptionist']}><ReportsPage /></RequireRole>
-    } />
+    <Route
+      path="reports"
+      element={
+        <RequireRole roles={['admin', 'receptionist']}>
+          <ReportsPage />
+        </RequireRole>
+      }
+    />
     {/* Solo admin */}
-    <Route path="users" element={
-      <RequireRole roles={['admin']}><UsersPage /></RequireRole>
-    } />
+    <Route
+      path="users"
+      element={
+        <RequireRole roles={['admin']}>
+          <UsersPage />
+        </RequireRole>
+      }
+    />
     {/* Ocultar a recepcionista (el backend también da 403) */}
-    <Route path="routines" element={
-      <RequireRole roles={['admin', 'trainer', 'member']}><RoutinesPage /></RequireRole>
-    } />
+    <Route
+      path="routines"
+      element={
+        <RequireRole roles={['admin', 'trainer', 'member']}>
+          <RoutinesPage />
+        </RequireRole>
+      }
+    />
   </Route>
 </Routes>
 ```
@@ -336,8 +406,20 @@ export default function LoginPage() {
     <form onSubmit={onSubmit}>
       <h1>Iniciar sesión</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" required />
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+        required
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Contraseña"
+        required
+      />
       <button type="submit">Ingresar</button>
     </form>
   );
@@ -378,12 +460,18 @@ export default function MembersPage() {
     }
   };
 
-  useEffect(() => { load(1); }, [search, status]); // búsqueda/filtro reinician a página 1
+  useEffect(() => {
+    load(1);
+  }, [search, status]); // búsqueda/filtro reinician a página 1
 
   return (
     <div>
       <h1>Miembros</h1>
-      <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar..." />
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Buscar..."
+      />
       <select value={status} onChange={(e) => setStatus(e.target.value)}>
         <option value="">Todos</option>
         <option value="active">Activos</option>
@@ -396,7 +484,12 @@ export default function MembersPage() {
 
       <table>
         <thead>
-          <tr><th>Nombre</th><th>Email</th><th>Documento</th><th>Estado</th></tr>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Documento</th>
+            <th>Estado</th>
+          </tr>
         </thead>
         <tbody>
           {members.map((m) => (
@@ -411,9 +504,20 @@ export default function MembersPage() {
       </table>
 
       <div>
-        <button disabled={meta.page <= 1} onClick={() => load(meta.page - 1)}>← Anterior</button>
-        <span>Página {meta.page} de {Math.max(1, Math.ceil(meta.total / meta.limit))} ({meta.total} resultados)</span>
-        <button disabled={meta.page >= Math.ceil(meta.total / meta.limit)} onClick={() => load(meta.page + 1)}>Siguiente →</button>
+        <button disabled={meta.page <= 1} onClick={() => load(meta.page - 1)}>
+          ← Anterior
+        </button>
+        <span>
+          Página {meta.page} de{' '}
+          {Math.max(1, Math.ceil(meta.total / meta.limit))} ({meta.total}{' '}
+          resultados)
+        </span>
+        <button
+          disabled={meta.page >= Math.ceil(meta.total / meta.limit)}
+          onClick={() => load(meta.page + 1)}
+        >
+          Siguiente →
+        </button>
       </div>
     </div>
   );
@@ -426,15 +530,18 @@ export default function MembersPage() {
 import { post } from '../lib/apiClient';
 import type { Envelope } from '../types/api';
 
-interface PaymentRow { id: string; status: string; /* ...snake_case */ }
+interface PaymentRow {
+  id: string;
+  status: string; /* ...snake_case */
+}
 
 // Campos del DTO (camelCase en el body, snake_case en la respuesta)
 await post<Envelope<PaymentRow>>('/payments', {
-  memberId: memberId,          // uuid
-  membershipId: membershipId,  // uuid
+  memberId: memberId, // uuid
+  membershipId: membershipId, // uuid
   amount: 89.9,
-  paymentMethod: 'YAPE',       // CASH | CARD | TRANSFER | YAPE | PLIN | OTHER
-  status: 'COMPLETED',         // PENDING | COMPLETED | FAILED | REFUNDED
+  paymentMethod: 'YAPE', // CASH | CARD | TRANSFER | YAPE | PLIN | OTHER
+  status: 'COMPLETED', // PENDING | COMPLETED | FAILED | REFUNDED
   reference: 'YAPE-123',
 });
 ```
@@ -448,13 +555,16 @@ export function Navbar() {
   const { user, logout } = useAuth();
   if (!user) return null;
 
-  const canManagePayments = user.role === 'admin' || user.role === 'receptionist';
+  const canManagePayments =
+    user.role === 'admin' || user.role === 'receptionist';
   const canSeeReports = user.role === 'admin' || user.role === 'receptionist';
   const isAdmin = user.role === 'admin';
 
   return (
     <nav>
-      <span>{user.name} ({user.role})</span>
+      <span>
+        {user.name} ({user.role})
+      </span>
       <a href="/members">Miembros</a>
       {canManagePayments && <a href="/payments">Pagos</a>}
       {canSeeReports && <a href="/reports">Reportes</a>}
@@ -467,15 +577,15 @@ export function Navbar() {
 
 ## 9. Errores frecuentes de integración
 
-| Error | Causa | Fix |
-|---|---|---|
-| 401 en todo | Token no enviado o expirado | Revisa `getToken()` y el interceptor; re-login |
-| 400 "property X should not exist" | Enviaste un campo que no está en el DTO | Elimina el campo extra del body |
-| 400 en query | `page`/`limit` no numéricos o `limit > 100` | Envía siempre números |
-| 403 | Rol sin permiso para el endpoint | Oculta la UI según `user.role` |
-| 404 en recurso ajeno (member) | Anti-IDOR por diseño | Trata como inexistente |
-| 409 | Duplicado (nombre, documento) o check-in abierto | Muestra el mensaje del error |
-| CORS | Origen no permitido | Agrega tu origen a `CORS_ORIGIN` en el backend |
+| Error                             | Causa                                            | Fix                                            |
+| --------------------------------- | ------------------------------------------------ | ---------------------------------------------- |
+| 401 en todo                       | Token no enviado o expirado                      | Revisa `getToken()` y el interceptor; re-login |
+| 400 "property X should not exist" | Enviaste un campo que no está en el DTO          | Elimina el campo extra del body                |
+| 400 en query                      | `page`/`limit` no numéricos o `limit > 100`      | Envía siempre números                          |
+| 403                               | Rol sin permiso para el endpoint                 | Oculta la UI según `user.role`                 |
+| 404 en recurso ajeno (member)     | Anti-IDOR por diseño                             | Trata como inexistente                         |
+| 409                               | Duplicado (nombre, documento) o check-in abierto | Muestra el mensaje del error                   |
+| CORS                              | Origen no permitido                              | Agrega tu origen a `CORS_ORIGIN` en el backend |
 
 ## 10. Checklist final
 

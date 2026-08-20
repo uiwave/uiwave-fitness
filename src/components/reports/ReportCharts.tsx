@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 import {
   Area,
   AreaChart,
@@ -15,21 +15,34 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from 'recharts'
+} from 'recharts';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { formatMoney } from '@/lib/format'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { formatMoney } from '@/lib/format';
 
-export const CHART_COLORS = ['#16a34a', '#f59e0b', '#ef4444', '#0ea5e9', '#8b5cf6', '#71717a']
+export const CHART_COLORS = [
+  '#16a34a',
+  '#f59e0b',
+  '#ef4444',
+  '#0ea5e9',
+  '#8b5cf6',
+  '#71717a',
+];
 
 export function ChartCard({
   title,
   description,
   children,
 }: {
-  title: string
-  description?: string
-  children: ReactNode
+  title: string;
+  description?: string;
+  children: ReactNode;
 }) {
   return (
     <Card>
@@ -39,32 +52,53 @@ export function ChartCard({
       </CardHeader>
       <CardContent className="h-64">{children}</CardContent>
     </Card>
-  )
+  );
 }
 
-export function RevenueBarChart({ data }: { data: { month: string; total: number }[] }) {
+export function RevenueBarChart({
+  data,
+}: {
+  data: { month: string; total: number }[];
+}) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-border" />
-        <XAxis dataKey="month" tickLine={false} axisLine={false} fontSize={12} />
+        <CartesianGrid
+          strokeDasharray="3 3"
+          vertical={false}
+          className="stroke-border"
+        />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          axisLine={false}
+          fontSize={12}
+        />
         <YAxis tickLine={false} axisLine={false} fontSize={12} />
         <Tooltip formatter={(value) => formatMoney(Number(value))} />
-        <Bar dataKey="total" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
+        <Bar
+          dataKey="total"
+          fill="var(--color-primary)"
+          radius={[4, 4, 0, 0]}
+        />
       </BarChart>
     </ResponsiveContainer>
-  )
+  );
 }
 
 export function AttendanceAreaChart({
   data,
 }: {
-  data: { day: string; check_ins: number; check_outs: number }[]
+  data: { day: string; check_ins: number; check_outs: number }[];
 }) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-border" />
+        <CartesianGrid
+          strokeDasharray="3 3"
+          vertical={false}
+          className="stroke-border"
+        />
         <XAxis dataKey="day" tickLine={false} axisLine={false} fontSize={12} />
         <YAxis tickLine={false} axisLine={false} fontSize={12} />
         <Tooltip />
@@ -87,24 +121,48 @@ export function AttendanceAreaChart({
         />
       </AreaChart>
     </ResponsiveContainer>
-  )
+  );
 }
 
-export function MembersLineChart({ data }: { data: { month: string; total: number }[] }) {
+export function MembersLineChart({
+  data,
+}: {
+  data: { month: string; total: number }[];
+}) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-border" />
-        <XAxis dataKey="month" tickLine={false} axisLine={false} fontSize={12} />
+        <CartesianGrid
+          strokeDasharray="3 3"
+          vertical={false}
+          className="stroke-border"
+        />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          axisLine={false}
+          fontSize={12}
+        />
         <YAxis tickLine={false} axisLine={false} fontSize={12} />
         <Tooltip />
-        <Line type="monotone" dataKey="total" name="Nuevos" stroke="#8b5cf6" strokeWidth={2} dot={false} />
+        <Line
+          type="monotone"
+          dataKey="total"
+          name="Nuevos"
+          stroke="#8b5cf6"
+          strokeWidth={2}
+          dot={false}
+        />
       </LineChart>
     </ResponsiveContainer>
-  )
+  );
 }
 
-export function StatusPieChart({ data }: { data: { status: string; total: number }[] }) {
+export function StatusPieChart({
+  data,
+}: {
+  data: { status: string; total: number }[];
+}) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
@@ -117,34 +175,49 @@ export function StatusPieChart({ data }: { data: { status: string; total: number
           paddingAngle={2}
         >
           {data.map((entry, index) => (
-            <Cell key={entry.status} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+            <Cell
+              key={entry.status}
+              fill={CHART_COLORS[index % CHART_COLORS.length]}
+            />
           ))}
         </Pie>
         <Tooltip />
         <Legend />
       </PieChart>
     </ResponsiveContainer>
-  )
+  );
 }
 
 export function MethodBarChart({
   data,
 }: {
-  data: { payment_method: string; total: number }[]
+  data: { payment_method: string; total: number }[];
 }) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-border" />
-        <XAxis dataKey="payment_method" tickLine={false} axisLine={false} fontSize={12} />
+        <CartesianGrid
+          strokeDasharray="3 3"
+          vertical={false}
+          className="stroke-border"
+        />
+        <XAxis
+          dataKey="payment_method"
+          tickLine={false}
+          axisLine={false}
+          fontSize={12}
+        />
         <YAxis tickLine={false} axisLine={false} fontSize={12} />
         <Tooltip formatter={(value) => formatMoney(Number(value))} />
         <Bar dataKey="total" radius={[4, 4, 0, 0]}>
           {data.map((entry, index) => (
-            <Cell key={entry.payment_method} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+            <Cell
+              key={entry.payment_method}
+              fill={CHART_COLORS[index % CHART_COLORS.length]}
+            />
           ))}
         </Bar>
       </BarChart>
     </ResponsiveContainer>
-  )
+  );
 }

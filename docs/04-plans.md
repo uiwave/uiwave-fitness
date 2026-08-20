@@ -4,13 +4,13 @@ Planes/membresías del negocio (precio, duración, estado). Lectura para todos; 
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Body | Respuesta |
-|---|---|---|---|---|---|
-| GET | `/plans` | cualquiera | `page`, `limit`, `status` | — | `{ data: Plan[], meta }` |
-| GET | `/plans/:id` | cualquiera | — | — | `{ data: Plan }` |
-| POST | `/plans` | admin | — | `CreatePlanDto` | `{ data: Plan }` |
-| PATCH | `/plans/:id` | admin | — | `UpdatePlanDto` | `{ data: Plan }` |
-| DELETE | `/plans/:id` | admin | — | — | `{ data: { id, deleted: true } }` |
+| Método | Ruta         | Roles      | Query                     | Body            | Respuesta                         |
+| ------ | ------------ | ---------- | ------------------------- | --------------- | --------------------------------- |
+| GET    | `/plans`     | cualquiera | `page`, `limit`, `status` | —               | `{ data: Plan[], meta }`          |
+| GET    | `/plans/:id` | cualquiera | —                         | —               | `{ data: Plan }`                  |
+| POST   | `/plans`     | admin      | —                         | `CreatePlanDto` | `{ data: Plan }`                  |
+| PATCH  | `/plans/:id` | admin      | —                         | `UpdatePlanDto` | `{ data: Plan }`                  |
+| DELETE | `/plans/:id` | admin      | —                         | —               | `{ data: { id, deleted: true } }` |
 
 ## Fila Plan (respuesta, snake_case)
 
@@ -20,7 +20,7 @@ Planes/membresías del negocio (precio, duración, estado). Lectura para todos; 
     "id": "uuid",
     "name": "Plan Mensual",
     "description": "Acceso ilimitado",
-    "price": 89.90,
+    "price": 89.9,
     "duration_days": 30,
     "status": "active",
     "created_at": "2026-01-01T00:00:00.000Z",
@@ -33,23 +33,24 @@ Planes/membresías del negocio (precio, duración, estado). Lectura para todos; 
 
 ### CreatePlanDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `name` | string | máx 100 | **requerido**, único (409 si se repite) |
-| `description` | string | máx 2000 | opcional |
-| `price` | number | ≥ 0, máx 2 decimales, ≤ 99999999.99 | opcional, default `0` |
-| `durationDays` | number | entero 1–3650 | **requerido** |
-| `status` | string | `active` \| `inactive` | opcional, default `active` |
+| Campo          | Tipo   | Validación                          | Notas                                   |
+| -------------- | ------ | ----------------------------------- | --------------------------------------- |
+| `name`         | string | máx 100                             | **requerido**, único (409 si se repite) |
+| `description`  | string | máx 2000                            | opcional                                |
+| `price`        | number | ≥ 0, máx 2 decimales, ≤ 99999999.99 | opcional, default `0`                   |
+| `durationDays` | number | entero 1–3650                       | **requerido**                           |
+| `status`       | string | `active` \| `inactive`              | opcional, default `active`              |
 
 ### UpdatePlanDto
+
 Todos los campos opcionales.
 
 ### Query params de GET /plans
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
+| Param    | Tipo   | Notas                  |
+| -------- | ------ | ---------------------- |
+| `page`   | number | default 1              |
+| `limit`  | number | 1–100, default 20      |
 | `status` | string | `active` \| `inactive` |
 
 ## Reglas de negocio

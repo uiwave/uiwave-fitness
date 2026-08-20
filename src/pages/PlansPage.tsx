@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { usePaginated } from '@/hooks/usePaginated'
-import { del, errorMessage, patch, post } from '@/lib/apiClient'
-import type { Envelope, Plan } from '@/types/api'
-import { formatMoney } from '@/lib/format'
-import { useAuth } from '@/auth/AuthContext'
+import { usePaginated } from '@/hooks/usePaginated';
+import { del, errorMessage, patch, post } from '@/lib/apiClient';
+import type { Envelope, Plan } from '@/types/api';
+import { formatMoney } from '@/lib/format';
+import { useAuth } from '@/auth/AuthContext';
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -21,14 +21,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -36,7 +36,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,7 +46,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog';
 import {
   Form,
   FormControl,
@@ -54,10 +54,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { ErrorAlert, LoadingRows, EmptyState } from '@/components/shared/DataState'
-import { PageHeader, PaginationBar } from '@/components/shared/PageParts'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+} from '@/components/ui/form';
+import {
+  ErrorAlert,
+  LoadingRows,
+  EmptyState,
+} from '@/components/shared/DataState';
+import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
 const planSchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio').max(100),
@@ -65,7 +69,8 @@ const planSchema = z.object({
   price: z
     .string()
     .refine(
-      (v) => !Number.isNaN(Number(v)) && Number(v) >= 0 && Number(v) <= 99999999.99,
+      (v) =>
+        !Number.isNaN(Number(v)) && Number(v) >= 0 && Number(v) <= 99999999.99,
       'Precio inválido',
     ),
   durationDays: z
@@ -75,9 +80,9 @@ const planSchema = z.object({
       'Duración inválida (1–3650 días)',
     ),
   status: z.enum(['active', 'inactive']),
-})
+});
 
-type PlanValues = z.infer<typeof planSchema>
+type PlanValues = z.infer<typeof planSchema>;
 
 const emptyValues: PlanValues = {
   name: '',
@@ -85,19 +90,19 @@ const emptyValues: PlanValues = {
   price: '0',
   durationDays: '30',
   status: 'active',
-}
+};
 
 function PlanForm({
   plan,
   onSuccess,
   onCancel,
 }: {
-  plan?: Plan
-  onSuccess: () => void
-  onCancel: () => void
+  plan?: Plan;
+  onSuccess: () => void;
+  onCancel: () => void;
 }) {
-  const [submitting, setSubmitting] = useState(false)
-  const isEdit = !!plan
+  const [submitting, setSubmitting] = useState(false);
+  const isEdit = !!plan;
 
   const form = useForm<PlanValues>({
     resolver: zodResolver(planSchema),
@@ -110,31 +115,31 @@ function PlanForm({
           status: plan.status,
         }
       : emptyValues,
-  })
+  });
 
   const onSubmit = async (values: PlanValues) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const body = {
       ...values,
       description: values.description || undefined,
       price: Number(values.price),
       durationDays: Number(values.durationDays),
-    }
+    };
     try {
       if (isEdit) {
-        await patch<Envelope<Plan>>(`/plans/${plan!.id}`, body)
-        toast.success('Plan actualizado')
+        await patch<Envelope<Plan>>(`/plans/${plan!.id}`, body);
+        toast.success('Plan actualizado');
       } else {
-        await post<Envelope<Plan>>('/plans', body)
-        toast.success('Plan creado')
+        await post<Envelope<Plan>>('/plans', body);
+        toast.success('Plan creado');
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -219,52 +224,65 @@ function PlanForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear plan'}
+            {submitting
+              ? 'Guardando...'
+              : isEdit
+                ? 'Guardar cambios'
+                : 'Crear plan'}
           </Button>
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 export default function PlansPage() {
-  const { user } = useAuth()
-  const isAdmin = user?.role === 'admin'
-  const { data, meta, loading, error, page, setPage, filters, setFilter, reload } =
-    usePaginated<Plan>('/plans')
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+  const {
+    data,
+    meta,
+    loading,
+    error,
+    page,
+    setPage,
+    filters,
+    setFilter,
+    reload,
+  } = usePaginated<Plan>('/plans');
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Plan | null>(null)
-  const [deleting, setDeleting] = useState<Plan | null>(null)
-  const [deletingLoading, setDeletingLoading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Plan | null>(null);
+  const [deleting, setDeleting] = useState<Plan | null>(null);
+  const [deletingLoading, setDeletingLoading] = useState(false);
 
   const openCreate = () => {
-    setEditing(null)
-    setDialogOpen(true)
-  }
+    setEditing(null);
+    setDialogOpen(true);
+  };
   const openEdit = (plan: Plan) => {
-    setEditing(plan)
-    setDialogOpen(true)
-  }
+    setEditing(plan);
+    setDialogOpen(true);
+  };
   const onSuccess = () => {
-    setDialogOpen(false)
-    reload()
-  }
+    setDialogOpen(false);
+    reload();
+  };
 
   const confirmDelete = async () => {
-    if (!deleting) return
-    setDeletingLoading(true)
+    if (!deleting) return;
+    setDeletingLoading(true);
     try {
-      await del(`/plans/${deleting.id}`)
-      toast.success('Plan eliminado')
-      setDeleting(null)
-      reload()
+      await del(`/plans/${deleting.id}`);
+      toast.success('Plan eliminado');
+      setDeleting(null);
+      reload();
     } catch (err) {
-      toast.error(errorMessage(err))
+      toast.error(errorMessage(err));
     } finally {
-      setDeletingLoading(false)
+      setDeletingLoading(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -278,10 +296,12 @@ export default function PlansPage() {
       </PageHeader>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <Label className="text-sm text-muted-foreground">Estado</Label>
+        <Label className="text-muted-foreground text-sm">Estado</Label>
         <Select
           value={(filters.status as string) ?? ''}
-          onValueChange={(v) => setFilter('status', v === 'all' ? undefined : v)}
+          onValueChange={(v) =>
+            setFilter('status', v === 'all' ? undefined : v)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
@@ -305,7 +325,9 @@ export default function PlansPage() {
               <TableHead>Precio</TableHead>
               <TableHead>Duración</TableHead>
               <TableHead>Estado</TableHead>
-              {isAdmin && <TableHead className="w-24 text-right">Acciones</TableHead>}
+              {isAdmin && (
+                <TableHead className="w-24 text-right">Acciones</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -327,7 +349,11 @@ export default function PlansPage() {
                 {isAdmin && (
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon-sm" onClick={() => openEdit(plan)}>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => openEdit(plan)}
+                      >
                         <Pencil />
                       </Button>
                       <Button
@@ -346,14 +372,21 @@ export default function PlansPage() {
           </TableBody>
         </Table>
       )}
-      <PaginationBar page={page} limit={meta.limit} total={meta.total} onPageChange={setPage} />
+      <PaginationBar
+        page={page}
+        limit={meta.limit}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editing ? 'Editar plan' : 'Nuevo plan'}</DialogTitle>
             <DialogDescription>
-              {editing ? 'Actualiza los datos del plan.' : 'Crea un nuevo plan de membresía.'}
+              {editing
+                ? 'Actualiza los datos del plan.'
+                : 'Crea un nuevo plan de membresía.'}
             </DialogDescription>
           </DialogHeader>
           <PlanForm
@@ -364,14 +397,23 @@ export default function PlansPage() {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
+      <AlertDialog
+        open={!!deleting}
+        onOpenChange={(open) => !open && setDeleting(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar el plan "{deleting?.name}"?</AlertDialogTitle>
-            <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+            <AlertDialogTitle>
+              ¿Eliminar el plan "{deleting?.name}"?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deletingLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={deletingLoading}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-white"
               disabled={deletingLoading}
@@ -383,5 +425,5 @@ export default function PlansPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

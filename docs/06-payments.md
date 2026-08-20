@@ -6,13 +6,13 @@ Pagos de los miembros. Escritura: admin/receptionist. **No tiene DELETE.**
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Body | Respuesta |
-|---|---|---|---|---|---|
-| GET | `/payments` | admin, receptionist | `page`, `limit`, `status`, `from`, `to` | — | `{ data: Payment[], meta }` |
-| GET | `/payments/:id` | cualquiera (staff o propio, si no → 404) | — | — | `{ data: Payment }` |
-| POST | `/payments` | admin, receptionist | — | `CreatePaymentDto` | `{ data: Payment }` |
-| PATCH | `/payments/:id` | admin, receptionist | — | `UpdatePaymentDto` | `{ data: Payment }` |
-| GET | `/members/:memberId/payments` | cualquiera (staff o propio, si no → 404) | — | — | `{ data: Payment[] }` |
+| Método | Ruta                          | Roles                                    | Query                                   | Body               | Respuesta                   |
+| ------ | ----------------------------- | ---------------------------------------- | --------------------------------------- | ------------------ | --------------------------- |
+| GET    | `/payments`                   | admin, receptionist                      | `page`, `limit`, `status`, `from`, `to` | —                  | `{ data: Payment[], meta }` |
+| GET    | `/payments/:id`               | cualquiera (staff o propio, si no → 404) | —                                       | —                  | `{ data: Payment }`         |
+| POST   | `/payments`                   | admin, receptionist                      | —                                       | `CreatePaymentDto` | `{ data: Payment }`         |
+| PATCH  | `/payments/:id`               | admin, receptionist                      | —                                       | `UpdatePaymentDto` | `{ data: Payment }`         |
+| GET    | `/members/:memberId/payments` | cualquiera (staff o propio, si no → 404) | —                                       | —                  | `{ data: Payment[] }`       |
 
 ## Fila Payment (respuesta, snake_case)
 
@@ -25,7 +25,7 @@ Pagos de los miembros. Escritura: admin/receptionist. **No tiene DELETE.**
     "member_email": "juan@test.com",
     "member_document_number": "12345678",
     "membership_id": "uuid | null",
-    "amount": 89.90,
+    "amount": 89.9,
     "payment_method": "YAPE",
     "payment_date": "2026-08-19T10:00:00.000Z",
     "status": "COMPLETED",
@@ -41,29 +41,30 @@ Pagos de los miembros. Escritura: admin/receptionist. **No tiene DELETE.**
 
 ### CreatePaymentDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `memberId` | string | UUID | **requerido** |
-| `membershipId` | string | UUID | opcional; si se envía, debe pertenecer al member |
-| `amount` | number | ≥ 0.01, 2 decimales máx, ≤ 99999999.99 | **requerido** |
-| `paymentMethod` | string | `CASH` \| `CARD` \| `TRANSFER` \| `YAPE` \| `PLIN` \| `OTHER` | **requerido** |
-| `paymentDate` | string | ISO date | opcional, default ahora |
-| `status` | string | `PENDING` \| `COMPLETED` \| `FAILED` \| `REFUNDED` | opcional, default `PENDING` |
-| `reference` | string | máx 100 | opcional |
-| `notes` | string | máx 2000 | opcional |
+| Campo           | Tipo   | Validación                                                    | Notas                                            |
+| --------------- | ------ | ------------------------------------------------------------- | ------------------------------------------------ |
+| `memberId`      | string | UUID                                                          | **requerido**                                    |
+| `membershipId`  | string | UUID                                                          | opcional; si se envía, debe pertenecer al member |
+| `amount`        | number | ≥ 0.01, 2 decimales máx, ≤ 99999999.99                        | **requerido**                                    |
+| `paymentMethod` | string | `CASH` \| `CARD` \| `TRANSFER` \| `YAPE` \| `PLIN` \| `OTHER` | **requerido**                                    |
+| `paymentDate`   | string | ISO date                                                      | opcional, default ahora                          |
+| `status`        | string | `PENDING` \| `COMPLETED` \| `FAILED` \| `REFUNDED`            | opcional, default `PENDING`                      |
+| `reference`     | string | máx 100                                                       | opcional                                         |
+| `notes`         | string | máx 2000                                                      | opcional                                         |
 
 ### UpdatePaymentDto
+
 Todos los campos opcionales.
 
 ### Query params de GET /payments
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
-| `status` | string | `PENDING` \| `COMPLETED` \| `FAILED` \| `REFUNDED` |
-| `from` | string | ISO date, filtra payment_date ≥ from |
-| `to` | string | ISO date, filtra payment_date ≤ to (inclusive, +1 día) |
+| Param    | Tipo   | Notas                                                  |
+| -------- | ------ | ------------------------------------------------------ |
+| `page`   | number | default 1                                              |
+| `limit`  | number | 1–100, default 20                                      |
+| `status` | string | `PENDING` \| `COMPLETED` \| `FAILED` \| `REFUNDED`     |
+| `from`   | string | ISO date, filtra payment_date ≥ from                   |
+| `to`     | string | ISO date, filtra payment_date ≤ to (inclusive, +1 día) |
 
 ## Reglas de negocio
 

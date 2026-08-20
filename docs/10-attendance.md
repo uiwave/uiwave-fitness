@@ -4,13 +4,13 @@ Asistencia: check-in y check-out de los miembros. El miembro se registra a sí m
 
 ## Endpoints
 
-| Método | Ruta | Roles | Query | Body | Respuesta |
-|---|---|---|---|---|---|
-| POST | `/attendance/check-in` | cualquiera | — | `CheckInDto` | `{ data: Attendance }` |
-| POST | `/attendance/check-out` | cualquiera | — | `CheckOutDto` | `{ data: Attendance }` |
-| GET | `/attendance` | admin, receptionist, trainer (members ven solo las suyas) | `page`, `limit`, `from`, `to`, `memberId` | — | `{ data: Attendance[], meta }` |
-| GET | `/attendance/:id` | cualquiera (staff o propio, si no → 404) | — | — | `{ data: Attendance }` |
-| GET | `/members/:memberId/attendance` | cualquiera (staff o propio, si no → 404) | — | — | `{ data: Attendance[] }` |
+| Método | Ruta                            | Roles                                                     | Query                                     | Body          | Respuesta                      |
+| ------ | ------------------------------- | --------------------------------------------------------- | ----------------------------------------- | ------------- | ------------------------------ |
+| POST   | `/attendance/check-in`          | cualquiera                                                | —                                         | `CheckInDto`  | `{ data: Attendance }`         |
+| POST   | `/attendance/check-out`         | cualquiera                                                | —                                         | `CheckOutDto` | `{ data: Attendance }`         |
+| GET    | `/attendance`                   | admin, receptionist, trainer (members ven solo las suyas) | `page`, `limit`, `from`, `to`, `memberId` | —             | `{ data: Attendance[], meta }` |
+| GET    | `/attendance/:id`               | cualquiera (staff o propio, si no → 404)                  | —                                         | —             | `{ data: Attendance }`         |
+| GET    | `/members/:memberId/attendance` | cualquiera (staff o propio, si no → 404)                  | —                                         | —             | `{ data: Attendance[] }`       |
 
 ## Fila Attendance (respuesta, snake_case)
 
@@ -35,19 +35,19 @@ Asistencia: check-in y check-out de los miembros. El miembro se registra a sí m
 
 ### CheckInDto / CheckOutDto
 
-| Campo | Tipo | Validación | Notas |
-|---|---|---|---|
-| `memberId` | string | UUID | opcional; **requerido para staff** (receptionist/admin/trainer), **prohibido para member** (se registra él mismo) |
+| Campo      | Tipo   | Validación | Notas                                                                                                             |
+| ---------- | ------ | ---------- | ----------------------------------------------------------------------------------------------------------------- |
+| `memberId` | string | UUID       | opcional; **requerido para staff** (receptionist/admin/trainer), **prohibido para member** (se registra él mismo) |
 
 ### Query params de GET /attendance
 
-| Param | Tipo | Notas |
-|---|---|---|
-| `page` | number | default 1 |
-| `limit` | number | 1–100, default 20 |
-| `from` | string | ISO date |
-| `to` | string | ISO date |
-| `memberId` | string | UUID |
+| Param      | Tipo   | Notas             |
+| ---------- | ------ | ----------------- |
+| `page`     | number | default 1         |
+| `limit`    | number | 1–100, default 20 |
+| `from`     | string | ISO date          |
+| `to`       | string | ISO date          |
+| `memberId` | string | UUID              |
 
 ## Reglas de negocio
 

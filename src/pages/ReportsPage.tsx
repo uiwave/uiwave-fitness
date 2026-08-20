@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-import { get, errorMessage } from '@/lib/apiClient'
+import { get, errorMessage } from '@/lib/apiClient';
 import type {
   AttendanceReport,
   Envelope,
   MembersReport,
   MembershipsReport,
   RevenueReport,
-} from '@/types/api'
-import { formatDate, formatMoney } from '@/lib/format'
+} from '@/types/api';
+import { formatDate, formatMoney } from '@/lib/format';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -21,9 +21,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { ErrorAlert, LoadingRows } from '@/components/shared/DataState'
-import { PageHeader } from '@/components/shared/PageParts'
+} from '@/components/ui/table';
+import { ErrorAlert, LoadingRows } from '@/components/shared/DataState';
+import { PageHeader } from '@/components/shared/PageParts';
 import {
   AttendanceAreaChart,
   ChartCard,
@@ -31,59 +31,78 @@ import {
   MethodBarChart,
   RevenueBarChart,
   StatusPieChart,
-} from '@/components/reports/ReportCharts'
+} from '@/components/reports/ReportCharts';
 
 export default function ReportsPage() {
-  const [from, setFrom] = useState('')
-  const [to, setTo] = useState('')
-  const [revenue, setRevenue] = useState<RevenueReport | null>(null)
-  const [members, setMembers] = useState<MembersReport | null>(null)
-  const [attendance, setAttendance] = useState<AttendanceReport | null>(null)
-  const [memberships, setMemberships] = useState<MembershipsReport | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+  const [revenue, setRevenue] = useState<RevenueReport | null>(null);
+  const [members, setMembers] = useState<MembersReport | null>(null);
+  const [attendance, setAttendance] = useState<AttendanceReport | null>(null);
+  const [memberships, setMemberships] = useState<MembershipsReport | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const load = () => {
-    setLoading(true)
-    setError('')
-    const query = { from: from || undefined, to: to || undefined }
+    setLoading(true);
+    setError('');
+    const query = { from: from || undefined, to: to || undefined };
     Promise.all([
       get<Envelope<RevenueReport>>('/reports/revenue', query),
       get<Envelope<MembersReport>>('/reports/members', query),
       get<Envelope<AttendanceReport>>('/reports/attendance', query),
       get<Envelope<MembershipsReport>>('/reports/memberships'),
     ])
-      .then(([revenueResult, membersResult, attendanceResult, membershipsResult]) => {
-        setRevenue(revenueResult.data)
-        setMembers(membersResult.data)
-        setAttendance(attendanceResult.data)
-        setMemberships(membershipsResult.data)
-      })
+      .then(
+        ([
+          revenueResult,
+          membersResult,
+          attendanceResult,
+          membershipsResult,
+        ]) => {
+          setRevenue(revenueResult.data);
+          setMembers(membersResult.data);
+          setAttendance(attendanceResult.data);
+          setMemberships(membershipsResult.data);
+        },
+      )
       .catch((err) => setError(errorMessage(err)))
-      .finally(() => setLoading(false))
-  }
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
-    load()
-  }, [])
+    load();
+  }, []);
 
   const applyFilters = () => {
-    load()
-  }
+    load();
+  };
 
-  if (loading) return <LoadingRows rows={8} />
+  if (loading) return <LoadingRows rows={8} />;
 
   return (
     <div className="space-y-6">
       <PageHeader title="Reportes" description="Métricas del gimnasio">
         <div className="flex flex-wrap items-end gap-2">
           <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Desde</Label>
-            <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" />
+            <Label className="text-muted-foreground text-xs">Desde</Label>
+            <Input
+              type="date"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+              className="w-40"
+            />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Hasta</Label>
-            <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" />
+            <Label className="text-muted-foreground text-xs">Hasta</Label>
+            <Input
+              type="date"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              className="w-40"
+            />
           </div>
           <Button onClick={applyFilters}>Aplicar filtros</Button>
         </div>
@@ -92,7 +111,10 @@ export default function ReportsPage() {
       {error && <ErrorAlert message={error} />}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <ChartCard title="Ingresos por mes" description={`Total: ${formatMoney(revenue?.totalRevenue ?? 0)}`}>
+        <ChartCard
+          title="Ingresos por mes"
+          description={`Total: ${formatMoney(revenue?.totalRevenue ?? 0)}`}
+        >
           <RevenueBarChart data={revenue?.byMonth ?? []} />
         </ChartCard>
         <ChartCard title="Ingresos por método de pago">
@@ -115,7 +137,9 @@ export default function ReportsPage() {
       {memberships && memberships.expiringSoonList.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Membresías próximas a vencer</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Membresías próximas a vencer
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
@@ -141,7 +165,9 @@ export default function ReportsPage() {
       {members && members.byStatus.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Miembros por estado</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Miembros por estado
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
@@ -164,5 +190,5 @@ export default function ReportsPage() {
         </Card>
       )}
     </div>
-  )
+  );
 }
