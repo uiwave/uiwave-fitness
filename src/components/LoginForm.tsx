@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Field, FieldGroup, FieldLabel } from './ui/field';
 
 const loginSchema = z.object({
   email: z.email({
@@ -55,40 +56,52 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="admin@test.com"
-          autoComplete="email"
-          {...register('email')}
-        />
-        {errors.email?.message && (
-          <p className="text-destructive text-sm">{errors.email.message}</p>
+      <FieldGroup>
+        <div className="flex flex-col items-center gap-1 text-center">
+          <h1 className="text-2xl font-bold">Login to your account</h1>
+          <p className="text-muted-foreground text-sm text-balance">
+            Enter your email below to login to your account
+          </p>
+        </div>
+        <Field>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input
+            id="email"
+            type="email"
+            placeholder="admin@test.com"
+            autoComplete="email"
+            {...register('email')}
+          />
+          {errors.email?.message && (
+            <p className="text-destructive text-sm">{errors.email.message}</p>
+          )}
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="password">Contraseña</FieldLabel>
+          <Input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            autoComplete="current-password"
+            {...register('password')}
+          />
+          {errors.password?.message && (
+            <p className="text-destructive text-sm">
+              {errors.password.message}
+            </p>
+          )}
+        </Field>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         )}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="password">Contraseña</Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          autoComplete="current-password"
-          {...register('password')}
-        />
-        {errors.password?.message && (
-          <p className="text-destructive text-sm">{errors.password.message}</p>
-        )}
-      </div>
-      <Button type="submit" className="w-full" disabled={submitting}>
-        {submitting ? 'Ingresando...' : 'Ingresar'}
-      </Button>
+        <Field>
+          <Button type="submit" disabled={submitting}>
+            {submitting ? 'Ingresando...' : 'Ingresar'}
+          </Button>
+        </Field>
+      </FieldGroup>
     </form>
   );
 }
