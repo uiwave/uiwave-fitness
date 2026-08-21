@@ -26,60 +26,72 @@ type Role = 'admin' | 'trainer' | 'receptionist' | 'member';
 
 type RouteConfig = {
   path: string;
+  label: string;
   element: ReactNode;
   roles?: Role[];
 };
 
-const routes: RouteConfig[] = [
+export const routes: RouteConfig[] = [
   {
     path: 'members',
+    label: 'Miembros',
     element: <MembersPage />,
     roles: ['admin', 'trainer', 'receptionist'],
   },
   {
     path: 'plans',
+    label: 'Planes',
     element: <PlansPage />,
   },
   {
     path: 'memberships',
+    label: 'Membresías',
     element: <MembershipsPage />,
     roles: ['admin', 'trainer', 'receptionist'],
   },
   {
     path: 'payments',
+    label: 'Pagos',
     element: <PaymentsPage />,
     roles: ['admin', 'receptionist'],
   },
   {
     path: 'trainers',
+    label: 'Entrenadores',
     element: <TrainersPage />,
     roles: ['admin', 'trainer', 'receptionist'],
   },
   {
     path: 'exercises',
+    label: 'Ejercicios',
     element: <ExercisesPage />,
   },
   {
     path: 'routines',
+    label: 'Rutinas',
     element: <RoutinesPage />,
     roles: ['admin', 'trainer', 'member'],
   },
   {
     path: 'attendance',
+    label: 'Asistencia',
     element: <AttendancePage />,
   },
   {
     path: 'users',
+    label: 'Usuarios',
     element: <UsersPage />,
     roles: ['admin', 'receptionist'],
   },
   {
     path: 'reports',
+    label: 'Reportes',
     element: <ReportsPage />,
     roles: ['admin', 'receptionist'],
   },
   {
     path: 'notifications',
+    label: 'Notificaciones',
     element: <NotificationsPage />,
   },
 ];

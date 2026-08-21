@@ -1,11 +1,11 @@
-import {Dumbbell } from 'lucide-react';
+import { Dumbbell } from 'lucide-react';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar';
 import { NotificationBell } from '../notifications/NotificationBell';
 
 export function TeamSwitcher() {
   return (
     <SidebarMenu>
-      <SidebarMenuItem>
+      <SidebarMenuItem className="flex items-center">
         <SidebarMenuButton
           size="lg"
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
@@ -17,8 +17,8 @@ export function TeamSwitcher() {
             <span className="truncate font-medium">GYM Panel</span>
             <span className="truncate text-xs">GYM Plan</span>
           </div>
-          <NotificationBell />
         </SidebarMenuButton>
+        <NotificationBell />
       </SidebarMenuItem>
     </SidebarMenu>
   );

@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '@/auth/AuthContext';
 import {
@@ -8,17 +8,12 @@ import {
 } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/sidebar/AppSidebar';
 import { Separator } from '../ui/separator';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '../ui/breadcrumb';
+import AppBreadcrumb from '../navigation/AppBreadcrumb';
 
 export default function AppLayout() {
   const { user } = useAuth();
+  const location = useLocation();
+  console.log(location);
 
   if (!user) return null;
 
@@ -33,19 +28,7 @@ export default function AppLayout() {
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4"
             />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Build Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <AppBreadcrumb />
           </div>
         </header>
         <main className="w-full p-4 pt-0">
