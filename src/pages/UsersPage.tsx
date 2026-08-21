@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Ban, Plus, ShieldCheck, Trash2, Unlock } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { usePaginated } from '@/hooks/usePaginated';
@@ -14,21 +14,11 @@ import type {
   User,
   UserRole,
 } from '@/types/api';
-import { formatDateTime } from '@/lib/format';
 import { useAuth } from '@/auth/AuthContext';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
@@ -62,13 +52,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  ErrorAlert,
-  LoadingRows,
-  EmptyState,
-} from '@/components/shared/DataState';
+import { ErrorAlert, LoadingRows } from '@/components/shared/DataState';
 import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
-import { StatusBadge } from '@/components/shared/StatusBadge';
+import { UsersTable } from '@/features/users/ui/UsersTable';
 
 const ROLES: UserRole[] = ['admin', 'trainer', 'receptionist', 'member'];
 
@@ -300,98 +286,21 @@ export default function UsersPage() {
       {loading ? (
         <LoadingRows />
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nombre</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Rol</TableHead>
-              <TableHead>Estado</TableHead>
-              <TableHead>Creado</TableHead>
-              {isAdmin && (
-                <TableHead className="w-28 text-right">Acciones</TableHead>
-              )}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={isAdmin ? 6 : 5}>
-                  <EmptyState />
-                </TableCell>
-              </TableRow>
-            )}
-            {data.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">
-                  {user.name}
-                  {user.id === me?.id && (
-                    <Badge variant="outline" className="ml-2 font-normal">
-                      tú
-                    </Badge>
-                  )}
-                </TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  <StatusBadge status={user.role} />
-                </TableCell>
-                <TableCell>
-                  {user.banned ? (
-                    <Badge
-                      variant="outline"
-                      className="bg-red-500/10 text-red-600 dark:text-red-400"
-                    >
-                      baneado
-                    </Badge>
-                  ) : (
-                    <Badge
-                      variant="outline"
-                      className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                    >
-                      activo
-                    </Badge>
-                  )}
-                </TableCell>
-                <TableCell>{formatDateTime(user.createdAt)}</TableCell>
-                {isAdmin && (
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        title="Cambiar rol"
-                        onClick={() => {
-                          setRoleUser(user);
-                          setRoleValue(user.role);
-                        }}
-                      >
-                        <ShieldCheck />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        title={user.banned ? 'Desbanear' : 'Banear'}
-                        onClick={() => setBanUser(user)}
-                      >
-                        {user.banned ? <Unlock /> : <Ban />}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        className="text-destructive"
-                        title="Eliminar"
-                        disabled={user.id === me?.id}
-                        onClick={() => setDeleteUser(user)}
-                      >
-                        <Trash2 />
-                      </Button>
-                    </div>
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <UsersTable
+          users={data}
+          currentUserId={me?.id}
+          isAdmin={isAdmin}
+          onChangeRole={(user) => {
+            setRoleUser(user);
+            setRoleValue(user.role);
+          }}
+          onToggleBan={(user) => {
+            setBanUser(user);
+          }}
+          onDelete={(user) => {
+            setDeleteUser(user);
+          }}
+        />
       )}
       <PaginationBar
         page={page}
