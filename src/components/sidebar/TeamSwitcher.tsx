@@ -1,5 +1,6 @@
-import { Dumbbell } from 'lucide-react';
+import {Dumbbell } from 'lucide-react';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar';
+import { NotificationBell } from '../notifications/NotificationBell';
 
 export function TeamSwitcher() {
   return (
@@ -16,6 +17,7 @@ export function TeamSwitcher() {
             <span className="truncate font-medium">GYM Panel</span>
             <span className="truncate text-xs">GYM Plan</span>
           </div>
+          <NotificationBell />
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>

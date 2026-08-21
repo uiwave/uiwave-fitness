@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
 import { useAuth } from '@/auth/AuthContext';
-import { NotificationBell } from '@/components/notifications/NotificationBell';
 import {
   SidebarInset,
   SidebarProvider,
@@ -47,7 +46,6 @@ export default function AppLayout() {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
-            <NotificationBell />
           </div>
         </header>
         <main className="w-full p-4 pt-0">
