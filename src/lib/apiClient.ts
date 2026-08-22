@@ -6,8 +6,11 @@ export function getToken(): string | null {
 }
 
 export function setToken(token: string | null) {
-  if (token) localStorage.setItem(TOKEN_KEY, token);
-  else localStorage.removeItem(TOKEN_KEY);
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+  }
 }
 
 // Callback que se dispara en 401 (lo conecta tu AuthProvider)
@@ -38,6 +41,7 @@ export async function api<T>(
   const { method = 'GET', body, query } = options;
 
   const url = new URL(path, API_URL);
+
   if (query) {
     for (const [key, value] of Object.entries(query)) {
       if (value !== undefined && value !== null && value !== '') {

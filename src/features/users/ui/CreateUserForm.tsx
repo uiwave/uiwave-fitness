@@ -18,24 +18,23 @@ import {
 } from '@/components/ui/select';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Envelope, User, UserRole } from '@/types/api';
-import { errorMessage, post } from '@/lib/apiClient';
 import { toast } from 'sonner';
+import type { CrearUsuarioDTO } from '../schemas/create-user.schema';
+import type { CreateUserUseCase } from '../ports/create-user.input';
+import { ROLES } from '@/features/users/domain/user-role';
 
-const createUserSchema = z.object({
-  name: z.string().min(2, 'Mínimo 2 caracteres').max(100),
-  email: z.string().email('Email inválido'),
-  password: z.string().min(8, 'Mínimo 8 caracteres').max(100),
-  role: z.enum(['admin', 'trainer', 'receptionist', 'member']),
-});
+import { createUserSchema } from '../schemas/create-user.schema';
 
-const ROLES: UserRole[] = ['admin', 'trainer', 'receptionist', 'member'];
+type CreateUserValues = CrearUsuarioDTO;
 
-type CreateUserValues = z.infer<typeof createUserSchema>;
-
-export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
+export function CreateUserForm({
+  createUser,
+  onSuccess,
+}: {
+  createUser: CreateUserUseCase;
+  onSuccess: () => void;
+}) {
   const [submitting, setSubmitting] = useState(false);
   const form = useForm<CreateUserValues>({
     resolver: zodResolver(createUserSchema),
@@ -44,14 +43,14 @@ export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
 
   const onSubmit = async (values: CreateUserValues) => {
     setSubmitting(true);
-    try {
-      await post<Envelope<User>>('/users', values);
+    const result = await createUser.execute(values);
+    setSubmitting(false);
+
+    if (result.ok) {
       toast.success('Usuario creado');
       onSuccess();
-    } catch (err) {
-      toast.error(errorMessage(err));
-    } finally {
-      setSubmitting(false);
+    } else {
+      toast.error(result.error);
     }
   };
 
