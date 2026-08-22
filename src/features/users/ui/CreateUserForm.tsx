@@ -36,7 +36,7 @@ export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
     formState: { errors },
   } = useForm<CreateUserValues>({
     resolver: zodResolver(createUserSchema),
-    defaultValues: { name: '', email: '', password: '', role: 'member' }, 
+    defaultValues: { name: '', email: '', password: '', role: 'member' },
   });
 
   const roleValue = watch('role');
