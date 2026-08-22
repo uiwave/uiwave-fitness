@@ -36,7 +36,6 @@ import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
 import { UsersTable } from '@/features/users/ui/UsersTable';
 import { CreateUserForm } from '@/features/users/ui/CreateUserForm';
 import { ConfirmDialog } from '@/features/shared/ui/ConfirmDialog';
-import { deleteUserById } from '@/features/users/services/user.service';
 
 const ROLES: UserRole[] = ['admin', 'trainer', 'receptionist', 'member'];
 
@@ -190,7 +189,12 @@ export default function UsersPage() {
               Crea una cuenta para un miembro del staff.
             </DialogDescription>
           </DialogHeader>
-          <CreateUserForm onSuccess={() => setCreateOpen(false)} />
+          <CreateUserForm
+            onSuccess={() => {
+              setCreateOpen(false);
+              reload();
+            }}
+          />
         </DialogContent>
       </Dialog>
 

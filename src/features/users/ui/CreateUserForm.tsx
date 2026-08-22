@@ -12,8 +12,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { createUser } from '../services/user.service';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { errorMessage, post } from '@/lib/apiClient';
+import type { Envelope, User } from '@/types/api';
 
 const createUserSchema = z.object({
   name: z.string().min(2, 'Mínimo 2 caracteres').max(100),
@@ -44,11 +45,11 @@ export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
   const onSubmit = async (values: CreateUserValues) => {
     setSubmitting(true);
     try {
-      await createUser(values);
+      await post<Envelope<User>>(`/users`, values);
       toast.success('Usuario creado');
       onSuccess();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Error de conexión');
+      toast.error(errorMessage(err));
     } finally {
       setSubmitting(false);
     }
