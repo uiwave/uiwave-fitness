@@ -31,20 +31,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import { ErrorAlert, LoadingRows } from '@/components/shared/DataState';
 import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
 import { UsersTable } from '@/features/users/ui/UsersTable';
 import { CreateUserForm } from '@/features/users/ui/CreateUserForm';
+import { ConfirmDialog } from '@/features/shared/ui/ConfirmDialog';
 
 const ROLES: UserRole[] = ['admin', 'trainer', 'receptionist', 'member'];
 
@@ -108,7 +99,7 @@ export default function UsersPage() {
     }
   };
 
-  const confirmDelete = async () => {
+  const handleDelete = async () => {
     if (!deleteUser) return;
     setActionLoading(true);
     try {
@@ -152,7 +143,7 @@ export default function UsersPage() {
           <SelectTrigger>
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper" side="bottom" align="start">
             <SelectItem value="all">Todos</SelectItem>
             {ROLES.map((role) => (
               <SelectItem key={role} value={role}>
@@ -198,7 +189,12 @@ export default function UsersPage() {
               Crea una cuenta para un miembro del staff.
             </DialogDescription>
           </DialogHeader>
-          <CreateUserForm onSuccess={() => setCreateOpen(false)} />
+          <CreateUserForm
+            onSuccess={() => {
+              setCreateOpen(false);
+              reload();
+            }}
+          />
         </DialogContent>
       </Dialog>
 
@@ -222,7 +218,7 @@ export default function UsersPage() {
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" side="bottom" align="start">
                 {ROLES.map((role) => (
                   <SelectItem key={role} value={role}>
                     {role}
@@ -242,64 +238,35 @@ export default function UsersPage() {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog
+      <ConfirmDialog
         open={!!banUser}
         onOpenChange={(open) => !open && setBanUser(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {banUser?.banned
-                ? `¿Desbanear a ${banUser?.name}?`
-                : `¿Banear a ${banUser?.name}?`}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {banUser?.banned
-                ? 'El usuario podrá volver a iniciar sesión.'
-                : 'El usuario no podrá iniciar sesión hasta que sea desbaneado.'}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={actionLoading}>
-              Cancelar
-            </AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-destructive text-white"
-              disabled={actionLoading}
-              onClick={() => banUser && toggleBan(banUser)}
-            >
-              {actionLoading ? 'Procesando...' : 'Confirmar'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        title={
+          banUser?.banned
+            ? `¿Desbanear a ${banUser?.name}?`
+            : `¿Banear a ${banUser?.name}?`
+        }
+        description={
+          banUser?.banned
+            ? 'El usuario podrá volver a iniciar sesión.'
+            : 'El usuario no podrá iniciar sesión hasta que sea desbaneado.'
+        }
+        confirmText="Confirmar"
+        loadingText="Procesando..."
+        loading={actionLoading}
+        onConfirm={() => banUser && toggleBan(banUser)}
+      />
 
-      <AlertDialog
+      <ConfirmDialog
         open={!!deleteUser}
         onOpenChange={(open) => !open && setDeleteUser(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar a {deleteUser?.name}?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Se eliminará la cuenta y sus sesiones. Esta acción no se puede
-              deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={actionLoading}>
-              Cancelar
-            </AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-destructive text-white"
-              disabled={actionLoading}
-              onClick={confirmDelete}
-            >
-              {actionLoading ? 'Eliminando...' : 'Eliminar'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        title={`¿Eliminar a ${deleteUser?.name}?`}
+        description="Se eliminará la cuenta y sus sesiones. Esta acción no se puede deshacer."
+        confirmText="Eliminar"
+        loadingText="Eliminando..."
+        loading={actionLoading}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }
