@@ -45,13 +45,8 @@ import { ErrorAlert, LoadingRows } from '@/components/shared/DataState';
 import { PageHeader, PaginationBar } from '@/components/shared/PageParts';
 import { UsersTable } from '@/features/users/ui/UsersTable';
 import { CreateUserForm } from '@/features/users/ui/CreateUserForm';
-import { ApiUserRepository } from '@/features/users/adapters/api-user.repository';
-import { CreateUserServiceImpl } from '@/features/users/application/create-user.service';
 
 const ROLES: UserRole[] = ['admin', 'trainer', 'receptionist', 'member'];
-
-const userRepo = new ApiUserRepository();
-const createUser = new CreateUserServiceImpl(userRepo);
 
 export default function UsersPage() {
   const { user: me } = useAuth();
@@ -203,10 +198,7 @@ export default function UsersPage() {
               Crea una cuenta para un miembro del staff.
             </DialogDescription>
           </DialogHeader>
-          <CreateUserForm
-            createUser={createUser}
-            onSuccess={() => setCreateOpen(false)}
-          />
+          <CreateUserForm onSuccess={() => setCreateOpen(false)} />
         </DialogContent>
       </Dialog>
 
