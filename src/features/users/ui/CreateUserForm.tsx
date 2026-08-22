@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -14,10 +13,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { createUser } from '../services/user.service';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 
 const createUserSchema = z.object({
   name: z.string().min(2, 'Mínimo 2 caracteres').max(100),
-  email: z.string().email('Email inválido'),
+  email: z.email('Email inválido'),
   password: z.string().min(8, 'Mínimo 8 caracteres').max(100),
   role: z.enum(['admin', 'trainer', 'receptionist', 'member']),
 });
@@ -36,7 +36,7 @@ export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
     formState: { errors },
   } = useForm<CreateUserValues>({
     resolver: zodResolver(createUserSchema),
-    defaultValues: { name: '', email: '', password: '', role: 'member' },
+    defaultValues: { name: '', email: '', password: '', role: 'member' }, 
   });
 
   const roleValue = watch('role');
@@ -55,74 +55,73 @@ export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="space-y-1">
-        <label htmlFor="name" className="text-sm font-medium">
-          Nombre
-        </label>
-        <Input id="name" placeholder="Juan Pérez" {...register('name')} />
-        {errors.name && (
-          <p className="text-destructive text-sm">{errors.name.message}</p>
-        )}
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="name">Nombre</FieldLabel>
+          <Input id="name" placeholder="Juan Pérez" {...register('name')} />
+          {errors.name && (
+            <p className="text-destructive text-sm">{errors.name.message}</p>
+          )}
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input
+            id="email"
+            type="email"
+            placeholder="juan@test.com"
+            {...register('email')}
+          />
+          {errors.email && (
+            <p className="text-destructive text-sm">{errors.email.message}</p>
+          )}
+        </Field>
 
-      <div className="space-y-1">
-        <label htmlFor="email" className="text-sm font-medium">
-          Email
-        </label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="juan@test.com"
-          {...register('email')}
-        />
-        {errors.email && (
-          <p className="text-destructive text-sm">{errors.email.message}</p>
-        )}
-      </div>
+        <Field>
+          <FieldLabel htmlFor="password">Contraseña</FieldLabel>
+          <Input
+            id="password"
+            type="password"
+            placeholder="Mínimo 8 caracteres"
+            {...register('password')}
+          />
+          {errors.password && (
+            <p className="text-destructive text-sm">
+              {errors.password.message}
+            </p>
+          )}
+        </Field>
 
-      <div className="space-y-1">
-        <label htmlFor="password" className="text-sm font-medium">
-          Contraseña
-        </label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="Mínimo 8 caracteres"
-          {...register('password')}
-        />
-        {errors.password && (
-          <p className="text-destructive text-sm">{errors.password.message}</p>
-        )}
-      </div>
+        <Field>
+          <FieldLabel>Rol</FieldLabel>
+          <Select
+            value={roleValue}
+            onValueChange={(v) =>
+              setValue('role', v as CreateUserValues['role'])
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent position="popper" side="bottom" align="start">
+              {ROLES.map((role) => (
+                <SelectItem key={role} value={role}>
+                  {role}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.role && (
+            <p className="text-destructive text-sm">{errors.role.message}</p>
+          )}
+        </Field>
 
-      <div className="space-y-1">
-        <label className="text-sm font-medium">Rol</label>
-        <Select
-          value={roleValue}
-          onValueChange={(v) => setValue('role', v as CreateUserValues['role'])}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {ROLES.map((role) => (
-              <SelectItem key={role} value={role}>
-                {role}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.role && (
-          <p className="text-destructive text-sm">{errors.role.message}</p>
-        )}
-      </div>
-
-      <DialogFooter>
-        <Button type="submit" disabled={submitting}>
-          {submitting ? 'Creando...' : 'Crear usuario'}
-        </Button>
-      </DialogFooter>
+        <Field>
+          <Button type="submit" disabled={submitting}>
+            {submitting ? 'Creando...' : 'Crear usuario'}
+          </Button>
+        </Field>
+      </FieldGroup>
     </form>
   );
 }
