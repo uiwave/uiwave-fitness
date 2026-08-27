@@ -1,0 +1,40 @@
+---
+import { ITEMS } from "@/consts";
+---
+
+<section
+    class="overflow-hidden border-b border-surface-high bg-surface-lowest py-4"
+>
+    <div class="marquee-track flex w-max">
+        {
+            [0, 1].map(() => (
+                <div class="flex shrink-0 gap-8 pr-8">
+                    {
+                        ITEMS.map((item) => (
+                            <span class="flex shrink-0 items-center gap-8 font-display text-2xl font-extrabold uppercase tracking-wider text-on-surface-variant md:text-3xl">
+                                {item}
+                                <span class="text-primary-container">◆</span>
+                            </span>
+                        ))
+                    }
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .marquee-track {
+        animation: marquee 28s linear infinite;
+    }
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-50%);
+        }
+    }
+</style>

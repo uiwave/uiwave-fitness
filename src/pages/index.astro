@@ -1,11 +1,24 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Heading from "@/components/uiwave/Heading.astro";
+import Layout from "@/layouts/Layout.astro";
+import HeroSection from "@/components/HeroSection.astro";
+import InfiniteBanner from "@/components/InfiniteBanner.astro";
+import Programs from "@/components/Programs.astro";
+import ProcessStep from "@/components/ProcessStep.astro";
+import CoachProfile from "@/components/CoachProfile.astro";
+import Banner from "@/components/Banner.astro";
+import FAQ from "@/components/FAQ.astro";
+import PriceSection from "@/components/PriceSection.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+    <HeroSection />
+    <InfiniteBanner />
+    <ProcessStep />
+    <Programs/>
+    <CoachProfile/>
+    <PriceSection/>
+    <FAQ/>
+    <Banner/>   
 </Layout>

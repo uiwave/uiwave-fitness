@@ -1,0 +1,110 @@
+---
+const navItems = [
+    { label: "Home", href: "/" },
+    { label: "Programs", href: "/programs" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Results", href: "/results" },
+    { label: "About", href: "/about" },
+    { label: "Blog", href: "/blog" },
+    { label: "Book", href: "/book" },
+];
+---
+
+<header
+    class="sticky top-0 z-50 border-b border-surface-high bg-background/95 backdrop-blur-sm"
+>
+    <div
+        class="container-site flex h-16 items-center justify-between gap-4 md:h-20"
+    >
+        <a
+            href="/"
+            class="font-display text-xl font-extrabold uppercase tracking-tight text-primary md:text-2xl"
+        >
+            UiWaveFitnes
+        </a>
+        <nav
+            class="hidden items-center gap-6 lg:flex"
+            aria-label="Main navigation"
+        >
+            {
+                navItems.map((item) => (
+                    <a
+                        href={item.href}
+                        class="label-sm transition-colors hover:text-secondary-container text-on-surface-variant"
+                    >
+                        {item.label}
+                    </a>
+                ))
+            }
+        </nav>
+        <div class="hidden lg:block">
+            <a
+                href="/book"
+                class="inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container bg-primary-container text-on-primary hover:scale-[1.02] active:scale-[0.98] px-4 py-2 text-sm btn-clipped"
+            >
+                Book Free Consultation
+            </a>
+        </div>
+        <button
+            type="button"
+            class="flex h-10 w-10 items-center justify-center border border-surface-high bg-surface-container text-on-surface lg:hidden"
+            aria-label="Open menu"
+            aria-controls="mobile-menu"
+            id="menu-toggle"
+        >
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden="true"
+            >
+                <path
+                    d="M3 5h14M3 10h14M3 15h14"
+                    stroke="currentColor"
+                    stroke-width="1.5"></path>
+            </svg>
+        </button>
+    </div>
+    <nav
+        id="mobile-menu"
+        class="hidden border-t border-surface-high bg-surface-container lg:hidden"
+        aria-label="Mobile navigation"
+    >
+        <div class="container-site flex flex-col gap-1 py-4">
+            {
+                navItems.map((item) => (
+                    <a
+                        href={item.href}
+                        class="px-2 py-3 font-display text-lg font-semibold uppercase tracking-tight text-on-surface"
+                    >
+                        {item.label}
+                    </a>
+                ))
+            }
+            <div class="pt-4">
+                <a
+                    href="/book"
+                    class="inline-flex items-ce nter justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container bg-primary-container text-on-primary hover:scale-[1.02] active:scale-[0.98] px-6 py-3 text-base rounded-sm w-full"
+                >
+                    Book Free Consultation
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<script>
+    import { $ } from "@/lib/dom";
+
+    const menu = $("#mobile-menu");
+    const menuToggle = $("#menu-toggle");
+
+    function toggleMenu() {
+        if (!menu || !menuToggle) return;
+
+        menu.classList.toggle("hidden");
+    }
+
+    menuToggle?.addEventListener("click", toggleMenu);
+</script>

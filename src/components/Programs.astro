@@ -1,0 +1,72 @@
+---
+import Heading from "./uiwave/Heading.astro";
+import { getCollection } from "astro:content";
+const PROGRAMS = await getCollection("programs");
+---
+
+<section class="section-padding">
+    <div class="container-site">
+        <div
+            class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+        >
+            <Heading
+                title="Programas de capacitación"
+                subtitle="Lo que ofrecemos"
+                link={{ href: "programs", label: "Ver todos los programas" }}
+            />
+        </div>
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {
+                PROGRAMS.map((program) => {
+                    const { data, id } = program;
+                    const {
+                        image,
+                        alt,
+                        level,
+                        duration,
+                        title,
+                        description,
+                        price,
+                    } = data;
+                    return (
+                        <article class="card-surface overflow-hidden card-featured">
+                            <a href={id} class="group block">
+                                <div class="relative aspect-4/3 overflow-hidden">
+                                    <img
+                                        src={image}
+                                        alt={alt}
+                                        loading="lazy"
+                                        decoding="async"
+                                        width="400"
+                                        height="300"
+                                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    />
+                                    <div class="gradient-overlay absolute inset-0" />
+                                </div>
+                                <div class="p-5">
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="inline-flex items-center bg-chip-bg px-2 py-1 font-mono text-xs font-medium uppercase tracking-wider text-primary">
+                                            Level: {level}
+                                        </span>
+                                        <span class="inline-flex items-center bg-chip-bg px-2 py-1 font-mono text-xs font-medium uppercase tracking-wider text-primary">
+                                            Duration: {duration}
+                                        </span>
+                                    </div>
+                                    <h3 class="headline-md mt-4 text-primary transition-colors group-hover:text-primary-container">
+                                        {title}
+                                    </h3>
+                                    <p class="mt-2 text-sm text-on-surface-variant line-clamp-2">
+                                        {description}
+                                    </p>
+                                    <p class="mt-4 label-sm text-primary-container">
+                                        {price}
+                                    </p>
+                                </div>
+                            </a>
+                        </article>
+                    );
+                })
+            }
+        </div>
+    </div>
+</section>
