@@ -1,4 +1,5 @@
 ---
+import { Button, buttonVariants } from "@/components/uiwave/Button";
 const navItems = [
     { label: "Home", href: "/" },
     { label: "Programs", href: "/programs" },
@@ -38,11 +39,8 @@ const navItems = [
             }
         </nav>
         <div class="hidden lg:block">
-            <a
-                href="/book"
-                class="inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container bg-primary-container text-on-primary hover:scale-[1.02] active:scale-[0.98] px-4 py-2 text-sm btn-clipped"
-            >
-                Book Free Consultation
+            <a href="/book" class={buttonVariants({ size: "sm" })}>
+                Reserva una consulta gratuita
             </a>
         </div>
         <button

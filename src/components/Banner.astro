@@ -1,42 +1,39 @@
 ---
+import { buttonVariants } from "./uiwave/Button";
 import Heading from "./uiwave/Heading.astro";
 ---
- <section class="section-padding">
-        <div class="container-site">
+
+<section class="section-padding">
+    <div class="container-site">
+        <div
+            class="card-surface card-featured relative overflow-hidden px-8 py-12 text-center md:px-16 md:py-16"
+        >
             <div
-                class="card-surface card-featured relative overflow-hidden px-8 py-12 text-center md:px-16 md:py-16"
+                class="pointer-events-none absolute inset-0 opacity-30"
+                style="background: radial-gradient(ellipse at center, rgba(195,244,0,0.15) 0%, transparent 70%);"
             >
+            </div>
+            <div class="relative">
+                <Heading
+                    class="max-w-full text-center"
+                    title="¿Listo para comenzar tu transformación?"
+                    subtitle="Siguiente paso"
+                    description="Reserva una consulta gratuita de 30 minutos. Evaluaremos tus objetivos, hablaremos sobre tu historial de entrenamiento y diseñaremos un plan que se adapte a tu horario."
+                />
                 <div
-                    class="pointer-events-none absolute inset-0 opacity-30"
-                    style="background: radial-gradient(ellipse at center, rgba(195,244,0,0.15) 0%, transparent 70%);"
+                    class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row"
                 >
-                </div>
-                <div class="relative">
-                    <Heading
-                        class="max-w-full text-center"
-                        title="Ready to Start Your Transformation?"
-                        subtitle="Next step"
-                        description="Book a free 30-minute consultation. We will assess your
-                        goals, discuss your training history, and map out a plan
-                        that fits your schedule."
-                    />
-                    <div
-                        class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row"
+                    <a href="/book" class={buttonVariants({})}>
+                        Reserva una consulta gratuita
+                    </a>
+                    <a
+                        href="/contact"
+                        class={buttonVariants({ variant: "secondary" })}
                     >
-                        <a
-                            href="/book"
-                            class="inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container bg-primary-container text-on-primary hover:scale-[1.02] active:scale-[0.98] px-8 py-4 text-lg btn-clipped"
-                        >
-                            Book Free Consultation
-                        </a>
-                        <a
-                            href="/contact"
-                            class="inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container bg-transparent text-primary hover:text-secondary-container px-8 py-4 text-lg rounded-sm"
-                        >
-                            Contact Us
-                        </a>
-                    </div>
+                        Contacta con nosotros
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
