@@ -1,0 +1,56 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { buttonVariants } from "@/components/uiwave/Button";
+import { ARTICLES } from "@/data/articles";
+
+export async function getStaticPaths() {
+    return Object.entries(ARTICLES).map(([slug, article]) => ({
+        params: { slug },
+        props: { article },
+    }));
+}
+
+const { article } = Astro.props;
+---
+
+<Layout
+    title={`${article.title} - UiWave Fitness`}
+    description={article.content.slice(0, 160).replace(/<[^>]*>/g, "")}
+>
+    <section class="section-padding">
+        <div class="container-site max-w-3xl">
+            <nav aria-label="Breadcrumb" class="mb-6">
+                <ol class="label-sm flex flex-wrap items-center gap-2">
+                    <li class="flex items-center gap-2">
+                        <a href="/" class="hover:text-secondary">Inicio</a>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span>/</span>
+                        <a href="/blog" class="hover:text-secondary">Blog</a>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span>/</span>
+                        <span class="text-primary truncate max-w-[200px]">{article.title}</span>
+                    </li>
+                </ol>
+            </nav>
+
+            <p class="label-sm text-foreground/50">{article.date}</p>
+            <h1 class="display-xl text-primary mt-4">{article.title}</h1>
+
+            <div class="prose mt-10" set:html={article.content} />
+
+            <div class="border-card mt-12 border-t pt-8">
+                <p class="body-lg">¿Te ha resultado útil este artículo?</p>
+                <div class="mt-4 flex flex-col gap-4 sm:flex-row">
+                    <a href="/book" class={buttonVariants({})}>
+                        Reserva una consulta gratuita
+                    </a>
+                    <a href="/blog" class={buttonVariants({ variant: "secondary" })}>
+                        Volver al blog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>
