@@ -1,22 +1,22 @@
 export const STATS = [
     {
-        label: "Clients Trained",
+        label: "Clientes entrenados",
         value: "200+",
     },
     {
-        label: "Avg. Strength Gain",
+        label: "Ganancia promedio de fuerza",
         value: "32",
         suffix: "%",
     },
     {
-        label: "Session Rating",
+        label: "Valoración de sesión",
         value: "4.9",
         suffix: "/5",
     },
     {
-        label: "Years Coaching",
+        label: "Años de experiencia",
         value: "8",
-        suffix: "yr",
+        suffix: "años",
     },
 ];
 

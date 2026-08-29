@@ -1,0 +1,126 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import CardPrice from "@/components/card/CardPrice.astro";
+import Heading from "@/components/uiwave/Heading.astro";
+
+const PLANS = [
+    {
+        name: "Inicial",
+        price: 149,
+        description:
+            "Perfecto para principiantes que buscan estructura y acompañamiento.",
+        features: [
+            "Plan de entrenamiento personalizado",
+            "2 sesiones al mes",
+            "Videos para revisar la técnica",
+            "Seguimiento mediante la app",
+        ],
+        button: "Comenzar",
+        featured: false,
+    },
+
+    {
+        name: "Rendimiento",
+        price: 299,
+        description:
+            "Nuestro plan más popular para quienes buscan mejorar su fuerza y composición corporal.",
+        features: [
+            "Todo lo incluido en Inicial",
+            "4 sesiones al mes",
+            "Orientación nutricional",
+            "Seguimiento semanal",
+            "Horarios con prioridad",
+        ],
+        button: "Comenzar Rendimiento",
+        featured: true,
+        badge: "Más Popular",
+    },
+
+    {
+        name: "Élite",
+        price: 499,
+        description:
+            "Máximo acompañamiento para atletas y personas de alto rendimiento.",
+        features: [
+            "Todo lo incluido en Rendimiento",
+            "8 sesiones al mes",
+            "Protocolos de recuperación",
+            "Preparación para competencias",
+            "Acceso directo por mensajería",
+        ],
+        button: "Elegir Élite",
+        featured: false,
+    },
+];
+---
+
+<Layout
+    title="Precios - UiWave Fitness"
+    description="Precios transparentes para nuestros programas de entrenamiento personalizado. Sin cargos ocultos, sin contratos a largo plazo."
+>
+    <section class="section-padding">
+        <div class="container-site">
+            <Heading
+                title="Elige tu plan"
+                subtitle="Precios"
+                description="Precios transparentes sin cargos ocultos. Todos los planes incluyen una consulta inicial gratuita."
+            />
+
+            <div class="mt-10 grid gap-6 lg:grid-cols-3">
+                {
+                    PLANS.map((plan) => (
+                        <CardPrice
+                            name={plan.name}
+                            price={plan.price}
+                            description={plan.description}
+                            features={plan.features}
+                            button={plan.button}
+                            featured={plan.featured}
+                            badge={plan.badge}
+                        />
+                    ))
+                }
+            </div>
+
+            <div class="bg-card mt-12 p-8">
+                <h3 class="headline-md">Preguntas sobre precios</h3>
+                <div class="mt-6 grid gap-6 sm:grid-cols-2">
+                    <div>
+                        <p class="font-semibold">
+                            ¿Hay algún costo de inscripción?
+                        </p>
+                        <p class="text-foreground/70 mt-1 text-sm">
+                            No. Solo pagas el plan que elijas. Sin costos
+                            adicionales.
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">¿Puedo cambiar de plan?</p>
+                        <p class="text-foreground/70 mt-1 text-sm">
+                            Sí, puedes actualizar o reducir tu plan en cualquier
+                            momento.
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">
+                            ¿Qué incluye la consulta gratuita?
+                        </p>
+                        <p class="text-foreground/70 mt-1 text-sm">
+                            Una llamada de 30 minutos para evaluar tus objetivos
+                            y recomendarte el mejor programa.
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">
+                            ¿Accepten pagos con tarjeta?
+                        </p>
+                        <p class="text-foreground/70 mt-1 text-sm">
+                            Sí, aceptamos tarjeta de crédito/débito y
+                            transferencia bancaria.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>

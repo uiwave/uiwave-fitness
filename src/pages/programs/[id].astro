@@ -21,7 +21,10 @@ const { program } = Astro.props;
 const { Content } = await render(program);
 ---
 
-<Layout>
+<Layout
+    title={`${program.data.title} - UiWave Fitness`}
+    description={program.data.description}
+>
     <div class="container-site section-padding">
         <nav aria-label="Breadcrumb" class="mb-6">
             <ol class="label-sm flex flex-wrap items-center gap-2">

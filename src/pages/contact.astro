@@ -1,0 +1,79 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { buttonVariants } from "@/components/uiwave/Button";
+import Heading from "@/components/uiwave/Heading.astro";
+---
+
+<Layout
+    title="Contacto - UiWave Fitness"
+    description="¿Tienes preguntas? Contáctanos y te responderemos lo antes posible."
+>
+    <section class="section-padding">
+        <div class="container-site max-w-2xl">
+            <Heading
+                title="Contáctanos"
+                subtitle="Contacto"
+                description="¿Tienes alguna pregunta o necesitas más información? Escríbenos y te responderemos en menos de 24 horas."
+            />
+
+            <div class="mt-10 space-y-8">
+                <div class="grid gap-6 sm:grid-cols-2">
+                    <div class="bg-card p-6">
+                        <p class="label-sm text-primary mb-2">Email</p>
+                        <a
+                            href="mailto:hola@uiwavefitness.com"
+                            class="hover:text-primary transition-colors"
+                        >
+                            hola@uiwavefitness.com
+                        </a>
+                    </div>
+                    <div class="bg-card p-6">
+                        <p class="label-sm text-primary mb-2">WhatsApp</p>
+                        <a
+                            href="https://wa.me/34600000000"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="hover:text-primary transition-colors"
+                        >
+                            +34 600 000 000
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-card p-6">
+                    <p class="label-sm text-primary mb-2">
+                        Horario de atención
+                    </p>
+                    <p>Lunes a viernes: 9:00 - 20:00</p>
+                    <p>Sábados: 10:00 - 14:00</p>
+                </div>
+
+                <div class="bg-card p-6">
+                    <p class="label-sm text-primary mb-2">Ubicación</p>
+                    <p>
+                        Entrenamiento presencial en instalaciones de última
+                        generación en España.
+                    </p>
+                    <p class="text-foreground/60 mt-2 text-sm">
+                        Las sesiones online están disponibles para cualquier
+                        ubicación.
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-4 sm:flex-row">
+                    <a href="/book" class={buttonVariants({})}>
+                        Reserva una consulta gratuita
+                    </a>
+                    <a
+                        href="https://wa.me/34600000000"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class={buttonVariants({ variant: "secondary" })}
+                    >
+                        Envíanos un WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>

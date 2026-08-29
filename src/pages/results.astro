@@ -1,0 +1,82 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { buttonVariants } from "@/components/uiwave/Button";
+import Heading from "@/components/uiwave/Heading.astro";
+
+const TESTIMONIALS = [
+    {
+        name: "María García",
+        result: "-12 kg en 4 meses",
+        text: "Llevaba años probando dietas sin resultado. Con Alex aprendí a entrenar y a comer de forma sostenible. Los números hablan por sí solos.",
+    },
+    {
+        name: "Carlos Ruiz",
+        result: "+40 kg en sentadilla",
+        text: "En 6 meses pasé de sentadillar 60 kg a 100 kg. La periodización y el seguimiento semanal marcaron la diferencia.",
+    },
+    {
+        name: "Laura Martín",
+        result: "De sedentaria a atleta",
+        text: "Empecé sin saber hacer una sentadilla correctamente. Ahora entreno 4 veces por semana y me siento más fuerte que nunca.",
+    },
+    {
+        name: "Pedro López",
+        result: "-8% grasa corporal",
+        text: "El enfoque basado en datos cambió mi perspectiva. No es solo entrenar duro, es entrenar inteligente.",
+    },
+    {
+        name: "Ana Sánchez",
+        result: "Maratón completado",
+        text: "El entrenamiento cruzado con fuerza mejoró mi resistencia notablemente. Completé mi primer maratón en 3:45.",
+    },
+    {
+        name: "Javier Hernández",
+        result: "+25 kg en peso muerto",
+        text: "Como ingeniero, valoro mucho el enfoque científico. Cada ajuste tiene una razón, y eso se refleja en los resultados.",
+    },
+];
+---
+
+<Layout
+    title="Resultados - UiWave Fitness"
+    description="Resultados reales de nuestros clientes. Transformaciones comprobadas con datos, no promesas vacías."
+>
+    <section class="section-padding">
+        <div class="container-site">
+            <Heading
+                title="Resultados que hablan"
+                subtitle="Resultados"
+                description="Transformaciones reales de personas que confiaron en nuestro método. Sin atajos, sin promesas vacías."
+            />
+
+            <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {
+                    TESTIMONIALS.map((testimonial) => (
+                        <article class="bg-card p-6">
+                            <p class="text-primary font-display text-2xl font-bold uppercase">
+                                {testimonial.result}
+                            </p>
+                            <p class="mt-4 italic">"{testimonial.text}"</p>
+                            <p class="label-sm text-foreground/60 mt-4">
+                                — {testimonial.name}
+                            </p>
+                        </article>
+                    ))
+                }
+            </div>
+
+            <div class="mt-16 text-center">
+                <h2 class="headline-lg">¿Listo para ser el siguiente?</h2>
+                <p class="body-lg mx-auto mt-4 max-w-xl">
+                    Estos resultados no son la excepción, son el resultado de un
+                    método probado y un acompañamiento constante.
+                </p>
+                <div class="mt-8">
+                    <a href="/book" class={buttonVariants({ size: "lg" })}>
+                        Reserva tu consulta gratuita
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>

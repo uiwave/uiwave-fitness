@@ -1,0 +1,105 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { buttonVariants } from "@/components/uiwave/Button";
+import Heading from "@/components/uiwave/Heading.astro";
+---
+
+<Layout
+    title="Sobre mí - UiWave Fitness"
+    description="Conoce a Alex Vega, entrenador personal certificado NSCA-CPT con más de 8 años de experiencia en entrenamiento de fuerza y composición corporal."
+>
+    <section class="section-padding">
+        <div class="container-site">
+            <div class="grid-12 items-center gap-10">
+                <div class="col-span-4 md:col-span-5">
+                    <div class="relative">
+                        <div class="overflow-hidden">
+                            <img
+                                src="/images/coach-alex.DTCMkw9A_Gqc4a.webp"
+                                alt="Coach Alex Vega"
+                                loading="lazy"
+                                decoding="async"
+                                width="500"
+                                height="625"
+                                class="aspect-4/5 w-full object-cover"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-4 md:col-span-7">
+                    <Heading title="Entrenador Alex Vega" subtitle="Sobre mí" />
+
+                    <p
+                        class="font-display text-primary mt-2 text-lg tracking-wide uppercase"
+                    >
+                        Entrenador principal y fundador
+                    </p>
+                    <p class="body-lg mt-6">
+                        Con 8 años de experiencia como entrenador y la
+                        certificación NSCA-CPT, me especializo en la
+                        periodización del entrenamiento de fuerza y en la
+                        transformación de la composición corporal. Como exatleta
+                        universitario convertido en entrenador que basa su
+                        trabajo en datos, considero que cada cliente merece una
+                        planificación respaldada por la ciencia, no por las
+                        modas.
+                    </p>
+
+                    <div class="mt-8">
+                        <h3 class="headline-md">Certificaciones</h3>
+                        <ul class="mt-4 space-y-2">
+                            <li class="flex items-center gap-2">
+                                <span class="text-primary" aria-hidden="true"
+                                    >✓</span
+                                >
+                                NSCA-CPT (Certified Personal Trainer)
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-primary" aria-hidden="true"
+                                    >✓</span
+                                >
+                                Especialización en Nutrición Deportiva
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-primary" aria-hidden="true"
+                                    >✓</span
+                                >
+                                Ejercicio Correctivo Avanzado
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="headline-md">Filosofía</h3>
+                        <p class="mt-4">
+                            Cada cliente es único. No creo en soluciones
+                            genéricas. Mi enfoque combina ciencia del ejercicio,
+                            datos de progreso y un acompañamiento cercano para
+                            obtener resultados que duren.
+                        </p>
+                    </div>
+
+                    <blockquote class="border-primary mt-8 border-l-2 pl-6">
+                        <p class="italic">
+                            "Cada repetición cuenta. Cada sesión es una
+                            oportunidad para mejorar un 1%. Mi trabajo es
+                            asegurarme de que nunca desperdicies ninguna"
+                        </p>
+                    </blockquote>
+
+                    <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+                        <a href="/book" class={buttonVariants({})}>
+                            Agenda una llamada
+                        </a>
+                        <a
+                            href="/programs"
+                            class={buttonVariants({ variant: "secondary" })}
+                        >
+                            Ver programas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>
