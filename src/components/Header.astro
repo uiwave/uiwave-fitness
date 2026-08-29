@@ -41,12 +41,12 @@ const navItems = [
                 Reserva una consulta gratuita
             </a>
         </div>
-        <button
-            type="button"
-            class="flex h-10 w-10 items-center justify-center lg:hidden"
+        <Button
+            size="icon"
             aria-label="Open menu"
             aria-controls="mobile-menu"
             id="menu-toggle"
+            className="lg:hidden"
         >
             <svg
                 width="20"
@@ -60,7 +60,7 @@ const navItems = [
                     stroke="currentColor"
                     stroke-width="1.5"></path>
             </svg>
-        </button>
+        </Button>
     </div>
     <nav
         id="mobile-menu"

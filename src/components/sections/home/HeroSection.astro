@@ -1,5 +1,5 @@
 ---
-import { buttonVariants } from "./uiwave/Button";
+import { buttonVariants } from "@/components/uiwave/Button";
 ---
 
 <section
@@ -10,6 +10,7 @@ import { buttonVariants } from "./uiwave/Button";
         aria-hidden="true"
     >
         <video
+            id="hero-video"
             class="h-full w-full object-cover"
             autoplay
             muted
@@ -20,6 +21,9 @@ import { buttonVariants } from "./uiwave/Button";
         >
             <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
+
+        <!-- Overlay oscuro -->
+        <div class="absolute inset-0 bg-black/70"></div>
     </div>
     <div class="container-site section-padding relative z-10">
         <div class="grid-12 items-center">
