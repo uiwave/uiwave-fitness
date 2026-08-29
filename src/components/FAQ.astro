@@ -22,12 +22,12 @@ const FAQS = [
 
 <section class="section-padding">
     <div class="container-site max-w-3xl">
-        <Heading title="Common Questions" subtitle="FAQ" />
+        <Heading title="Preguntas frecuentes" subtitle="FAQ" />
         <div class="mt-10 space-y-3">
             {
                 FAQS.map((faq) => (
-                    <details class="card-surface group">
-                        <summary class="font-display cursor-pointer list-none p-5 text-lg font-semibold uppercase marker:content-none [&::-webkit-details-marker]:hidden">
+                    <details class="group">
+                        <summary class="font-display cursor-pointer list-none p-5 text-lg font-semibold uppercase">
                             <span class="flex items-center justify-between gap-4">
                                 {faq.question}{" "}
                                 <span

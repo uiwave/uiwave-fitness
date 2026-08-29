@@ -1,5 +1,5 @@
 ---
-image: "/_astro/program-online.DVrC1dS1_Z10lltq.webp"
+image: "/images/program-online.DVrC1dS1_Z10lltq.webp"
 alt: Online Coaching
 level: Intermediate
 duration: Ongoing

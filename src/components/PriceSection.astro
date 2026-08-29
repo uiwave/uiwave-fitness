@@ -4,47 +4,50 @@ import Heading from "./uiwave/Heading.astro";
 
 const PLANS = [
     {
-        name: "Starter",
+        name: "Inicial",
         price: 149,
         description:
-            "Perfect for beginners who want structure and accountability.",
+            "Perfecto para principiantes que buscan estructura y acompañamiento.",
         features: [
-            "Custom training plan",
-            "2 sessions per month",
-            "Form check videos",
-            "App-based tracking",
+            "Plan de entrenamiento personalizado",
+            "2 sesiones al mes",
+            "Videos para revisar la técnica",
+            "Seguimiento mediante la app",
         ],
-        button: "Get Started",
+        button: "Comenzar",
         featured: false,
     },
+
     {
-        name: "Performance",
+        name: "Rendimiento",
         price: 299,
         description:
-            "Our most popular plan for serious strength and body composition goals.",
+            "Nuestro plan más popular para quienes buscan mejorar su fuerza y composición corporal.",
         features: [
-            "Everything in Starter",
-            "4 sessions per month",
-            "Nutrition guidance",
-            "Weekly check-ins",
-            "Priority scheduling",
+            "Todo lo incluido en Inicial",
+            "4 sesiones al mes",
+            "Orientación nutricional",
+            "Seguimiento semanal",
+            "Horarios con prioridad",
         ],
-        button: "Start Performance",
+        button: "Comenzar Rendimiento",
         featured: true,
-        badge: "Most Popular",
+        badge: "Más Popular",
     },
+
     {
-        name: "Elite",
+        name: "Élite",
         price: 499,
-        description: "Maximum support for athletes and high-performers.",
+        description:
+            "Máximo acompañamiento para atletas y personas de alto rendimiento.",
         features: [
-            "Everything in Performance",
-            "8 sessions per month",
-            "Recovery protocols",
-            "Competition prep",
-            "Direct messaging access",
+            "Todo lo incluido en Rendimiento",
+            "8 sesiones al mes",
+            "Protocolos de recuperación",
+            "Preparación para competencias",
+            "Acceso directo por mensajería",
         ],
-        button: "Go Elite",
+        button: "Elegir Élite",
         featured: false,
     },
 ];
@@ -53,9 +56,9 @@ const PLANS = [
 <section class="section-padding">
     <div class="container-site">
         <Heading
-            title="Choose Your Pla"
-            subtitle="Investment"
-            description="Transparent pricing with no hidden fees. All plans include a free initial consultation."
+            title="Elige tu plan"
+            subtitle="Inversión"
+            description="Precios transparentes sin cargos ocultos. Todos los planes incluyen una consulta inicial gratuita."
         />
 
         <div class="mt-10 grid gap-6 lg:grid-cols-3">

@@ -29,7 +29,7 @@ const PROGRAMS = await getCollection("programs");
                         price,
                     } = data;
                     return (
-                        <article class="card-surface card-featured overflow-hidden">
+                        <article class="bg-card overflow-hidden">
                             <a href={id} class="group block">
                                 <div class="relative aspect-4/3 overflow-hidden">
                                     <img
@@ -45,10 +45,10 @@ const PROGRAMS = await getCollection("programs");
                                 </div>
                                 <div class="p-5">
                                     <div class="flex flex-wrap gap-2">
-                                        <span class="bg-card inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase">
+                                        <span class="inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase">
                                             Level: {level}
                                         </span>
-                                        <span class="bg-card inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase">
+                                        <span class="inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase">
                                             Duration: {duration}
                                         </span>
                                     </div>

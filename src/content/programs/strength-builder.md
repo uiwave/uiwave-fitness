@@ -1,5 +1,5 @@
 ---
-image: "/_astro/program-strength.DIwBhegJ_Z1HPMaL.webp"
+image: "/images/program-strength.DIwBhegJ_Z1HPMaL.webp"
 alt: 12-Week Strength Builder
 level: Intermediate
 duration: 12 weeks

@@ -1,5 +1,5 @@
 ---
-image: "/_astro/program-hiit.DLXg8c1J_fyTqK.webp"
+image: "/images/program-hiit.DLXg8c1J_fyTqK.webp"
 alt: Group HIIT
 level: Advanced
 duration: 45 min/session

@@ -1,5 +1,5 @@
 ---
-image: /_astro/program-fatloss.BoSu_2wP_1gUdWa.webp
+image: /images/program-fatloss.BoSu_2wP_1gUdWa.webp
 alt: Acelerador de pérdida de grasa
 level: Principiante
 duration: 8 semanas
