@@ -24,20 +24,17 @@ const { Content } = await render(program);
 <Layout>
     <div class="container-site section-padding">
         <nav aria-label="Breadcrumb" class="mb-6">
-            <ol class="label-sm text-outline flex flex-wrap items-center gap-2">
+            <ol class="label-sm flex flex-wrap items-center gap-2">
                 <li class="flex items-center gap-2">
-                    <a href="/" class="hover:text-secondary-container">Inicio</a
-                    >
+                    <a href="/" class="hover:text-secondary">Inicio</a>
                 </li><li class="flex items-center gap-2">
-                    <span aria-hidden="true">/</span>
-                    <a href="/programs" class="hover:text-secondary-container"
+                    <span>/</span>
+                    <a href="/programs" class="hover:text-secondary"
                         >Programas</a
                     >
                 </li><li class="flex items-center gap-2">
-                    <span aria-hidden="true">/</span>
-                    <span class="text-on-surface-variant" aria-current="page"
-                        >{program.data.title}</span
-                    >
+                    <span>/</span>
+                    <span class="text-primary">{program.data.title}</span>
                 </li>
             </ol>
         </nav>
@@ -45,17 +42,17 @@ const { Content } = await render(program);
             <div class="col-span-4 md:col-span-7">
                 <div class="flex flex-wrap gap-2">
                     <span
-                        class="bg-chip-bg text-primary inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase"
+                        class="text-primary inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase"
                     >
                         Nivel: {program.data.level}
                     </span>
                     <span
-                        class="bg-chip-bg text-primary inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase"
+                        class="text-primary inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase"
                     >
                         Duración: {program.data.duration}
                     </span>
                     <span
-                        class="bg-chip-bg text-primary inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase"
+                        class="text-primary inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase"
                     >
                         Desde: {program.data.price}
                     </span>
@@ -63,7 +60,7 @@ const { Content } = await render(program);
                 <h1 class="display-xl text-primary mt-6">
                     {program.data.title}
                 </h1>
-                <p class="body-lg text-on-surface-variant mt-4">
+                <p class="body-lg mt-4">
                     {program.data.description}
                 </p>
                 <div class="prose mt-10">
@@ -76,7 +73,7 @@ const { Content } = await render(program);
                 </div>
             </div>
             <div class="col-span-4 md:col-span-5">
-                <div class="card-surface sticky top-24 overflow-hidden">
+                <div class="sticky top-24 overflow-hidden">
                     <img
                         src={program.data.image}
                         alt={program.data.alt}
@@ -87,10 +84,8 @@ const { Content } = await render(program);
                         class="aspect-4/3 w-full object-cover"
                     />
                     <div class="p-6">
-                        <p class="label-sm text-outline">
-                            ¿Listo para empezar?
-                        </p>
-                        <p class="text-on-surface-variant mt-2">
+                        <p class="label-sm">¿Listo para empezar?</p>
+                        <p class="mt-2">
                             Solicite una consulta gratuita para analizar si este
                             programa se ajusta a sus objetivos.
                         </p>
