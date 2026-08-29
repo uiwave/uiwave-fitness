@@ -1,13 +1,3 @@
-export const ITEMS = [
-    "FUERZA",
-    "RENDIMIENTO",
-    "RESPONSABILIDAD",
-    "BASADO EN DATOS",
-    "SOBRECARGA PROGRESIVA",
-    "ENTRENAMIENTO ÉLITE",
-    "RESULTADOS MEDIBLES",
-];
-
 export const STATS = [
     {
         label: "Clients Trained",

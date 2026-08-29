@@ -5,21 +5,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container btn-clipped",
+    "inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary btn-clipped",
     {
         variants: {
             variant: {
                 default:
-                    "bg-primary-container text-on-primary hover:scale-[1.02] active:scale-[0.98]",
+                    "bg-primary text-primary-foreground hover:scale-[1.02] active:scale-[0.98]",
                 destructive:
                     "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
                 outline:
                     "border border-secondary-container bg-transparent text-secondary-container hover:bg-secondary-container/10",
                 secondary:
-                    "bg-secondary-container text-on-primary hover:scale-[1.02] active:scale-[0.98]",
-                ghost:
-                    "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-                link: "text-primary underline-offset-4 hover:underline",
+                    "bg-secondary text-secondary-foreground hover:scale-[1.02] active:scale-[0.98]",
+                ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+                link: "underline-offset-4 hover:underline",
             },
             size: {
                 default: "px-6 py-3 text-base",

@@ -1,7 +1,9 @@
 ---
+import { buttonVariants } from "../uiwave/Button";
+
 interface Props {
     name: string;
-    price: string;
+    price: number;
     description: string;
     features: string[];
     button: string;
@@ -14,32 +16,33 @@ const { name, price, description, features, button, featured, badge } =
 ---
 
 <article
-    class:list={["card-surface flex flex-col p-6", featured && "card-featured"]}
+    class:list={[
+        "bg-card flex flex-col p-6",
+        featured && "border-primary border",
+    ]}
 >
     {
         badge && (
-            <span class="inline-flex items-center bg-chip-bg px-2 py-1 font-mono text-xs font-medium uppercase tracking-wider text-primary mb-4 self-start">
+            <span class="mb-4 inline-flex items-center self-start px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase">
                 {badge}
             </span>
         )
     }
-    <h3 class="headline-md text-primary">{name}</h3>
+    <h3 class="headline-md">{name}</h3>
     <p class="mt-4">
-        <span
-            class="font-display text-4xl font-extrabold text-primary-container"
-        >
+        <span class="font-display text-primary text-4xl font-extrabold">
             ${price}
         </span>
-        <span class="text-on-surface-variant">/month</span>
+        <span class="">/month</span>
     </p>
-    <p class="mt-4 text-sm text-on-surface-variant">
+    <p class="mt-4 text-sm">
         {description}
     </p>
     <ul class="mt-6 flex-1 space-y-3">
         {
             features.map((feature) => (
-                <li class="flex items-start gap-2 text-sm text-on-surface-variant">
-                    <span class="text-primary-container" aria-hidden="true">
+                <li class="flex items-start gap-2 text-sm">
+                    <span class="text-primary" aria-hidden="true">
                         ✓
                     </span>{" "}
                     {feature}
@@ -47,10 +50,5 @@ const { name, price, description, features, button, featured, badge } =
             ))
         }
     </ul>
-    <a
-        href="/book"
-        class="inline-flex items-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container border border-secondary-container bg-transparent text-secondary-container hover:bg-secondary-container/10 px-6 py-3 text-base rounded-sm mt-8 w-full justify-center"
-    >
-        Get Started
-    </a>
+    <a href="/book" class={buttonVariants({ class: "mt-8" })}> Get Started </a>
 </article>

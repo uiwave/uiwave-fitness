@@ -1,190 +1,77 @@
 ---
+import CardPrice from "./card/CardPrice.astro";
 import Heading from "./uiwave/Heading.astro";
+
+const PLANS = [
+    {
+        name: "Starter",
+        price: 149,
+        description:
+            "Perfect for beginners who want structure and accountability.",
+        features: [
+            "Custom training plan",
+            "2 sessions per month",
+            "Form check videos",
+            "App-based tracking",
+        ],
+        button: "Get Started",
+        featured: false,
+    },
+    {
+        name: "Performance",
+        price: 299,
+        description:
+            "Our most popular plan for serious strength and body composition goals.",
+        features: [
+            "Everything in Starter",
+            "4 sessions per month",
+            "Nutrition guidance",
+            "Weekly check-ins",
+            "Priority scheduling",
+        ],
+        button: "Start Performance",
+        featured: true,
+        badge: "Most Popular",
+    },
+    {
+        name: "Elite",
+        price: 499,
+        description: "Maximum support for athletes and high-performers.",
+        features: [
+            "Everything in Performance",
+            "8 sessions per month",
+            "Recovery protocols",
+            "Competition prep",
+            "Direct messaging access",
+        ],
+        button: "Go Elite",
+        featured: false,
+    },
+];
 ---
 
 <section class="section-padding">
-        <div class="container-site">
-            <Heading
-                title="Choose Your Pla"
-                subtitle="Investment"
-                description="Transparent pricing with no hidden fees. All plans include a free initial consultation."
-            />
+    <div class="container-site">
+        <Heading
+            title="Choose Your Pla"
+            subtitle="Investment"
+            description="Transparent pricing with no hidden fees. All plans include a free initial consultation."
+        />
 
-            <div class="mt-10 grid gap-6 lg:grid-cols-3">
-                <article class="card-surface flex flex-col p-6">
-                    <h3 class="headline-md text-primary">Starter</h3>
-                    <p class="mt-4">
-                        <span
-                            class="font-display text-4xl font-extrabold text-primary-container"
-                        >
-                            $149
-                        </span>
-                        <span class="text-on-surface-variant">/month</span>
-                    </p>
-                    <p class="mt-4 text-sm text-on-surface-variant">
-                        Perfect for beginners who want structure and
-                        accountability.
-                    </p>
-                    <ul class="mt-6 flex-1 space-y-3">
-                        <li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Custom training plan
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > 2 sessions per month
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Form check videos
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > App-based tracking
-                        </li>
-                    </ul>
-                    <a
-                        href="/book"
-                        class="inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container border border-secondary-container bg-transparent text-secondary-container hover:bg-secondary-container/10 px-6 py-3 text-base rounded-sm mt-8 w-full justify-center"
-                    >
-                        Get Started
-                    </a>
-                </article>
-                <article class="card-surface flex flex-col p-6 card-featured">
-                    <span
-                        class="inline-flex items-center bg-chip-bg px-2 py-1 font-mono text-xs font-medium uppercase tracking-wider text-primary mb-4 self-start"
-                    >
-                        Most Popular
-                    </span>
-                    <h3 class="headline-md text-primary">Performance</h3>
-                    <p class="mt-4">
-                        <span
-                            class="font-display text-4xl font-extrabold text-primary-container"
-                        >
-                            $299
-                        </span>
-                        <span class="text-on-surface-variant">/month</span>
-                    </p>
-                    <p class="mt-4 text-sm text-on-surface-variant">
-                        Our most popular plan for serious strength and body
-                        composition goals.
-                    </p>
-                    <ul class="mt-6 flex-1 space-y-3">
-                        <li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Everything in Starter
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > 4 sessions per month
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Nutrition guidance
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Weekly check-ins
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Priority scheduling
-                        </li>
-                    </ul>
-                    <a
-                        href="/book"
-                        class="inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container bg-primary-container text-on-primary hover:scale-[1.02] active:scale-[0.98] px-6 py-3 text-base btn-clipped mt-8 w-full justify-center"
-                    >
-                        Start Performance
-                    </a>
-                </article>
-                <article class="card-surface flex flex-col p-6">
-                    <h3 class="headline-md text-primary">Elite</h3>
-                    <p class="mt-4">
-                        <span
-                            class="font-display text-4xl font-extrabold text-primary-container"
-                        >
-                            $499
-                        </span>
-                        <span class="text-on-surface-variant">/month</span>
-                    </p>
-                    <p class="mt-4 text-sm text-on-surface-variant">
-                        Maximum support for athletes and high-performers.
-                    </p>
-                    <ul class="mt-6 flex-1 space-y-3">
-                        <li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Everything in Performance
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > 8 sessions per month
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Recovery protocols
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Competition prep
-                        </li><li
-                            class="flex items-start gap-2 text-sm text-on-surface-variant"
-                        >
-                            <span
-                                class="text-primary-container"
-                                aria-hidden="true">✓</span
-                            > Direct messaging access
-                        </li>
-                    </ul>
-                    <a
-                        href="/book"
-                        class="inline-flex items-center justify-center font-display font-bold uppercase tracking-wide transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-container border border-secondary-container bg-transparent text-secondary-container hover:bg-secondary-container/10 px-6 py-3 text-base rounded-sm mt-8 w-full justify-center"
-                    >
-                        Go Elite
-                    </a>
-                </article>
-            </div>
+        <div class="mt-10 grid gap-6 lg:grid-cols-3">
+            {
+                PLANS.map((plan) => (
+                    <CardPrice
+                        name={plan.name}
+                        price={plan.price}
+                        description={plan.description}
+                        features={plan.features}
+                        button={plan.button}
+                        featured={plan.featured}
+                        badge={plan.badge}
+                    />
+                ))
+            }
         </div>
-    </section>
+    </div>
+</section>

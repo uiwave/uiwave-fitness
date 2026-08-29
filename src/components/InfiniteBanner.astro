@@ -1,22 +1,26 @@
 ---
-import { ITEMS } from "@/consts";
+const ITEMS = [
+    "fuerza",
+    "rendimiento",
+    "responsabilidad",
+    "basado en datos",
+    "sobrecarga progresiva",
+    "entrenamiento élite",
+    "resultados medibles",
+];
 ---
 
-<section
-    class="overflow-hidden border-b border-surface-high bg-surface-lowest py-4"
->
-    <div class="marquee-track flex w-max">
+<section class="overflow-hidden py-4">
+    <div class="marquee-inner flex">
         {
             [0, 1].map(() => (
                 <div class="flex shrink-0 gap-8 pr-8">
-                    {
-                        ITEMS.map((item) => (
-                            <span class="flex shrink-0 items-center gap-8 font-display text-2xl font-extrabold uppercase tracking-wider text-on-surface-variant md:text-3xl">
-                                {item}
-                                <span class="text-primary-container">◆</span>
-                            </span>
-                        ))
-                    }
+                    {ITEMS.map((item) => (
+                        <span class="font-display flex shrink-0 items-center gap-8 text-2xl font-extrabold tracking-wider uppercase md:text-3xl">
+                            {item}
+                            <span class="text-primary">◆</span>
+                        </span>
+                    ))}
                 </div>
             ))
         }
@@ -24,11 +28,11 @@ import { ITEMS } from "@/consts";
 </section>
 
 <style>
-    .marquee-track {
-        animation: marquee 28s linear infinite;
+    .marquee-inner {
+        animation: marqueeScroll 28s linear infinite;
     }
 
-    @keyframes marquee {
+    @keyframes marqueeScroll {
         from {
             transform: translateX(0);
         }
