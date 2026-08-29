@@ -30,7 +30,7 @@ const PROGRAMS = await getCollection("programs");
                     } = data;
                     return (
                         <article class="bg-card overflow-hidden">
-                            <a href={id} class="group block">
+                            <a href={`/programs/${id}`} class="group block">
                                 <div class="relative aspect-4/3 overflow-hidden">
                                     <img
                                         src={image}
@@ -46,7 +46,7 @@ const PROGRAMS = await getCollection("programs");
                                 <div class="p-5">
                                     <div class="flex flex-wrap gap-2">
                                         <span class="inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase">
-                                            Level: {level}
+                                            Nivel: {level}
                                         </span>
                                         <span class="inline-flex items-center px-2 py-1 font-mono text-xs font-medium tracking-wider uppercase">
                                             Duration: {duration}
