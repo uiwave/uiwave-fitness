@@ -1,4 +1,7 @@
-export const ARTICLES: Record<string, { title: string; date: string; content: string }> = {
+export const ARTICLES: Record<
+    string,
+    { title: string; date: string; content: string }
+> = {
     "errores-entrenamiento-fuerza": {
         title: "5 errores comunes en el entrenamiento de fuerza",
         date: "15 de agosto, 2026",

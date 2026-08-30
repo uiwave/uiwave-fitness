@@ -30,7 +30,9 @@ const { article } = Astro.props;
                     </li>
                     <li class="flex items-center gap-2">
                         <span>/</span>
-                        <span class="text-primary truncate max-w-[200px]">{article.title}</span>
+                        <span class="text-primary max-w-[200px] truncate"
+                            >{article.title}</span
+                        >
                     </li>
                 </ol>
             </nav>
@@ -46,7 +48,10 @@ const { article } = Astro.props;
                     <a href="/book" class={buttonVariants({})}>
                         Reserva una consulta gratuita
                     </a>
-                    <a href="/blog" class={buttonVariants({ variant: "secondary" })}>
+                    <a
+                        href="/blog"
+                        class={buttonVariants({ variant: "secondary" })}
+                    >
                         Volver al blog
                     </a>
                 </div>

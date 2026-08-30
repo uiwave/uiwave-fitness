@@ -35,13 +35,19 @@ const canonicalURL = Astro.url.href;
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:url" content={canonicalURL} />
-        <meta property="og:image" content={new URL(image, Astro.url.origin).href} />
+        <meta
+            property="og:image"
+            content={new URL(image, Astro.url.origin).href}
+        />
 
         <!-- Twitter / X -->
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={new URL(image, Astro.url.origin).href} />
+        <meta
+            name="twitter:image"
+            content={new URL(image, Astro.url.origin).href}
+        />
 
         <link rel="canonical" href={canonicalURL} />
         <title>{title}</title>
@@ -49,7 +55,7 @@ const canonicalURL = Astro.url.href;
     <body class="flex min-h-screen flex-col">
         <a
             href="#main-content"
-            class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+            class="focus:bg-primary focus:text-primary-foreground sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2"
         >
             Saltar al contenido principal
         </a>
