@@ -18,7 +18,7 @@ const navItems = [
             href="/"
             class="font-display text-xl font-extrabold tracking-tight uppercase md:text-2xl"
         >
-            UiWaveFitnes
+            UiWaveFitness
         </a>
         <nav
             class="hidden items-center gap-6 lg:flex"
@@ -64,7 +64,7 @@ const navItems = [
     </div>
     <nav
         id="mobile-menu"
-        class="hidden lg:hidden"
+        class="hidden transition-all duration-300 lg:hidden"
         aria-label="Mobile navigation"
     >
         <div class="container-site flex flex-col gap-1 py-4">
@@ -96,5 +96,23 @@ const navItems = [
         menuToggle.setAttribute("aria-expanded", String(!isOpen));
     }
 
+    function closeMenu() {
+        if (!menu || !menuToggle) return;
+        menu.classList.add("hidden");
+        menuToggle.setAttribute("aria-expanded", "false");
+    }
+
     menuToggle?.addEventListener("click", toggleMenu);
+
+    document.addEventListener("click", (e) => {
+        if (!menu || !menuToggle) return;
+        const target = e.target as Node;
+        if (
+            !menu.contains(target) &&
+            !menuToggle.contains(target) &&
+            !menu.classList.contains("hidden")
+        ) {
+            closeMenu();
+        }
+    });
 </script>

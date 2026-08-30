@@ -16,20 +16,20 @@ price: Desde $179/mes
 - Sistema de control de hábitos
 - Protocolos de recuperación
 
-#### Descripción del programa
+## Descripción del programa
 
 El Acelerador de Pérdida de Grasa combina entrenamiento de resistencia con acondicionamiento metabólico para preservar la masa muscular y crear un déficit calórico sostenible. Sin dietas restrictivas: solo métodos probados que funcionan.
 
-#### Para quién es
+## Para quién es
 
 - Principiantes listos para comprometerse con un plan estructurado
 - Profesionales ocupados que necesitan entrenamientos eficientes
 - Cualquier persona que haya tenido problemas con el efecto rebote de las dietas
 
-### Estructura del entrenamiento
+## Estructura del entrenamiento
 
 Tres sesiones por semana: dos días de fuerza de cuerpo completo y un día de acondicionamiento. Las sesiones duran entre 45 y 60 minutos, diseñadas para una máxima eficiencia.
 
-#### Enfoque nutricional
+## Enfoque nutricional
 
 Recibirás objetivos de macronutrientes basados ​​en tu peso corporal y nivel de actividad, además de plantillas de comidas sencillas. Nos enfocamos en la constancia, no en la perfección.

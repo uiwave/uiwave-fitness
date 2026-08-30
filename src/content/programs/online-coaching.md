@@ -17,20 +17,20 @@ price: Desde $149/mes
 - Ajustes ilimitados del programa
 - Acceso a la aplicación de seguimiento
 
-#### Descripción del programa
+## Descripción del programa
 
 El Entrenamiento Online ofrece la misma calidad de coaching presencial, adaptada a tu horario y ubicación. Recibes una planificación 100% personalizada basada en tus objetivos, equipamiento disponible y nivel de experiencia.
 
-#### Para quién es
+## Para quién es
 
 - Profesionales ocupados que necesitan flexibilidad de horario
 - Personas que prefieren entrenar en casa o en su gimnasio local
-- Clientes que buscan acompanhamiento continuo sin depender de un horario fijo
+- Clientes que buscan acompañamiento continuo sin depender de un horario fijo
 
-### Estructura del entrenamiento
+## Estructura del entrenamiento
 
 La frecuencia y duración de las sesiones se adaptan a tu disponibilidad. La mayoría de los clientes entrenan 3-4 veces por semana con sesiones de 45-60 minutos. Cada programa se actualiza mensualmente según tu progreso.
 
-#### Soporte continuo
+## Soporte continuo
 
 Tienes acceso directo por mensajería para resolver dudas, enviar vídeos de técnica y recibir feedback en tiempo real. Las llamadas de vídeo permiten revisar el progreso y ajustar el plan según sea necesario.

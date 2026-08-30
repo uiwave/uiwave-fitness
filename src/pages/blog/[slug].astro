@@ -30,14 +30,15 @@ const { article } = Astro.props;
                     </li>
                     <li class="flex items-center gap-2">
                         <span>/</span>
-                        <span class="text-primary max-w-[200px] truncate"
-                            >{article.title}</span
+                        <span
+                            class="text-primary max-w-[200px] truncate"
+                            aria-current="page">{article.title}</span
                         >
                     </li>
                 </ol>
             </nav>
 
-            <p class="label-sm text-foreground/50">{article.date}</p>
+            <p class="label-sm text-foreground/60">{article.date}</p>
             <h1 class="display-xl text-primary mt-4">{article.title}</h1>
 
             <div class="prose mt-10" set:html={article.content} />

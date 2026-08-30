@@ -3,7 +3,7 @@ export const SITE = {
     description:
         "Entrenamiento basado en datos para fuerza, pérdida de grasa y rendimiento. Programas personalizados, seguimiento semanal y resultados medibles.",
     url: "https://uiwavefitness.com",
-    image: "/images/og-default.jpg",
+    image: "/images/hero-training.CkuBBHKp_Zknix6.webp",
     locale: "es_ES",
     themeColor: "#1a1a1a",
 };

@@ -1,37 +1,16 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Heading from "@/components/uiwave/Heading.astro";
+import { ARTICLES } from "@/data/articles";
 
-const ARTICLES = [
-    {
-        title: "5 errores comunes en el entrenamiento de fuerza",
-        date: "15 de agosto, 2026",
-        excerpt:
-            "Descubre los errores más frecuentes que limitan tu progreso y cómo corregirlos con evidencia científica.",
-        slug: "errores-entrenamiento-fuerza",
-    },
-    {
-        title: "Cómo calcular tus macronutrientes sin obsesionarte",
-        date: "10 de agosto, 2026",
-        excerpt:
-            "Una guía práctica para establecer tus objetivos nutricionales de forma realista y sostenible.",
-        slug: "calcular-macronutrientes",
-    },
-    {
-        title: "La importancia del sueño en tu rendimiento deportivo",
-        date: "5 de agosto, 2026",
-        excerpt:
-            "El sueño es el factor de recuperación más importante y el más descuidado. Aprende a optimizarlo.",
-        slug: "sueno-rendimiento-deportivo",
-    },
-    {
-        title: "Periodización: por qué necesitas variar tu entrenamiento",
-        date: "1 de agosto, 2026",
-        excerpt:
-            "El cuerpo se adapta al estímulo constante. La periodización es la clave para seguir progresando.",
-        slug: "periodizacion-entrenamiento",
-    },
-];
+const ARTICLES_LIST = Object.entries(ARTICLES).map(
+    ([slug, { title, date, content }]) => ({
+        title,
+        date,
+        excerpt: content.replace(/<[^>]*>/g, "").slice(0, 120) + "...",
+        slug,
+    }),
+);
 ---
 
 <Layout
@@ -44,14 +23,15 @@ const ARTICLES = [
                 title="Blog"
                 subtitle="Blog"
                 description="Artículos sobre entrenamiento, nutrición y rendimiento. Contenido basado en evidencia, no en tendencias."
+                level="h1"
             />
 
             <div class="mt-10 grid gap-6 sm:grid-cols-2">
                 {
-                    ARTICLES.map((article) => (
+                    ARTICLES_LIST.map((article) => (
                         <article class="bg-card group overflow-hidden">
                             <a href={`/blog/${article.slug}`} class="block p-6">
-                                <p class="label-sm text-foreground/50">
+                                <p class="label-sm text-foreground/60">
                                     {article.date}
                                 </p>
                                 <h3 class="headline-md group-hover:text-primary mt-2 transition-colors">

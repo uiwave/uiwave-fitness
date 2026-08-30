@@ -32,6 +32,12 @@ const ITEMS = [
         animation: marqueeScroll 28s linear infinite;
     }
 
+    @media (prefers-reduced-motion: reduce) {
+        .marquee-inner {
+            animation: none;
+        }
+    }
+
     @keyframes marqueeScroll {
         from {
             transform: translateX(0);

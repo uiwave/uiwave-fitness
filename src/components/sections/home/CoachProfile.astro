@@ -1,6 +1,7 @@
 ---
 import { buttonVariants } from "@/components/uiwave/Button";
 import Heading from "@/components/uiwave/Heading.astro";
+import { COACH } from "@/data/coach";
 ---
 
 <section class="section-padding">
@@ -10,8 +11,8 @@ import Heading from "@/components/uiwave/Heading.astro";
                 <div class="relative">
                     <div class="overflow-hidden">
                         <img
-                            src="/images/coach-alex.DTCMkw9A_Gqc4a.webp"
-                            alt="Coach Alex Vega"
+                            src={COACH.image}
+                            alt={`Coach ${COACH.name}`}
                             loading="lazy"
                             decoding="async"
                             width="500"
@@ -23,29 +24,21 @@ import Heading from "@/components/uiwave/Heading.astro";
             </div>
             <div class="col-span-4 md:col-span-7">
                 <Heading
-                    title="Entrenador Alex Vega"
+                    title={`Entrenador ${COACH.name}`}
                     subtitle="Tu entrenador"
                 />
 
                 <p
                     class="font-display text-primary mt-2 text-lg tracking-wide uppercase"
                 >
-                    Entrenador principal y fundador
+                    {COACH.role}
                 </p>
                 <p class="body-lg mt-6">
-                    Con 8 años de experiencia como entrenador y la certificación
-                    NSCA-CPT, Alex se especializa en la periodización del
-                    entrenamiento de fuerza y ​​en la transformación de la
-                    composición corporal. Como exatleta universitario convertido
-                    en entrenador que basa su trabajo en datos, Alex considera
-                    que cada cliente merece una planificación respaldada por la
-                    ciencia, no por las modas.
+                    {COACH.bioThirdPerson}
                 </p>
                 <blockquote class="border-primary mt-8 border-l-2 pl-6">
                     <p class="italic">
-                        “Cada repetición cuenta. Cada sesión es una oportunidad
-                        para mejorar un 1 %. Mi trabajo es asegurarme de que
-                        nunca desperdicies ninguna”
+                        "{COACH.quote}"
                     </p>
                 </blockquote>
                 <div class="mt-8 flex flex-col gap-4 sm:flex-row">

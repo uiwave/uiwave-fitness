@@ -5,6 +5,7 @@ interface Props {
     title: string;
     subtitle: string;
     description?: string;
+    level?: "h1" | "h2";
     link?: {
         href: string;
         label: string;
@@ -12,12 +13,25 @@ interface Props {
     class?: string;
 }
 
-const { title, subtitle, description, link, class: className } = Astro.props;
+const {
+    title,
+    subtitle,
+    description,
+    level = "h2",
+    link,
+    class: className,
+} = Astro.props;
 ---
 
 <div class={cn("max-w-2xl", className)}>
     <p class="label-sm text-secondary">{subtitle}</p>
-    <h2 class="headline-lg text-primary mt-2">{title}</h2>
+    {
+        level === "h1" ? (
+            <h1 class="display-xl text-primary mt-2">{title}</h1>
+        ) : (
+            <h2 class="headline-lg text-primary mt-2">{title}</h2>
+        )
+    }
     {description && <p class="mt-4">{description}</p>}
 </div>
 {
