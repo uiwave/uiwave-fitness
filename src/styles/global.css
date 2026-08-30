@@ -152,9 +152,12 @@
 @layer components {
     .btn-clipped {
         clip-path: polygon(
-            0 0,
+            0 12px,
+            12px 0,
             calc(100% - 12px) 0,
             100% 12px,
+            100% calc(100% - 12px),
+            calc(100% - 12px) 100%,
             100% 100%,
             12px 100%,
             0 calc(100% - 12px)
