@@ -14,7 +14,7 @@ const { article } = Astro.props;
 ---
 
 <Layout
-    title={`${article.title} - UiWave Fitness`}
+    title={article.title}
     description={article.content.slice(0, 160).replace(/<[^>]*>/g, "")}
 >
     <section class="section-padding">
@@ -45,7 +45,7 @@ const { article } = Astro.props;
             <div class="border-card mt-12 border-t pt-8">
                 <p class="body-lg">¿Te ha resultado útil este artículo?</p>
                 <div class="mt-4 flex flex-col gap-4 sm:flex-row">
-                    <a href="/book" class={buttonVariants({})}>
+                    <a href="/contact" class={buttonVariants({})}>
                         Reserva una consulta gratuita
                     </a>
                     <a

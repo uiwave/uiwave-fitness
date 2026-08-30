@@ -1,4 +1,6 @@
 ---
+import { CONTACT } from "@/consts";
+
 const year = new Date().getFullYear();
 
 const footerLinks = [
@@ -54,20 +56,20 @@ const legalLinks = [
                 <ul class="space-y-2">
                     <li>
                         <a
-                            href="mailto:hola@uiwavefitness.com"
+                            href={`mailto:${CONTACT.email}`}
                             class="hover:text-primary text-sm transition-colors"
                         >
-                            hola@uiwavefitness.com
+                            {CONTACT.email}
                         </a>
                     </li>
                     <li>
                         <a
-                            href="https://wa.me/34600000000"
+                            href={CONTACT.whatsapp}
                             target="_blank"
                             rel="noopener noreferrer"
                             class="hover:text-primary text-sm transition-colors"
                         >
-                            +34 600 000 000
+                            {CONTACT.phone}
                         </a>
                     </li>
                 </ul>

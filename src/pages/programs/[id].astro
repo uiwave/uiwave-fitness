@@ -21,10 +21,7 @@ const { program } = Astro.props;
 const { Content } = await render(program);
 ---
 
-<Layout
-    title={`${program.data.title} - UiWave Fitness`}
-    description={program.data.description}
->
+<Layout title={program.data.title} description={program.data.description}>
     <div class="container-site section-padding">
         <nav aria-label="Breadcrumb" class="mb-6">
             <ol class="label-sm flex flex-wrap items-center gap-2">
@@ -70,7 +67,7 @@ const { Content } = await render(program);
                     <Content />
                 </div>
                 <div class="mt-10">
-                    <a href="/book" class={buttonVariants({})}>
+                    <a href="/contact" class={buttonVariants({})}>
                         Reserva una consulta gratuita
                     </a>
                 </div>
@@ -93,7 +90,7 @@ const { Content } = await render(program);
                             programa se ajusta a sus objetivos.
                         </p>
                         <a
-                            href="/book"
+                            href="/contact"
                             class={buttonVariants({
                                 variant: "secondary",
                                 class: "w-full mt-4",
